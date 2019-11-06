@@ -1,3 +1,29 @@
+#if 1
+#include <iostream>
+#include <algorithm>
+
+#define MAXN	((int)1000001)
+using namespace std;
+
+int N;
+int d[MAXN];
+
+int main()
+{
+	cin >> N;
+	fill(d, d + MAXN, MAXN);
+
+	d[1] = 0;
+	for (int i = 1; i < N; i++) {
+		d[i + 1] = min(d[i + 1], d[i] + 1);
+		if (i * 2 < MAXN) d[i * 2] = min(d[i * 2], d[i] + 1);
+		if (i * 3 < MAXN) d[i * 3] = min(d[i * 3], d[i] + 1);
+	}
+	cout << d[N];
+
+	return 0;
+}
+#else
 #include <iostream>
 using namespace std;
 
@@ -25,3 +51,4 @@ int main()
 	cout << minNum;
 	return 0;
 }
+#endif
