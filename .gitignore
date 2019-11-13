@@ -7,3 +7,9 @@
 /.vs/CodeMaster/v16/Browse.VC.opendb
 /.vs/CodeMaster/v16/Browse.VC.db
 /.vs
+/CodeMaster/Debug
+/CodeMaster/.vs/CodeMaster/v16
+/CodeMaster/CodeMaster.vcxproj.user
+/CodeMaster/CodeMaster.vcxproj.filters
+/CodeMaster/CodeMaster.vcxproj
+/CodeMaster/CodeMaster.sln
