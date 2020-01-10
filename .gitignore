@@ -13,3 +13,6 @@
 /CodeMaster/CodeMaster.vcxproj.filters
 /CodeMaster/CodeMaster.vcxproj
 /CodeMaster/CodeMaster.sln
+.vscode/settings.json
+.vscode/c_cpp_properties.json
+.vscode/tasks.json
