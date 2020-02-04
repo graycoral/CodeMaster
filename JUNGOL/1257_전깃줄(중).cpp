@@ -9,6 +9,7 @@ int N;
 vector<int> path;
 vector<pair<int,int>> Line;
 int D[MAXN];
+int P[MAXN];
 
 void input()
 {
@@ -43,26 +44,26 @@ void sol()
     for(int i=0; i<N; i++){
         int idx = BS(0, cur, Line[i].second);
         if(idx <= cur){
-            if(cur != 0){
-                path.pop_back();
+            if(Line[D[idx]].second > Line[i].second) {
+                D[idx] = i;
+                P[i] = D[idx-1];
             }
-            path.push_back(i);
-            cout << "test" <<endl;
         }
         else {
-            cout << "test else" <<endl;
-            D[cur++] = idx;
-            path.push_back(idx);
+            P[i] = D[cur];
+            D[cur++] = i;
         }
     }
     cout << cur << endl;
-    for(auto p: path){
-        cout << p << endl;
+    for(int i=0;i < cur ; i++){
+        cout << Line[D[i]].second << endl;
     }
 }
 
 int main()
 {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
     input();
     sol();
     return 0;
