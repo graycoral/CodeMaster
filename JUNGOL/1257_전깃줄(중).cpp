@@ -41,12 +41,16 @@ void sol()
 
     sort(Line.begin(), Line.end());
     for(int i=0; i<N; i++){
-        int idx = BS(cur, i, Line[i].second);
-        if(idx > cur){
-            path.pop_back();
-            path.push_back(idx);
+        int idx = BS(0, cur, Line[i].second);
+        if(idx <= cur){
+            if(cur != 0){
+                path.pop_back();
+            }
+            path.push_back(i);
+            cout << "test" <<endl;
         }
         else {
+            cout << "test else" <<endl;
             D[cur++] = idx;
             path.push_back(idx);
         }
