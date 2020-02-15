@@ -1,32 +1,33 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
-const int MAXN = 1e3+10;
-
-vector<int> Data;
-int dp[MAXN];
 int N;
-
-void rec(int idx, int n)
+vector<int> Input;
+void input()
 {
-    for(int i=idx; i<N; i++){
-        if(dp[i] > 0)   continue;
+    cin >> N;
+    for(int i=0; i<N; i++){
+        int tmp;
+        cin >> tmp;
+        Input.push_back(tmp);
     }
+}
+
+void sol()
+{
+    sort(Input.begin(), Input.end());
+    int sum = 1;
+    for(int i=0; i<N && sum >= Input[i]; i++){
+        sum += Input[i];
+    }
+    cout << sum << endl;
 }
 
 int main()
 {
-    cin >> N;
-    for(int i=0; i <N; i++){
-        int tmp;
-        cin >> tmp;
-        Data.push_back(tmp);
-    }
-    sort(Data.begin(), Data.end());
-
-
-
+    input();
+    sol();
     return 0;
 }
