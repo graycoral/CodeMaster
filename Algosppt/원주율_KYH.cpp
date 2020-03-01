@@ -11,7 +11,7 @@ string N;
 int cache[MAXN];
 
 int classify(int s, int L) {
-    string m = N.substr(s, L-s+1);
+    string m = N.substr(s, L);
 
     if(m == string(m.size(), m[0])) return 1;
 
@@ -41,7 +41,7 @@ int memoei(int s)
     ret = INF;
     for(int L = 3; L <=5; L++) {
         if(s + L <= N.size()) {
-            ret = min(ret, memoei(s + L) +classify(s, s+L-1));
+            ret = min(ret, memoei(s + L) +classify(s, L));
         }
     }
     return ret;
