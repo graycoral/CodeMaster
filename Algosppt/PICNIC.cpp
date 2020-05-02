@@ -24,7 +24,10 @@ int countPairs(bool cache[10])
     int ret = 0;
     int firstFree = -1;
     for(int i=0; i<N ; i++) {
-        if(!cache[i])   firstFree = i;  break;
+        if(!cache[i]) {
+            firstFree = i;
+            break;
+        }
     }
 
     if(firstFree == -1) return 1;
