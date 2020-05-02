@@ -22,7 +22,7 @@ void input()
 	}
 }
 
-int Find(int r, int c, string d)
+int Find(int r, int c, const string& d)
 {
 	int retVal = -1;
     if (d.size() == 1) return 1;
