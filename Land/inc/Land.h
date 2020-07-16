@@ -2,19 +2,23 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-#include "../inc/LandCal.h"
+#include <memory>
+
+#include "LandTaxCal.h"
 
 using namespace std;
 
 class Land
 {
-    vector<LandCal*> landCal;
+    vector<std::shared_ptr<LandTaxCal>> landCal;
 public:
     Land() : numoofHouse_(0) {}
-    void command();
     void showMain();
     void addLandInfo();
-    LandCal makeLandInfo();
+    void calTax();
+    void saveDatatoExcel();
+    void updateLandInfo();
+    std::shared_ptr<LandTaxCal> makeLandInfo();
 private:
     int numoofHouse_;
 };

@@ -3,7 +3,6 @@
 using namespace std;
 
 #include "../inc/Land.h"
-#include "../inc/LandTaxCal.h"
 
 #define clrscr()    system("cls")
 
@@ -14,17 +13,16 @@ int main(int argc, const char* argv[])
     Land land;
     while(1) {
         clrscr();
-        land.showMain();
+        cout << "========== Land Calculator ==========" << endl;
         cin >> cmd;
         if(cmd == 1) {
             land.addLandInfo();
         } else if (cmd == 2) {
-            land.
-
+            // land.calTax();
         } else if (cmd == 3) {
-
+            // land.saveDatatoExcel();
         } else if (cmd == 4) {
-
+            // land.updateLandInfo();
         }
     }
 }

@@ -4,8 +4,8 @@
 
 using namespace std;
 
-const string TransferDate_1216 = "1216";
-const string TransferDate_0706 = "0706";
+const string TransferDate_1216("1216");
+const string TransferDate_0706("0706");
 
 class ILandTaxCal
 {
@@ -17,7 +17,7 @@ class landTaxCal_1216 : public ILandTaxCal
 {
     virtual double calTax() override
     {
-
+        cout << "landTaxCal_1216" << endl;
     }
 };
 
@@ -25,7 +25,7 @@ class landTaxCal_0706 : public ILandTaxCal
 {
     virtual double calTax() override
     {
-
+        cout << "landTaxCal_0706" << endl;
     }
 };
 

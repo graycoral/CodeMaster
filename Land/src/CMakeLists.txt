@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.17)
+
 message(STATUS "------------------------START-------------------------------------")
 set(TARGET_NAME land-builder)
 
