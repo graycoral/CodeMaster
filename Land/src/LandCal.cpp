@@ -4,6 +4,7 @@ using namespace std;
 
 void LandCal::showMain()
 {
+    clrscr();
     cout << "1. Add your house Info" << endl;
     cout << "2. Save Data to Excel" << endl;
     cout << "3. Update your house Info" << endl;
@@ -32,7 +33,7 @@ void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
     cout << "================== " << __func__  << "===================================" << endl;
     // 양도차액
     double transferMargin = landTaxCal->getTransferMargin();
-    double basicDeduction = landTaxCal->calYearfromDate(landTaxCal->) * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
+    double basicDeduction = landTaxCal->calYearfromDate( landTaxCal->getAcquisitionDate(), landTaxCal->getTransferDate_()) * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
 
     // 과세대상 양도 차액
     double taxBaseTransferMargin = landTaxCal->getTransferPrice() >= 1e9 ? transferMargin * (landTaxCal->getTransferPrice() - 1e9) / landTaxCal->getTransferPrice() : 0;
@@ -83,6 +84,7 @@ void LandCal::showLandInfo(const LandCal& landCal)
     for (auto v : landTaxCal) {
         v->show();
     }
+    cout << endl << "please input any button";
 }
 
 void LandCal::expectLandRevnue(const LandCal& landCal, double diffence)

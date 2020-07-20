@@ -44,6 +44,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER g++)
 
 # Add subdirectories to the build.
-add_subdirectory(lib_json)
+#add_subdirectory(jsoncpp/src)
 add_subdirectory(src)
 

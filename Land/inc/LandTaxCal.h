@@ -165,7 +165,7 @@ public:
     bool getReallive2year() { return reallive2years_; }
     int getAssementStandardTaxBase();
     int getHoldingYears() { return years_; }
-    double calLongteramHoldingDeductionRate(bool realLive, int years, int holingYears)
+    double calLongteramHoldingDeductionRate(bool realLive, int years, int holingYears);
     void setTax(double tax) { tax_ = tax; }
     double getTrasferMarginTaxRate(double taxBaseTransferMargin);
     double getProgressiveTax(double trasferMarginTaxRate);

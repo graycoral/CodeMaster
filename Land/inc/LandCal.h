@@ -6,6 +6,8 @@
 
 #include "LandTaxCal.h"
 
+#define clrscr()    system("clear")
+
 using namespace std;
 
 class LandCal

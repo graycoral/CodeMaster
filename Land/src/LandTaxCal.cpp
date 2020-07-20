@@ -123,10 +123,7 @@ void LandTaxCal::show()
     cout << "py_ : " << setw(2) << right << py_ << std::endl;
     cout << "tax_ : " << setw(2) << right << tax_ << std::endl;
 
-    int test;
-
-    cout << endl << "please input any button";
-    fflush(stdin);  getchar();
+    fflush(stdin);
     getchar();
 }
 
@@ -181,7 +178,7 @@ double LandTaxCal::calExpectedTax(double transferPrice)
 
     // 장기보유 특별 공제
     int longTermDeductuibRate = 1;
-    if (numhouse_ == 1)  longTermDeductuibRate *= calLongteramHoldingDeductionRate(landTaxCal->getReallive2year(), landTaxCal->getActualDurationofStay(), landTaxCal->getHoldingYears());
+    if (numhouse_ == 1)  longTermDeductuibRate *= calLongteramHoldingDeductionRate(getReallive2year(), getActualDurationofStay(), getHoldingYears());
     else                    longTermDeductuibRate *= 0;
 
     taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);
