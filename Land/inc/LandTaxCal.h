@@ -147,6 +147,7 @@ public:
     void setJointTenacy(const bool& jointTenancy);
     bool getJointTenacy() { return jointTenancy_; };
     void setAcquisitionPrice(const double& acquisitionPrice);
+    double getAcquisitionPrice() { return acquisitionPrice_; };
     void setTransferPrice(const double& transferPrice);
     double getTransferPrice() { return transferPrice_; };
     void setTaxBaseTransferMargin(const double& taxBaseTransferMargin);
@@ -154,21 +155,24 @@ public:
     void setAcquisitionDate(const string&  acquisitionDate);
     void setTransferDate(const string&  transferDate);
     void setActualDurationofStay(int years) { liveYears_ = years; }
+    int getActualDurationofStay() { return liveYears_; }
     void show();
     void addInfo();
     void updateData();
     void calTransferMargin(double transferPrice, int py, double acquisitionPrice);
     double getTransferMargin();
-    int calYearfromDate();
+    int calYearfromDate(string acquisitionDate, string transferDate);
     bool getReallive2year() { return reallive2years_; }
     int getAssementStandardTaxBase();
     int getHoldingYears() { return years_; }
-    double calLongteramHoldingDeductionRate();
+    double calLongteramHoldingDeductionRate(bool realLive, int years, int holingYears)
     void setTax(double tax) { tax_ = tax; }
     double getTrasferMarginTaxRate(double taxBaseTransferMargin);
     double getProgressiveTax(double trasferMarginTaxRate);
+    string getAcquisitionDate()     {  return acquisitionDate_; }
+    string getTransferDate_()       {  return transferDate_; }
 
-    std::pair<int,double> calExpectedTax();
+    double calExpectedTax(double transferPrice);
     void expectLandRevnue(LandTaxCal landTaxCal ,double diffence);
 
     // TBD

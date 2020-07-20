@@ -32,7 +32,7 @@ void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
     cout << "================== " << __func__  << "===================================" << endl;
     // 양도차액
     double transferMargin = landTaxCal->getTransferMargin();
-    double basicDeduction = landTaxCal->calYearfromDate() * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
+    double basicDeduction = landTaxCal->calYearfromDate(landTaxCal->) * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
 
     // 과세대상 양도 차액
     double taxBaseTransferMargin = landTaxCal->getTransferPrice() >= 1e9 ? transferMargin * (landTaxCal->getTransferPrice() - 1e9) / landTaxCal->getTransferPrice() : 0;
@@ -40,7 +40,7 @@ void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 
     // 장기보유 특별 공제
     int longTermDeductuibRate = 1;
-    if (numoofHouse_ == 1)  longTermDeductuibRate *= landTaxCal->calLongteramHoldingDeductionRate();
+    if (numoofHouse_ == 1)  longTermDeductuibRate *= landTaxCal->calLongteramHoldingDeductionRate(landTaxCal->getReallive2year(), landTaxCal->getActualDurationofStay(), landTaxCal->getHoldingYears());
     else                    longTermDeductuibRate *= 0;
 
     taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);

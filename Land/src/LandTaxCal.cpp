@@ -40,7 +40,6 @@ void LandTaxCal::addInfo()
 void LandTaxCal::setNumofHouse(const int& numofHouse)   { numhouse_ = numofHouse; }
 void LandTaxCal::setJointTenacy(const bool& jointTenancy)
 {
-    // ��������
     if (jointTenancy == 1 || jointTenancy == 0) {
         jointTenancy_ = jointTenancy;
     }
@@ -56,21 +55,21 @@ void LandTaxCal::setTransferPrice(const double& transferPrice)
     calTransferMargin(transferPrice_,  py_, acquisitionPrice_);
 }
 
-int LandTaxCal::calYearfromDate()
+int LandTaxCal::calYearfromDate(string acquisitionDate, string transferDate)
 {
     int retYears = 0;
     int month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     try {
-        int acqYear = std::stoi(acquisitionDate_.substr(0, 4));
-        int trasYear = std::stoi(transferDate_.substr(0, 4));
-        int acqMonth = std::stoi(acquisitionDate_.substr(4, 2));
-        int trasMonth = std::stoi(transferDate_.substr(4, 2));
-        int acqDay = std::stoi(acquisitionDate_.substr(6, 2));
-        int trasDay = std::stoi(transferDate_.substr(6, 2));
-        int acquisitionDate = (acqYear * 365) + month[acqMonth] + acqDay;
-        int transferDate = (trasYear * 365) + month[trasMonth] + trasDay;
+        int acqYear = std::stoi(acquisitionDate.substr(0, 4));
+        int trasYear = std::stoi(transferDate.substr(0, 4));
+        int acqMonth = std::stoi(acquisitionDate.substr(4, 2));
+        int trasMonth = std::stoi(transferDate.substr(4, 2));
+        int acqDay = std::stoi(acquisitionDate.substr(6, 2));
+        int trasDay = std::stoi(transferDate.substr(6, 2));
+        int acquisitionDays = (acqYear * 365) + month[acqMonth] + acqDay;
+        int transferDays = (trasYear * 365) + month[trasMonth] + trasDay;
 
-        retYears = (transferDate - acquisitionDate) / 365;
+        retYears = (transferDays - acquisitionDays) / 365;
     }
     catch (const std::out_of_range & e) {
         cout << "out of range " << endl;
@@ -87,7 +86,7 @@ void LandTaxCal::setAcquisitionDate(const string&  acquisitionDate)
 void LandTaxCal::setTransferDate(const string&  transferDate)
 {
     transferDate_= transferDate;
-    years_ = calYearfromDate();
+    years_ = calYearfromDate(acquisitionDate_, transferDate_);
     if(landTax == 0)    {
         if(transferDate_ > TransferDate_1216)           landTax = new landTaxCal_1216(years_);
         else if (transferDate_ > TransferDate_0706)     landTax = new landTaxCal_0706(liveYears_, years_);
@@ -100,7 +99,7 @@ void LandTaxCal::setTransferDate(const string&  transferDate)
 void LandTaxCal::calTransferMargin(double transferPrice, int py, double acquisitionPrice)
 {
     extraExpense_ += commmision_ + landTax->calAcquisitionTax(acquisitionPrice, py, numhouse_);
-    tranferMargin_ = transferPrice_- acquisitionPrice_ - extraExpense_;
+    tranferMargin_ = transferPrice- acquisitionPrice - extraExpense_;
 }
 
 double LandTaxCal::getTransferMargin()
@@ -136,9 +135,9 @@ void LandTaxCal::setTaxBaseTransferMargin(const double& taxBaseTransferMargin)
     taxBaseTransferMargin_ = taxBaseTransferMargin;
 }
 
-double LandTaxCal::calLongteramHoldingDeductionRate()
+double LandTaxCal::calLongteramHoldingDeductionRate(bool realLive, int years, int holingYears)
 {
-    return landTax->calLongteramHoldingDeductionRate(getReallive2year(), landTax->getLiveYears(), getHoldingYears()) / 100;
+    return landTax->calLongteramHoldingDeductionRate(realLive, years, holingYears) / 100;
 }
 
 int LandTaxCal::getAssementStandardTaxBase()
@@ -150,40 +149,54 @@ int LandTaxCal::getAssementStandardTaxBase()
 
 double LandTaxCal::getTrasferMarginTaxRate(double taxBaseTransferMargin)
 {
-    if (taxBaseTransferMargin <= 12e6)	return 0.06;
-    else if(taxBaseTransferMargin <= 46e6)	return 0.15;
-    else if(taxBaseTransferMargin <= 88e6)	return 0.24;
-    else if (taxBaseTransferMargin <= 15e7)	return 0.35;
-    else if (taxBaseTransferMargin <= 3e8)	return 0.38;
-    else if (taxBaseTransferMargin <= 5e8)	return 0.4;
-    else 									return 0.42;
+    if (taxBaseTransferMargin <= 12e6)          return 0.06;
+    else if(taxBaseTransferMargin <= 46e6)      return 0.15;
+    else if(taxBaseTransferMargin <= 88e6)      return 0.24;
+    else if (taxBaseTransferMargin <= 15e7)     return 0.35;
+    else if (taxBaseTransferMargin <= 3e8)      return 0.38;
+    else if (taxBaseTransferMargin <= 5e8)      return 0.4;
+    else                                        return 0.42;
 }
 
 double LandTaxCal::getProgressiveTax(double trasferMarginTaxRate)
 {
-    if (trasferMarginTaxRate <= 0.06)	return 0;
-    else if (trasferMarginTaxRate <= 0.15)	return 108e4;
-    else if (trasferMarginTaxRate <= 0.24)	return 522e4;
-    else if (trasferMarginTaxRate <= 0.35)	return 149e5;
-    else if (trasferMarginTaxRate <= 0.38)	return 194e5;
-    else if (trasferMarginTaxRate <= 0.4)	return 254e5;
-    else 									return 354e5;
+    if (trasferMarginTaxRate <= 0.06)       return 0;
+    else if (trasferMarginTaxRate <= 0.15)  return 108e4;
+    else if (trasferMarginTaxRate <= 0.24)  return 522e4;
+    else if (trasferMarginTaxRate <= 0.35)  return 149e5;
+    else if (trasferMarginTaxRate <= 0.38)  return 194e5;
+    else if (trasferMarginTaxRate <= 0.4)   return 254e5;
+    else                                    return 354e5;
 }
-std::pair<int,double> LandTaxCal::calExpectedTax()
-{
 
+
+double LandTaxCal::calExpectedTax(double transferPrice)
+{
+    // 양도차액
+    double transferMargin = transferPrice - getAcquisitionPrice() - extraExpense_;
+    double basicDeduction = calYearfromDate(getAcquisitionDate(), getTransferDate_()) * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
+
+    // 과세대상 양도 차액
+    double taxBaseTransferMargin = transferPrice >= 1e9 ? transferMargin * (transferPrice - 1e9) / transferPrice : 0;
+
+    // 장기보유 특별 공제
+    int longTermDeductuibRate = 1;
+    if (numhouse_ == 1)  longTermDeductuibRate *= calLongteramHoldingDeductionRate(landTaxCal->getReallive2year(), landTaxCal->getActualDurationofStay(), landTaxCal->getHoldingYears());
+    else                    longTermDeductuibRate *= 0;
+
+    taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);
 }
 
 void LandTaxCal::expectLandRevnue(LandTaxCal landTaxCal ,double diffence)
 {
-    vector<std::pair<int, double>> expectedRevenue;
+    vector<std::pair<double, double>> expectedRevenue;
 
     for(int i=0; i < 5; i++) {
-        std::pair<int,double> expectedTax = calExpectedTax();
-        expectedRevenue.push_back(expectedTax);
+        double transferPrice = getTransferPrice() + (i * diffence);
+        double expectedTax = calExpectedTax(transferPrice);
+        expectedRevenue.push_back({transferPrice, expectedTax});
     }
     // TBD(save Json file)
-
 }
 
 void LandTaxCal::saveRevenue()
