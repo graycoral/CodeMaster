@@ -40,8 +40,8 @@ void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 
     // 장기보유 특별 공제
     int longTermDeductuibRate = 1;
-    if (numoofHouse_ == 1) longTermDeductuibRate *= landTaxCal->calLongteramHoldingDeductionRate();
-    else				   longTermDeductuibRate *= 0;
+    if (numoofHouse_ == 1)  longTermDeductuibRate *= landTaxCal->calLongteramHoldingDeductionRate();
+    else                    longTermDeductuibRate *= 0;
 
     taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);
 
