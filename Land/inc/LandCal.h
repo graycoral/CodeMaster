@@ -8,16 +8,18 @@
 
 using namespace std;
 
-class Land
+class LandCal
 {
-    vector<std::shared_ptr<LandTaxCal>> landCal;
+    vector<std::shared_ptr<LandTaxCal>> landTaxCal;
 public:
-    Land() : numoofHouse_(0) {}
+	LandCal() : numoofHouse_(0) {}
     void showMain();
     void addLandInfo();
-    void calTax();
+    void calTax(std::shared_ptr<LandTaxCal> landTaxCal);
     void saveDatatoExcel();
     void updateLandInfo();
+	void showLandInfo(const LandCal& land);	
+	int getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase);
     std::shared_ptr<LandTaxCal> makeLandInfo();
 private:
     int numoofHouse_;

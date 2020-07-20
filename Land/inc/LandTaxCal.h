@@ -9,24 +9,109 @@ const string TransferDate_0706("0706");
 
 class ILandTaxCal
 {
-    virtual double calTax() = 0;
-
+public:
+	ILandTaxCal(int liveYears) : liveYears_(liveYears), holdngYears_(liveYears) {}
+	ILandTaxCal(int liveYears, int holdngYears) : liveYears_(liveYears), holdngYears_(holdngYears) {}
+	virtual double calAcquisitionTax(double acquisitionPrice, int py, int numofHouse) = 0;
+	virtual int calLongteramHoldingDeductionRate(bool realLive, int liveYears, int holdingYears) = 0;
+	virtual int getLiveYears() = 0;
+	virtual void setLiveYears(int years) = 0;
+	virtual void expectLandRevnue() = 0;
+public:
+	int liveYears_;
+	int holdngYears_;
 };
 
 class landTaxCal_1216 : public ILandTaxCal
 {
-    virtual double calTax() override
-    {
-        cout << "landTaxCal_1216" << endl;
-    }
+public:
+	landTaxCal_1216(int liveYears) : ILandTaxCal(liveYears) {}
+	virtual void setLiveYears(int years) { liveYears_ = years; }
+	virtual int getLiveYears() { return liveYears_; }
+	virtual int calLongteramHoldingDeductionRate(bool realLive, int liveYears, int holdingYears)
+	{
+		int retDeductionRate = 0;
+		if (realLive) retDeductionRate = holdingYears * 8;
+		else		  retDeductionRate = holdingYears * 2;
+
+		return retDeductionRate;
+	}
+
+	virtual double calAcquisitionTax(double acquisitionPrice, int py, int numofHouse) override
+	{
+		double retAcquisitionTax = 0;
+		if (numofHouse <= 3) {
+			if (acquisitionPrice < 6e9) {
+				if(py < 85) retAcquisitionTax = acquisitionPrice * 0.011;
+				else retAcquisitionTax = acquisitionPrice * 0.013;
+			} else if (acquisitionPrice < 9e9) {
+				if (py < 85) retAcquisitionTax = acquisitionPrice * 0.022;
+				else retAcquisitionTax = acquisitionPrice * 0.024;
+			}
+			else {
+				if (py < 85) retAcquisitionTax = acquisitionPrice * 0.033;
+				else retAcquisitionTax = acquisitionPrice * 0.035;
+			}
+		}
+		else {
+			retAcquisitionTax = acquisitionPrice * 0.04;
+		}
+
+		return retAcquisitionTax;
+	}
+	virtual void expectLandRevnue()
+	{
+
+	}
 };
 
 class landTaxCal_0706 : public ILandTaxCal
 {
-    virtual double calTax() override
-    {
-        cout << "landTaxCal_0706" << endl;
-    }
+public:
+	landTaxCal_0706(int liveYears, int holdingYears) : ILandTaxCal(liveYears, holdingYears) {}
+	virtual void setLiveYears(int years) { liveYears_ = years; }
+	virtual int getLiveYears() { return liveYears_; }
+	virtual int calLongteramHoldingDeductionRate(bool realLive, int liveYears, int holdingYears)
+	{
+		int retDeductionRate = 0;
+		if (realLive) retDeductionRate = holdingYears * 8;
+		else		  retDeductionRate = holdingYears * 2;
+
+		return retDeductionRate;
+	}
+
+	virtual double calAcquisitionTax(double acquisitionPrice, int py, int numofHouse) override
+	{
+		double retAcquisitionTax = 0;
+		if (numofHouse <= 1) {
+			if (acquisitionPrice < 6e9) {
+				if (py < 85) retAcquisitionTax = acquisitionPrice * 0.011;
+				else retAcquisitionTax = acquisitionPrice * 0.013;
+			}
+			else if (acquisitionPrice < 9e9) {
+				if (py < 85) retAcquisitionTax = acquisitionPrice * 0.022;
+				else retAcquisitionTax = acquisitionPrice * 0.024;
+			}
+			else {
+				if (py < 85) retAcquisitionTax = acquisitionPrice * 0.033;
+				else retAcquisitionTax = acquisitionPrice * 0.035;
+			}
+		}
+		else if (numofHouse <= 2) {
+			if (py < 85) retAcquisitionTax = acquisitionPrice * 0.083;
+			else retAcquisitionTax = acquisitionPrice * 0.085;
+		}
+		else {
+			retAcquisitionTax = acquisitionPrice * 0.125;
+		}
+
+		return retAcquisitionTax;
+	}
+
+	virtual void expectLandRevnue()
+	{
+
+	}
 };
 
 class LandTaxCal
@@ -34,32 +119,53 @@ class LandTaxCal
     ILandTaxCal* landTax;
 
 public:
-    LandTaxCal() { }
+    LandTaxCal() : numhouse_(0), jointTenancy_(false), acquisitionPrice_(0), transferPrice_(0), 
+		tranferMargin_(0), extraExpense_(0), tax_(0), commmision_(0), landTax(0), years_(0), acquisitionTax_(0) { }
 private:
-    int numhouse_;                  // 주택수
+	string title_;					// 집 이름	
+    int numhouse_;                  // 주택수	
     bool jointTenancy_;             // 공동명의
+	bool reallive2years_;           // 2년거주
     double acquisitionPrice_;       // 취득가액
+	double acquisitionTax_;			// 취득세
     string acquisitionDate_;        // 취득일자
     double transferPrice_;          // 양도가액
     string transferDate_;           // 양도일자
     double tranferMargin_;          // 양도차액
+	double taxBaseTransferMargin_;	// 과세대상 양도 차액
     double extraExpense_;           // 기타경비
-    double tax_;                    // 양도소득세
+    double tax_;                    // 납부 세액(양도소득세)
     double commmision_;             // 복비
+	int years_;						// 보유기간
+	int liveYears_;					// 실제 거주기간
+	int py_;						// 평수
 
 public:
     void setNumofHouse(const int& numofHouse);
     void setJointTenacy(const bool& jointTenancy);
+	bool getJointTenacy() { return jointTenancy_; };
     void setAcquisitionPrice(const double& acquisitionPrice);
     void setTransferPrice(const double& transferPrice);
+	double getTransferPrice() { return transferPrice_; };
+	void setTaxBaseTransferMargin(const double& taxBaseTransferMargin);
+	double getTaxBaseTransferMargin() { return taxBaseTransferMargin_; };
     void setAcquisitionDate(const string&  acquisitionDate);
     void setTransferDate(const string&  transferDate);
+	void setActualDurationofStay(int years) { liveYears_ = years; }
     void show();
-    void input();
+    void addInfo();
     void updateData();
-    double calTransferMargin(double transferPrice, double acquisitionPrice);
-
+	void calTransferMargin(double transferPrice, int py, double acquisitionPrice);
+	double getTransferMargin();
+	int calYearfromDate();
+	bool getReallive2year() { return reallive2years_; }
+	int getAssementStandardTaxBase();
+	int getHoldingYears() { return years_; }
+	double calLongteramHoldingDeductionRate();
+	void setTax(double tax) { tax_ = tax; }
+	double getTrasferMarginTaxRate(double taxBaseTransferMargin);
+	double getProgressiveTax(double trasferMarginTaxRate);
     // TBD
-    void drawRevenue()    {            }
-    void saveRevenue()    {            }
+	void drawRevenue();
+	void saveRevenue();
 };
