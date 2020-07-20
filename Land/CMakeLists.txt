@@ -29,19 +29,21 @@
 #
 #######################################################################################################################
 
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.10)
 
 project(
-  land-expect
+  landCalculator
   LANGUAGES CXX
 )
 
 include(GNUInstallDirs)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER g++)
 
 # Add subdirectories to the build.
+add_subdirectory(lib_json)
 add_subdirectory(src)
+

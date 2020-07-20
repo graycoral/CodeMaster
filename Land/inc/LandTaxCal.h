@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -119,11 +121,11 @@ class LandTaxCal
     ILandTaxCal* landTax;
 
 public:
-    LandTaxCal() : numhouse_(0), jointTenancy_(false), acquisitionPrice_(0), transferPrice_(0), 
+    LandTaxCal() : numhouse_(0), jointTenancy_(false), acquisitionPrice_(0), transferPrice_(0),
 		tranferMargin_(0), extraExpense_(0), tax_(0), commmision_(0), landTax(0), years_(0), acquisitionTax_(0) { }
 private:
-	string title_;					// 집 이름	
-    int numhouse_;                  // 주택수	
+	string title_;					// 집 이름
+    int numhouse_;                  // 주택수
     bool jointTenancy_;             // 공동명의
 	bool reallive2years_;           // 2년거주
     double acquisitionPrice_;       // 취득가액
@@ -165,6 +167,10 @@ public:
 	void setTax(double tax) { tax_ = tax; }
 	double getTrasferMarginTaxRate(double taxBaseTransferMargin);
 	double getProgressiveTax(double trasferMarginTaxRate);
+
+	std::pair<int,double> calExpectedTax();
+	void expectLandRevnue(LandTaxCal landTaxCal ,double diffence);
+
     // TBD
 	void drawRevenue();
 	void saveRevenue();

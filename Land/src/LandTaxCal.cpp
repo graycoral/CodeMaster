@@ -40,7 +40,7 @@ void LandTaxCal::addInfo()
 void LandTaxCal::setNumofHouse(const int& numofHouse)   { numhouse_ = numofHouse; }
 void LandTaxCal::setJointTenacy(const bool& jointTenancy)
 {
-	// °øµ¿¸íÀÇ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (jointTenancy == 1 || jointTenancy == 0) {
 		jointTenancy_ = jointTenancy;
 	}
@@ -60,7 +60,7 @@ int LandTaxCal::calYearfromDate()
 {
 	int retYears = 0;
 	int month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	try {		
+	try {
 		int acqYear = std::stoi(acquisitionDate_.substr(0, 4));
 		int trasYear = std::stoi(transferDate_.substr(0, 4));
 		int acqMonth = std::stoi(acquisitionDate_.substr(4, 2));
@@ -80,7 +80,7 @@ int LandTaxCal::calYearfromDate()
 }
 
 void LandTaxCal::setAcquisitionDate(const string&  acquisitionDate)
-{ 
+{
 	acquisitionDate_= acquisitionDate;
 }
 
@@ -98,9 +98,9 @@ void LandTaxCal::setTransferDate(const string&  transferDate)
 }
 
 void LandTaxCal::calTransferMargin(double transferPrice, int py, double acquisitionPrice)
-{ 
+{
 	extraExpense_ += commmision_ + landTax->calAcquisitionTax(acquisitionPrice, py, numhouse_);
-    tranferMargin_ = transferPrice_- acquisitionPrice_ - extraExpense_;    
+    tranferMargin_ = transferPrice_- acquisitionPrice_ - extraExpense_;
 }
 
 double LandTaxCal::getTransferMargin()
@@ -169,11 +169,27 @@ double LandTaxCal::getProgressiveTax(double trasferMarginTaxRate)
 	else if (trasferMarginTaxRate <= 0.4)	return 254e5;
 	else 									return 354e5;
 }
+std::pair<int,double> LandTaxCal::calExpectedTax()
+{
+	
+}
+
+void LandTaxCal::expectLandRevnue(LandTaxCal landTaxCal ,double diffence)
+{
+	vector<std::pair<int, double>> expectedRevenue;
+
+	for(int i=0; i < 5; i++) {
+		std::pair<int,double> expectedTax = calExpectedTax();
+		expectedRevenue.push_back(expectedTax);
+	}
+	// TBD(save Json file)
+
+}
 
 void LandTaxCal::saveRevenue()
 {
     cout << "================== " << __func__  << "===================================" << endl;
-    
+
 
 }
 

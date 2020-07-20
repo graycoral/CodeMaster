@@ -18,7 +18,8 @@ public:
     void calTax(std::shared_ptr<LandTaxCal> landTaxCal);
     void saveDatatoExcel();
     void updateLandInfo();
-	void showLandInfo(const LandCal& land);	
+	void showLandInfo(const LandCal& land);
+    void expectLandRevnue(const LandCal& landCal, double diffence);
 	int getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase);
     std::shared_ptr<LandTaxCal> makeLandInfo();
 private:

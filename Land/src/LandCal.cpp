@@ -30,45 +30,45 @@ int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTa
 void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 {
     cout << "================== " << __func__  << "===================================" << endl;
-	// �絵����
+	// 양도차액
 	double transferMargin = landTaxCal->getTransferMargin();
-	double basicDeduction = landTaxCal->calYearfromDate() * 25e6; // �⺻ ���� 250����
+	double basicDeduction = landTaxCal->calYearfromDate() * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
 
-	// �������絵����
+	// 과세대상 양도 차액
 	double taxBaseTransferMargin = landTaxCal->getTransferPrice() >= 1e9 ? transferMargin * (landTaxCal->getTransferPrice() - 1e9) / landTaxCal->getTransferPrice() : 0;
 	landTaxCal->setTaxBaseTransferMargin(taxBaseTransferMargin);
 
-	// ��⺸�� Ư������
+	// 장기보유 특별 공제
 	int longTermDeductuibRate = 1;
 	if (numoofHouse_ == 1) longTermDeductuibRate *= landTaxCal->calLongteramHoldingDeductionRate();
 	else				   longTermDeductuibRate *= 0;
 
 	taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);
 
-	// �κ� �絵�ҵ�ݾ�
+	// 인별 양도소득금액
 	if (landTaxCal->getJointTenacy() > 1) {
 		taxBaseTransferMargin /= landTaxCal->getJointTenacy();
 	}
 
-	// ����ǥ��
+	// 과세표준
 	taxBaseTransferMargin -= basicDeduction;
 
-	// �絵 �ҵ漼��
+	// 양도소득세율
 	double trasferMarginTaxRate = landTaxCal->getTrasferMarginTaxRate(taxBaseTransferMargin);
 
-	// ���� ����
+	// 누진공제액
 	double progressiveTax = landTaxCal->getProgressiveTax(trasferMarginTaxRate);
 
-	// ���鼼��
+	// 감면세액
 	double deductionTax = 0; // TBD
 
-	// �絵�ҵ漼 = ����ǥ�� * �絵 �ҵ漼�� - ���� ���� - ���鼼��
+	// 양도소득세 = 과세표준 * 양도소득세율 - 누진공제액 - 감면세액
 	double tax = taxBaseTransferMargin * trasferMarginTaxRate - deductionTax - progressiveTax;
 
-	// ���� �ҵ漼(10%)
+	//지방소득세(10%)
 	tax *= 1.1;
 
-	// �κ� �絵�ҵ�ݾ�
+	// 인별 납부금액
 	if (landTaxCal->getJointTenacy() > 1) {
 		tax *= landTaxCal->getJointTenacy();
 	}
@@ -85,13 +85,15 @@ void LandCal::showLandInfo(const LandCal& landCal)
 	}
 }
 
-void LandCal::expectLandRevnue(const LandCal& landCal)
+void LandCal::expectLandRevnue(const LandCal& landCal, double diffence)
 {
 	cout << "================== " << __func__ << "===================================" << endl;
-	cout << "number of house : " << landCal.numoofHouse_ << endl;
-	for (auto v : landTaxCal) {
-		v->show();
-	}
+	double diffValue = 0; int housenum = 0;
+	cout << "please input whay you want differce of value : " << diffValue << endl;
+	cout << "please input your house number : " << housenum << endl;
+//	landCal.expectLandRevnue(landCal.landTaxCal[housenum-1], diffence);
+
+
 }
 
 std::shared_ptr<LandTaxCal> LandCal::makeLandInfo()
