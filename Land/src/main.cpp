@@ -20,12 +20,10 @@ int main(int argc, const char* argv[])
             land.saveDatatoExcel();
         } else if (cmd == 3) {
             land.updateLandInfo();
-        }
-        else if (cmd == 4) {
+        } else if (cmd == 4) {
             land.showLandInfo(land);
-        }
-        else if (cmd == 5) {
-            land.showLandInfo(land);
+        } else if (cmd == 5) {
+            land.expectLandRevnue(land);
         } else if (cmd == 6) {
             cout << " Exit Land Calculator " << endl;
             exit(0);

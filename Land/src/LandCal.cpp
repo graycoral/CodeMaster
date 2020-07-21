@@ -4,11 +4,12 @@ using namespace std;
 
 void LandCal::showMain()
 {
-    clrscr();
+    // clrscr();
     cout << "1. Add your house Info" << endl;
     cout << "2. Save Data to Excel" << endl;
     cout << "3. Update your house Info" << endl;
     cout << "4. show your house Info and Tax" << endl;
+    cout << "5. Expect Your Reveue and Tax" << endl;
     cout << "6. Exit" << endl << endl;
 
     cout << "please select number : ";
@@ -31,6 +32,7 @@ int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTa
 void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 {
     cout << "================== " << __func__  << "===================================" << endl;
+#if 0
     // 양도차액
     double transferMargin = landTaxCal->getTransferMargin();
     double basicDeduction = landTaxCal->calYearfromDate( landTaxCal->getAcquisitionDate(), landTaxCal->getTransferDate_()) * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
@@ -74,6 +76,8 @@ void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
         tax *= landTaxCal->getJointTenacy();
     }
 
+#endif
+    double tax = landTaxCal->calExpectedTax(landTaxCal->getTransferPrice());
     landTaxCal->setTax(tax);
 }
 
@@ -87,14 +91,21 @@ void LandCal::showLandInfo(const LandCal& landCal)
     cout << endl << "please input any button";
 }
 
-void LandCal::expectLandRevnue(const LandCal& landCal, double diffence)
+void LandCal::expectLandRevnue(const LandCal& landCal)
 {
     cout << "================== " << __func__ << "===================================" << endl;
-    double diffValue = 0; int housenum = 0;
-    cout << "please input whay you want differce of value : " << diffValue << endl;
-    cout << "please input your house number : " << housenum << endl;
-//	landCal.expectLandRevnue(landCal.landTaxCal[housenum-1], diffence);
 
+    if(getNumofHoouses()) {
+        double diffValue = 0; int housenum = 0;
+        cout << "please input what you want differce of value : ";
+        cin >> diffValue;
+        cout << "please input your house number : " ;
+        cin >> housenum;
+        landCal.landTaxCal[housenum-1]->expectLandRevnue(diffValue);
+    }
+    else {
+        cout << "please input your house info before expecting land revenue" << endl;
+    }
 
 }
 

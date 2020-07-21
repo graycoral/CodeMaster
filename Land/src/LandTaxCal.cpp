@@ -182,9 +182,39 @@ double LandTaxCal::calExpectedTax(double transferPrice)
     else                    longTermDeductuibRate *= 0;
 
     taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);
+
+    // 인별 양도소득금액
+    if (getJointTenacy() > 1) {
+        taxBaseTransferMargin /= getJointTenacy();
+    }
+
+    // 과세표준
+    taxBaseTransferMargin -= basicDeduction;
+
+    // 양도소득세율
+    double trasferMarginTaxRate = getTrasferMarginTaxRate(taxBaseTransferMargin);
+
+    // 누진공제액
+    double progressiveTax = getProgressiveTax(trasferMarginTaxRate);
+
+    // 감면세액
+    double deductionTax = 0; // TBD
+
+    // 양도소득세 = 과세표준 * 양도소득세율 - 누진공제액 - 감면세액
+    double retTax = taxBaseTransferMargin * trasferMarginTaxRate - deductionTax - progressiveTax;
+
+    //지방소득세(10%)
+    retTax *= 1.1;
+
+    // 인별 납부금액
+    if (getJointTenacy() > 1) {
+        retTax *= getJointTenacy();
+    }
+
+    return retTax;
 }
 
-void LandTaxCal::expectLandRevnue(LandTaxCal landTaxCal ,double diffence)
+void LandTaxCal::expectLandRevnue(double diffence)
 {
     vector<std::pair<double, double>> expectedRevenue;
 
@@ -193,7 +223,22 @@ void LandTaxCal::expectLandRevnue(LandTaxCal landTaxCal ,double diffence)
         double expectedTax = calExpectedTax(transferPrice);
         expectedRevenue.push_back({transferPrice, expectedTax});
     }
+
+    cout << "양도가액" << setw(20) << "세금" << setw(20) << "손익" << endl;
+    for(auto revenue : expectedRevenue) {
+        cout << revenue.first << setw(20) << revenue.second << setw(20) << revenue.first - revenue.second << endl;
+    }
+    cout << endl << "please input any button" << endl;
+    fflush(stdin);
+    getchar(); getchar();
+
     // TBD(save Json file)
+}
+
+void LandTaxCal::expectLandRevnuebyYear(int endYear)
+{
+    vector<std::pair<double, double>> expectedRevenue;
+    // TBD
 }
 
 void LandTaxCal::saveRevenue()

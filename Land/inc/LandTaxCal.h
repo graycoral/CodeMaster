@@ -18,7 +18,6 @@ public:
     virtual int calLongteramHoldingDeductionRate(bool realLive, int liveYears, int holdingYears) = 0;
     virtual int getLiveYears() = 0;
     virtual void setLiveYears(int years) = 0;
-    virtual void expectLandRevnue() = 0;
 public:
     int liveYears_;
     int holdngYears_;
@@ -60,10 +59,6 @@ public:
         }
 
         return retAcquisitionTax;
-    }
-    virtual void expectLandRevnue()
-    {
-
     }
 };
 
@@ -109,11 +104,6 @@ public:
 
         return retAcquisitionTax;
     }
-
-    virtual void expectLandRevnue()
-    {
-
-    }
 };
 
 class LandTaxCal
@@ -124,7 +114,7 @@ public:
     LandTaxCal() : numhouse_(0), jointTenancy_(false), acquisitionPrice_(0), transferPrice_(0),
         tranferMargin_(0), extraExpense_(0), tax_(0), commmision_(0), landTax(0), years_(0), acquisitionTax_(0) { }
 private:
-    string title_;					// 집 이름
+    string title_;                  // 집 이름
     int numhouse_;                  // 주택수
     bool jointTenancy_;             // 공동명의
     bool reallive2years_;           // 2년거주
@@ -138,9 +128,9 @@ private:
     double extraExpense_;           // 기타경비
     double tax_;                    // 납부 세액(양도소득세)
     double commmision_;             // 복비
-    int years_;						// 보유기간
-    int liveYears_;					// 실제 거주기간
-    int py_;						// 평수
+    int years_;                     // 보유기간
+    int liveYears_;                 // 실제 거주기간
+    int py_;                        // 평수
 
 public:
     void setNumofHouse(const int& numofHouse);
@@ -173,7 +163,8 @@ public:
     string getTransferDate_()       {  return transferDate_; }
 
     double calExpectedTax(double transferPrice);
-    void expectLandRevnue(LandTaxCal landTaxCal ,double diffence);
+    void expectLandRevnue(double diffence);
+    void expectLandRevnuebyYear(int enbdYear);
 
     // TBD
     void drawRevenue();
