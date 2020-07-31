@@ -36,14 +36,7 @@ project(
   LANGUAGES CXX
 )
 
-include(GNUInstallDirs)
-
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_COMPILER g++)
-
 # Add subdirectories to the build.
-#add_subdirectory(jsoncpp/src)
+add_subdirectory(rapidjson)
 add_subdirectory(src)
 

@@ -4,8 +4,22 @@ set(TARGET_NAME landCalculator)
 message(STATUS "---------------------------------------------------")
 message(STATUS "${TARGET_NAME} - Importing dependencies ")
 
+include(GNUInstallDirs)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 # Automatically add the current source- and build directories to the include path.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+find_package(RapidJSON)
+
+include_directories("../build/usr/local/include/")
+include_directories("../inc/")
+
 # Collect source files
 file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/src *.cpp)
 

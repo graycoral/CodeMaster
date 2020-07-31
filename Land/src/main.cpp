@@ -2,8 +2,6 @@
 
 using namespace std;
 
-
-
 int main(int argc, const char* argv[])
 {
     int cmd;
@@ -12,7 +10,7 @@ int main(int argc, const char* argv[])
     while(1) {
         clrscr();
         cout << "========== Land Calculator ==========" << endl;
-        land.showMain();
+        land.init(land);
         cin >> cmd;
         if(cmd == 1) {
             land.addLandInfo();

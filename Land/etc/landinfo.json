@@ -1,0 +1,18 @@
+{
+    "name" : "Youngho Kim",
+    "housesInfo1" : [
+        {
+            "name" : "Bangbaedong",
+            "acqutionPrice" : "1000000000",
+            "transferPrice" : "1500000000",
+            "acqutionDate" : "20170520"
+        }
+    ],
+    "housesInfo2" : [
+        {
+            "name" : "Gwahcheon",
+            "acqutionPrice" : "1000000000",
+            "transferPrice" : "1500000000"
+        }
+    ]
+}

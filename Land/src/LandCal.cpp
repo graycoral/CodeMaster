@@ -1,6 +1,27 @@
 #include "../inc/LandCal.h"
+#include <rapidjson/filereadstream.h>
+#include <rapidjson/document.h>
+#include <cstdio>
 
 using namespace std;
+
+static constexpr const char kJsonPath[] = "./etc/landinfo.json";
+
+void LandCal::init(const LandCal& landCal)
+{
+    readData();
+}
+
+void LandCal::readData()
+{
+    FILE* fp = fopen("./etc/landinfo.json", "r");
+    char readBuffer[65536];
+    rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+
+    rapidjson::Document d;
+    d.ParseStream(is);
+    fclose(fp);
+}
 
 void LandCal::showMain()
 {
@@ -85,6 +106,7 @@ void LandCal::showLandInfo(const LandCal& landCal)
 {
     cout << "================== " << __func__ << "===================================" << endl;
     cout << "number of house : " << landCal.numoofHouse_ << endl;
+    cout << "number of house : " << this->numoofHouse_ << endl;
     for (auto v : landTaxCal) {
         v->show();
     }

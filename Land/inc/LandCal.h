@@ -4,7 +4,9 @@
 #include <vector>
 #include <memory>
 
-#include "LandTaxCal.h"
+#include <LandTaxCal.h>
+#include <rapidjson/document.h>     // rapidjson's DOM-style API
+#include <rapidjson/prettywriter.h> // for stringify JSON
 
 #define clrscr()    system("clear")
 
@@ -15,6 +17,8 @@ class LandCal
     vector<std::shared_ptr<LandTaxCal>> landTaxCal;
 public:
     LandCal() : numoofHouse_(0) {}
+    void init(const LandCal& landCal);
+    void readData();
     void showMain();
     void addLandInfo();
     void calTax(std::shared_ptr<LandTaxCal> landTaxCal);
@@ -23,7 +27,7 @@ public:
     void showLandInfo(const LandCal& land);
     void expectLandRevnue(const LandCal& landCal);
     int getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase);
-    int getNumofHoouses()   {   return numoofHouse_; }
+    const int getNumofHoouses() const {   return numoofHouse_; }
     std::shared_ptr<LandTaxCal> makeLandInfo();
 private:
     int numoofHouse_;
