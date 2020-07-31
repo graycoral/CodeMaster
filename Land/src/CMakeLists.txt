@@ -18,7 +18,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(RapidJSON)
 
 include_directories("../build/usr/local/include/")
-include_directories("../inc/")
+include_directories("./src/")
+#include_directories("./src/landConfigurartion")
 
 # Collect source files
 file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/src *.cpp)

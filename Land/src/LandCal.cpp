@@ -1,4 +1,4 @@
-#include "../inc/LandCal.h"
+#include <LandCal.h>
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/document.h>
 #include <cstdio>
@@ -17,21 +17,20 @@ void LandCal::readData()
     FILE* fp = fopen("./etc/landinfo.json", "r");
     char readBuffer[65536];
     rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-
     rapidjson::Document d;
     d.ParseStream(is);
-    fclose(fp);
+    cout << readBuffer << endl;
 }
 
 void LandCal::showMain()
 {
     // clrscr();
-    cout << "1. Add your house Info" << endl;
-    cout << "2. Save Data to Excel" << endl;
-    cout << "3. Update your house Info" << endl;
-    cout << "4. show your house Info and Tax" << endl;
-    cout << "5. Expect Your Reveue and Tax" << endl;
-    cout << "6. Exit" << endl << endl;
+    cout << "[1] Add your house Info" << endl;
+    cout << "[2] Save Data to Excel" << endl;
+    cout << "[3] Update your house Info" << endl;
+    cout << "[4] show your house Info and Tax" << endl;
+    cout << "[5] Expect Your Reveue and Tax" << endl;
+    cout << "[6] Exit" << endl << endl;
 
     cout << "please select number : ";
 }

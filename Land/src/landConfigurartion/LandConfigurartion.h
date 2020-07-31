@@ -14,7 +14,7 @@
 class LandConfiguration
 {
 public:
-    explicit LandConfiguration(std::string const* path) : cfg_path_(path)
+    explicit LandConfiguration(std::string const& path) : cfg_path_(path)
     {
         ReadJsonConfigurations();
     }

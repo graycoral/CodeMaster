@@ -1,4 +1,4 @@
-#include "../inc/LandTaxCal.h"
+#include <LandTaxCal.h>
 
 using namespace std;
 

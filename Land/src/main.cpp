@@ -1,4 +1,4 @@
-#include "../inc/LandCal.h"
+#include <LandCal.h>
 
 using namespace std;
 
@@ -10,6 +10,7 @@ int main(int argc, const char* argv[])
     while(1) {
         clrscr();
         cout << "========== Land Calculator ==========" << endl;
+        land.showMain();
         land.init(land);
         cin >> cmd;
         if(cmd == 1) {
