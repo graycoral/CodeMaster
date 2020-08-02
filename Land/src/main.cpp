@@ -10,8 +10,9 @@ int main(int argc, const char* argv[])
     while(1) {
         clrscr();
         cout << "========== Land Calculator ==========" << endl;
+        land.init();
         land.showMain();
-        land.init(land);
+        
         cin >> cmd;
         if(cmd == 1) {
             land.addLandInfo();

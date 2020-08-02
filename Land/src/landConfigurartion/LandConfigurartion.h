@@ -10,14 +10,17 @@
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/document.h>
 #include <cstdio>
+#include <fstream>
 
 class LandConfiguration
 {
 public:
     explicit LandConfiguration(std::string const& path) : cfg_path_(path)
     {
-        ReadJsonConfigurations();
+        //ReadJsonConfigurations();
     }
+
+    void UpdateLandInfo();
 private:
     void ReadJsonConfigurations();
     std::string cfg_path_;

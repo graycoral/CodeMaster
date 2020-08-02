@@ -19,8 +19,8 @@ class LandCal
     vector<std::shared_ptr<LandTaxCal>> landTaxCal;
 public:
     LandCal() : numoofHouse_(0) {}
-    void init(const LandCal& landCal);
-    void readData();
+    void init();
+    int readData();
     void showMain();
     void addLandInfo();
     void calTax(std::shared_ptr<LandTaxCal> landTaxCal);

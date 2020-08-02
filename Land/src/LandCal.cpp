@@ -1,25 +1,45 @@
 #include <LandCal.h>
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/document.h>
 #include <cstdio>
 
 using namespace std;
 
 static constexpr const char kJsonPath[] = "./etc/landinfo.json";
 
-void LandCal::init(const LandCal& landCal)
+void LandCal::init()
 {
-    readData();
+    if( readData() == 0) {
+        cout << "No Land Info : " << kJsonPath << endl;
+        addLandInfo();
+    }
 }
 
-void LandCal::readData()
+int LandCal::readData()
 {
-    FILE* fp = fopen("./etc/landinfo.json", "r");
+    int numofHouse = 0;
+    LandConfiguration readJson(kJsonPath);
+ #if 0
+    FILE* fp = fopen(kJsonPath, "r");
     char readBuffer[65536];
     rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-    rapidjson::Document d;
-    d.ParseStream(is);
-    cout << readBuffer << endl;
+    rapidjson::Document document;
+    document.ParseStream(is);
+    
+
+    //cout << readBuffer << endl;
+    if(document.IsObject() || document["numofhouse"].GetInt() > 0) {
+        cout << document["numofhouse"].GetInt() << endl;
+        numoofHouse_ = document["numofhouse"].GetInt();
+        for(int i=0; i < numoofHouse_; i++) {
+            updateLandInfo();
+        }
+    } else {
+        //assert(document.IsObject());
+        cout << "No Landif on your json file. : " << kJsonPath << endl;
+        addLandInfo();
+    }
+#endif
+
+    return numofHouse;
 }
 
 void LandCal::showMain()
@@ -52,51 +72,6 @@ int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTa
 void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 {
     cout << "================== " << __func__  << "===================================" << endl;
-#if 0
-    // 양도차액
-    double transferMargin = landTaxCal->getTransferMargin();
-    double basicDeduction = landTaxCal->calYearfromDate( landTaxCal->getAcquisitionDate(), landTaxCal->getTransferDate_()) * 25e6; // 연 1회 인별 250만원 공제 적용 과세표준
-
-    // 과세대상 양도 차액
-    double taxBaseTransferMargin = landTaxCal->getTransferPrice() >= 1e9 ? transferMargin * (landTaxCal->getTransferPrice() - 1e9) / landTaxCal->getTransferPrice() : 0;
-    landTaxCal->setTaxBaseTransferMargin(taxBaseTransferMargin);
-
-    // 장기보유 특별 공제
-    int longTermDeductuibRate = 1;
-    if (numoofHouse_ == 1)  longTermDeductuibRate *= landTaxCal->calLongteramHoldingDeductionRate(landTaxCal->getReallive2year(), landTaxCal->getActualDurationofStay(), landTaxCal->getHoldingYears());
-    else                    longTermDeductuibRate *= 0;
-
-    taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);
-
-    // 인별 양도소득금액
-    if (landTaxCal->getJointTenacy() > 1) {
-        taxBaseTransferMargin /= landTaxCal->getJointTenacy();
-    }
-
-    // 과세표준
-    taxBaseTransferMargin -= basicDeduction;
-
-    // 양도소득세율
-    double trasferMarginTaxRate = landTaxCal->getTrasferMarginTaxRate(taxBaseTransferMargin);
-
-    // 누진공제액
-    double progressiveTax = landTaxCal->getProgressiveTax(trasferMarginTaxRate);
-
-    // 감면세액
-    double deductionTax = 0; // TBD
-
-    // 양도소득세 = 과세표준 * 양도소득세율 - 누진공제액 - 감면세액
-    double tax = taxBaseTransferMargin * trasferMarginTaxRate - deductionTax - progressiveTax;
-
-    //지방소득세(10%)
-    tax *= 1.1;
-
-    // 인별 납부금액
-    if (landTaxCal->getJointTenacy() > 1) {
-        tax *= landTaxCal->getJointTenacy();
-    }
-
-#endif
     double tax = landTaxCal->calExpectedTax(landTaxCal->getTransferPrice());
     landTaxCal->setTax(tax);
 }
