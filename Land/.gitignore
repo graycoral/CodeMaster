@@ -3,3 +3,5 @@
 /rapidjson/
 *.exe
 *.out
+/usr
+

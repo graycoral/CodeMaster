@@ -1,9 +1,10 @@
 #include <LandCal.h>
-#include <cstdio>
+#include "landConfigurartion/LandConfigurartion.h"
 
 using namespace std;
 
-static constexpr const char kJsonPath[] = "./etc/landinfo.json";
+// static constexpr const char kJsonPath[] = "./etc/landinfo.json";
+const std::string kJsonPath = "./etc/landinfo.json";
 
 void LandCal::init()
 {
@@ -16,6 +17,7 @@ void LandCal::init()
 int LandCal::readData()
 {
     int numofHouse = 0;
+    // LandConfiguration readJson;
     LandConfiguration readJson(kJsonPath);
  #if 0
     FILE* fp = fopen(kJsonPath, "r");
@@ -23,7 +25,7 @@ int LandCal::readData()
     rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
     rapidjson::Document document;
     document.ParseStream(is);
-    
+
 
     //cout << readBuffer << endl;
     if(document.IsObject() || document["numofhouse"].GetInt() > 0) {

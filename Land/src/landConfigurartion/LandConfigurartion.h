@@ -1,3 +1,5 @@
+#ifndef __LAND_CONFIGURATION_H_
+#define __LAND_CONFIGURATION_H_
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -15,13 +17,19 @@
 class LandConfiguration
 {
 public:
-    explicit LandConfiguration(std::string const& path) : cfg_path_(path)
+    LandConfiguration()
     {
-        //ReadJsonConfigurations();
+        // ReadJsonConfigurations();
+        UpdateLandInfo();
     }
-
+    LandConfiguration(const std::string& path) : cfg_path_(path)
+    {
+        LandConfiguration::ReadJsonConfigurations(cfg_path_);
+    }
     void UpdateLandInfo();
 private:
-    void ReadJsonConfigurations();
+    void ReadJsonConfigurations(const std::string& file_path);
     std::string cfg_path_;
+
 };
+#endif

@@ -5,10 +5,6 @@
 #include <memory>
 
 #include <LandTaxCal.h>
-#include "landConfigurartion/LandConfigurartion.h"
-
-#include <rapidjson/document.h>     // rapidjson's DOM-style API
-#include <rapidjson/prettywriter.h> // for stringify JSON
 
 #define clrscr()    system("clear")
 

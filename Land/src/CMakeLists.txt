@@ -18,12 +18,13 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(RapidJSON)
 
 #include_directories("../build/usr/local/include/")
-include_directories("../rapidjson/include")
-include_directories("./src/")
-include_directories("./src/landConfigurartion")
+include_directories("${PROJECT_SOURCE_DIR}/rapidjson/include")
+include_directories("${PROJECT_SOURCE_DIR}/src")
+include_directories("${PROJECT_SOURCE_DIR}/src/landConfigurartion")
 
 # Collect source files
 file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/src *.cpp)
+file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/src/landConfigurartion *.cpp)
 
 add_executable(${TARGET_NAME} ${SRCS})
 

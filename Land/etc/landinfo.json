@@ -1,19 +1,24 @@
 {
     "name" : "Youngho Kim",
-    "numofhouse" : 2,
-    "housesInfo1" : [
+    "houses" : [
         {
-            "name" : "Bangbaedong",
-            "acqutionPrice" : "1000000000",
-            "transferPrice" : "1500000000",
-            "acqutionDate" : "20170520"
-        }
-    ],
-    "housesInfo2" : [
-        {
-            "name" : "Gwahcheon",
-            "acqutionPrice" : "1000000000",
-            "transferPrice" : "1500000000"
+            "numofhouse" : 2,
+            "houseInfos" :[
+                {
+                    "name" : "Bangbaedong",
+                    "acqutionPrice" : "1000000000",
+                    "transferPrice" : "1500000000",
+                    "acqutionDate" : "20170520",
+                    "transferDate" : "20220520"
+                },
+                {
+                    "name" : "Gwahcheon",
+                    "acqutionPrice" : "1000000000",
+                    "transferPrice" : "1500000000",
+                    "acqutionDate" : "20170520",
+                    "transferDate" : "20220520"
+                }
+            ]
         }
     ]
 }
