@@ -5,8 +5,13 @@
 #include <memory>
 
 #include <LandTaxCal.h>
-
+#ifdef __linux__
 #define clrscr()    system("clear")
+#endif
+
+#ifndef __linux__
+#define clrscr()    system("cls")
+#endif
 
 using namespace std;
 
