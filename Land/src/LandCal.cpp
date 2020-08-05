@@ -4,10 +4,11 @@
 using namespace std;
 
 // static constexpr const char kJsonPath[] = "./etc/landinfo.json";
-const std::string kJsonPath = "./etc/landinfo.json";
+const std::string kJsonPath = "../etc/landinfo.json";
 
 void LandCal::init()
 {
+    cout << "================== " << __func__  << "===================================" << endl;
     if( readData() == 0) {
         cout << "No Land Info : " << kJsonPath << endl;
         addLandInfo();
@@ -18,28 +19,8 @@ int LandCal::readData()
 {
     int numofHouse = 0;
     // LandConfiguration readJson;
+    cout << "================== " << __func__  << "===================================" << endl;
     LandConfiguration readJson(kJsonPath);
- #if 0
-    FILE* fp = fopen(kJsonPath, "r");
-    char readBuffer[65536];
-    rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-    rapidjson::Document document;
-    document.ParseStream(is);
-
-
-    //cout << readBuffer << endl;
-    if(document.IsObject() || document["numofhouse"].GetInt() > 0) {
-        cout << document["numofhouse"].GetInt() << endl;
-        numoofHouse_ = document["numofhouse"].GetInt();
-        for(int i=0; i < numoofHouse_; i++) {
-            updateLandInfo();
-        }
-    } else {
-        //assert(document.IsObject());
-        cout << "No Landif on your json file. : " << kJsonPath << endl;
-        addLandInfo();
-    }
-#endif
 
     return numofHouse;
 }

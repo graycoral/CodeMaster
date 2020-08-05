@@ -22,12 +22,14 @@ void LandConfiguration::ReadJsonConfigurations(const std::string& file_path)
         FILE* fp = fopen("./etc/landinfo.json", "r");
         char readBuffer[65536];
         rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-        #if 0
+
         rapidjson::Document document;
+        cout << "ParseStream" << file_path;
         document.ParseStream(is);
+#if 0
         if(document.IsObject() || document["numofhouse"].GetInt() > 0) {
             cout << document["numofhouse"].GetInt() << endl;
-            
+
             for(int i=0; i < document["numofhouse"].GetInt(); i++) {
                 UpdateLandInfo();
             }

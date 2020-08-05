@@ -17,14 +17,10 @@
 class LandConfiguration
 {
 public:
-    LandConfiguration()
-    {
-        // ReadJsonConfigurations();
-        UpdateLandInfo();
-    }
     LandConfiguration(const std::string& path) : cfg_path_(path)
     {
-        LandConfiguration::ReadJsonConfigurations(cfg_path_);
+        cout << "Check Land Info  : " << path;
+        LandConfiguration::ReadJsonConfigurations(path);
     }
     void UpdateLandInfo();
 private:
