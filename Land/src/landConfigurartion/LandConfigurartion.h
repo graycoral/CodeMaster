@@ -19,7 +19,6 @@ class LandConfiguration
 public:
     LandConfiguration(const std::string& path) : cfg_path_(path)
     {
-        cout << "Check Land Info  : " << path;
         LandConfiguration::ReadJsonConfigurations(path);
     }
     void UpdateLandInfo();

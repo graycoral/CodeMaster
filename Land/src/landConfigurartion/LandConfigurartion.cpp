@@ -4,40 +4,27 @@ using namespace std;
 
 void LandConfiguration::ReadJsonConfigurations(const std::string& file_path)
 {
-#if 0
-    std::fstream landCalConfig{ file_path.c_str(), std::fstream::in };
-    if(landCalConfig.is_open()) {
-        rapidjson::Document d;
-        d.ParseStream(landCalConfig);
-
-        if(d["houses"]["numofhouse"].GetInt() > 0) {
-
-        } else {
-            cout << "There is no LandInfo in Your landInfo JSON  : " << file_path;
-        }
-
-    }
-#endif
     try {
         FILE* fp = fopen("./etc/landinfo.json", "r");
         char readBuffer[65536];
         rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-
         rapidjson::Document document;
-        cout << "ParseStream" << file_path;
-        document.ParseStream(is);
-#if 0
-        if(document.IsObject() || document["numofhouse"].GetInt() > 0) {
-            cout << document["numofhouse"].GetInt() << endl;
+        document.ParseInsitu(readBuffer);
 
-            for(int i=0; i < document["numofhouse"].GetInt(); i++) {
-                UpdateLandInfo();
-            }
+        assert(document.IsObject());
+        assert(document.HasMember("houses"));
+        assert(document["houses"].HasMember("numofhouse"));
+
+        if(document["houses"]["numofhouse"].GetInt() > 0) {
+            cout << document["houses"]["numofhouse"].GetInt() << endl;
+
+            // for(int i=0; i < document["numofhouse"].GetInt(); i++) {
+            //     UpdateLandInfo();
+            // }
         }
         else {
             cout << "Skipped reading in LandInfo. Your landInfo JSON not found at: " << file_path;
         }
-        #endif
     } catch (...) {
         cout << "ASSERT" << file_path;
     }

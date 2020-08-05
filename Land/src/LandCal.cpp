@@ -8,7 +8,6 @@ const std::string kJsonPath = "../etc/landinfo.json";
 
 void LandCal::init()
 {
-    cout << "================== " << __func__  << "===================================" << endl;
     if( readData() == 0) {
         cout << "No Land Info : " << kJsonPath << endl;
         addLandInfo();
@@ -18,9 +17,9 @@ void LandCal::init()
 int LandCal::readData()
 {
     int numofHouse = 0;
-    // LandConfiguration readJson;
-    cout << "================== " << __func__  << "===================================" << endl;
     LandConfiguration readJson(kJsonPath);
+
+    
 
     return numofHouse;
 }
