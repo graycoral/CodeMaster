@@ -21,7 +21,7 @@ int main(int argc, const char* argv[])
         } else if (cmd == 3) {
             land.updateLandInfo();
         } else if (cmd == 4) {
-            land.showLandInfo(land);
+            land.showLandInfo();
         } else if (cmd == 5) {
             land.expectLandRevnue(land);
         } else if (cmd == 6) {

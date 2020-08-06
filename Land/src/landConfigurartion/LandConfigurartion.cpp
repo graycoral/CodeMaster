@@ -10,11 +10,9 @@ void LandConfiguration::ReadJsonConfigurations(const std::string& file_path, int
         fp = fopen(file_path.c_str(), "rb");
         char readBuffer[65536];
         rapidjson::FileReadStream fs(fp, readBuffer, sizeof(readBuffer));
-
         std::cout <<std::endl<< std::endl <<  readBuffer << std::endl << std::endl << std::endl;
-
         rapidjson::Document document;
-        // if(document.Parse(json).HasParseError())
+
         document.ParseStream(fs);
         if (document.HasParseError()) {
             std::cout << stderr << "Schema file is not a valid JSON\n";
@@ -26,6 +24,7 @@ void LandConfiguration::ReadJsonConfigurations(const std::string& file_path, int
         assert(document.IsObject());
         assert(document.HasMember("name"));
         landInfoName = document["name"].GetString();
+        numofHouse = document["houses"]["numofhouse"].GetInt();
 
     } catch (...) {
         cout << "ASSERT" << file_path;

@@ -24,10 +24,11 @@ public:
     int readData();
     void showMain();
     void addLandInfo();
+    void addLandInfofromData(int idx);
     void calTax(std::shared_ptr<LandTaxCal> landTaxCal);
     void saveDatatoExcel();
     void updateLandInfo();
-    void showLandInfo(const LandCal& land);
+    void showLandInfo();
     void expectLandRevnue(const LandCal& landCal);
     int getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase);
     const int getNumofHoouses() const {   return numoofHouse_; }

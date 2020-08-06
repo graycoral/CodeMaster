@@ -3,8 +3,7 @@
 
 using namespace std;
 
-// static constexpr const char kJsonPath[] = "./etc/landinfo.json";
-const std::string kJsonPath = "./etc/landinfo.json";
+static const string kJsonPath = "./etc/landinfo.json";
 
 void LandCal::init()
 {
@@ -12,8 +11,8 @@ void LandCal::init()
         cout << "No Land Info : " << kJsonPath << endl;
         addLandInfo();
     } else {
-        for(int i=0; i<numoofHouse_ ; i++){
-            addLandInfo();
+        for(int i=0; i< numoofHouse_ ; i++){
+            // addLandInfo();
         }
     }
 }
@@ -27,7 +26,6 @@ int LandCal::readData()
 
 void LandCal::showMain()
 {
-    // clrscr();
     cout << "[1] Add your house Info" << endl;
     cout << "[2] Save Data to Excel" << endl;
     cout << "[3] Update your house Info" << endl;
@@ -43,6 +41,14 @@ void LandCal::addLandInfo()
     cout << "Add Land your info" << endl;
     numoofHouse_++;
     std::shared_ptr<LandTaxCal> landTax = makeLandInfo(numoofHouse_);
+    calTax(landTax);
+    landTaxCal.push_back(landTax);
+}
+
+void LandCal::addLandInfofromData(int idx)
+{
+    cout << "Add Land your info from : "<< kJsonPath <<"[" << idx << "]" << endl;
+    std::shared_ptr<LandTaxCal> landTax = makeLandInfo(idx);
     calTax(landTax);
     landTaxCal.push_back(landTax);
 }
@@ -69,10 +75,9 @@ void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
     landTaxCal->setTax(tax);
 }
 
-void LandCal::showLandInfo(const LandCal& landCal)
+void LandCal::showLandInfo()
 {
-    cout << "================== " << __func__ << "===================================" << endl;
-    cout << "number of house : " << landCal.numoofHouse_ << endl;
+    cout << "number of house : " << numoofHouse_ << endl;
     for (auto v : landTaxCal) {
         v->show();
     }

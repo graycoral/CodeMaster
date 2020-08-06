@@ -6,6 +6,9 @@
             "houseInfos" :[
                 {
                     "name" : "Bangbaedong",
+                    "jointTenancy" : "true",
+                    "squreMeter" : 84,
+                    "liveYears" : 2,
                     "acqutionPrice" : "1000000000",
                     "transferPrice" : "1500000000",
                     "acqutionDate" : "20170520",
@@ -13,6 +16,9 @@
                 },
                 {
                     "name" : "Gwahcheon",
+                    "jointTenancy" : "true",
+                    "squreMeter" : 111,
+                    "liveYears" : 2,
                     "acqutionPrice" : "1000000000",
                     "transferPrice" : "1500000000",
                     "acqutionDate" : "20170520",
@@ -20,4 +26,4 @@
                 }
             ]
         }
-}
+    }
