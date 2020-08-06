@@ -4,24 +4,25 @@
 using namespace std;
 
 // static constexpr const char kJsonPath[] = "./etc/landinfo.json";
-const std::string kJsonPath = "../etc/landinfo.json";
+const std::string kJsonPath = "./etc/landinfo.json";
 
 void LandCal::init()
 {
     if( readData() == 0) {
         cout << "No Land Info : " << kJsonPath << endl;
         addLandInfo();
+    } else {
+        for(int i=0; i<numoofHouse_ ; i++){
+            addLandInfo();
+        }
     }
 }
 
 int LandCal::readData()
 {
-    int numofHouse = 0;
-    LandConfiguration readJson(kJsonPath);
+    LandConfiguration readJson(kJsonPath, numoofHouse_, name_);
 
-    
-
-    return numofHouse;
+    return numoofHouse_;
 }
 
 void LandCal::showMain()
@@ -41,7 +42,17 @@ void LandCal::addLandInfo()
 {
     cout << "Add Land your info" << endl;
     numoofHouse_++;
-    std::shared_ptr<LandTaxCal> landTax = makeLandInfo();
+    std::shared_ptr<LandTaxCal> landTax = makeLandInfo(numoofHouse_);
+    calTax(landTax);
+    landTaxCal.push_back(landTax);
+}
+
+void LandCal::updateLandInfo()
+{
+    int houseIdx;
+    cout << "please Info house Id what you want to update" << endl;
+    cin >> houseIdx;
+    std::shared_ptr<LandTaxCal> landTax = makeLandInfo(houseIdx);
     calTax(landTax);
     landTaxCal.push_back(landTax);
 }
@@ -62,7 +73,6 @@ void LandCal::showLandInfo(const LandCal& landCal)
 {
     cout << "================== " << __func__ << "===================================" << endl;
     cout << "number of house : " << landCal.numoofHouse_ << endl;
-    cout << "number of house : " << this->numoofHouse_ << endl;
     for (auto v : landTaxCal) {
         v->show();
     }
@@ -87,21 +97,16 @@ void LandCal::expectLandRevnue(const LandCal& landCal)
 
 }
 
-std::shared_ptr<LandTaxCal> LandCal::makeLandInfo()
+std::shared_ptr<LandTaxCal> LandCal::makeLandInfo(int num)
 {
     cout << "================== " << __func__ << "===================================" << endl;
     std::shared_ptr<LandTaxCal> retLandInfo= std::make_shared<LandTaxCal>();
-    retLandInfo->addInfo();
+    retLandInfo->addInfo(num);
 
     return retLandInfo;
 }
 
 void LandCal::saveDatatoExcel()
-{
-    cout << "================== " << __func__ << "===================================" << endl;
-}
-
-void LandCal::updateLandInfo()
 {
     cout << "================== " << __func__ << "===================================" << endl;
 }

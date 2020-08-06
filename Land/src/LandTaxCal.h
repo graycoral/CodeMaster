@@ -147,7 +147,7 @@ public:
     void setActualDurationofStay(int years) { liveYears_ = years; }
     int getActualDurationofStay() { return liveYears_; }
     void show();
-    void addInfo();
+    void addInfo(int numhouse);
     void updateData();
     void calTransferMargin(double transferPrice, int py, double acquisitionPrice);
     double getTransferMargin();

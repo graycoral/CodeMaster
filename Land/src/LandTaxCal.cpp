@@ -2,11 +2,9 @@
 
 using namespace std;
 
-void LandTaxCal::addInfo()
+void LandTaxCal::addInfo(int numhouse)
 {
-    cout << " input your number of House : ";
-    cin >> numhouse_;
-    setNumofHouse(numhouse_);
+    setNumofHouse(numhouse);
 
     cout << " input jointTenancy  true(1) or fasle(0) : ";
     cin >> jointTenancy_;
@@ -109,8 +107,8 @@ double LandTaxCal::getTransferMargin()
 
 void LandTaxCal::show()
 {
-    cout << "================== " << __func__  << "===================================" << endl;
-    cout << "numhouse_" << setw(2) << " : " << setw(2) << right << numhouse_ << std::endl;
+
+    cout << "[" << numhouse_  << "]" << setw(2) << std::endl;
     cout << "jointTenancy_" << setw(2) << " : " << setw(2) << right << jointTenancy_ << std::endl;
     cout << "acquisitionPrice_" << setw(2) << " : " << setw(2) << right << acquisitionPrice_ << std::endl;
     cout << "acquisitionDate_" << setw(2) << " : " << setw(2) << right << acquisitionDate_ << std::endl;

@@ -12,7 +12,7 @@ int main(int argc, const char* argv[])
         cout << "========== Land Calculator ==========" << endl;
         land.init();
         land.showMain();
-        
+
         cin >> cmd;
         if(cmd == 1) {
             land.addLandInfo();

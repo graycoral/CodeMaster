@@ -10,20 +10,22 @@
 #include <vector>
 
 #include <rapidjson/filereadstream.h>
-#include <rapidjson/document.h>
+#include <rapidjson/document.h> // rapidjson's DOM-style API
+#include "rapidjson/prettywriter.h" // for stringify JSON
+#include "rapidjson/error/en.h"
 #include <cstdio>
 #include <fstream>
 
 class LandConfiguration
 {
 public:
-    LandConfiguration(const std::string& path) : cfg_path_(path)
+    LandConfiguration(const std::string& path, int& numofHouse, std::string& landInfoName) : cfg_path_(path)
     {
-        LandConfiguration::ReadJsonConfigurations(path);
+        LandConfiguration::ReadJsonConfigurations(path, numofHouse, landInfoName);
     }
-    void UpdateLandInfo();
+    void UpdateLandInfo(rapidjson::Value jsonValues);
 private:
-    void ReadJsonConfigurations(const std::string& file_path);
+    void ReadJsonConfigurations(const std::string& file_path, int& numofHouse, std::string& landInfoName);
     std::string cfg_path_;
 
 };

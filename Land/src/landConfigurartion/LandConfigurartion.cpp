@@ -2,36 +2,40 @@
 
 using namespace std;
 
-void LandConfiguration::ReadJsonConfigurations(const std::string& file_path)
+void LandConfiguration::ReadJsonConfigurations(const std::string& file_path, int& numofHouse, std::string& landInfoName)
 {
+    FILE* fp;
+
     try {
-        FILE* fp = fopen("./etc/landinfo.json", "r");
+        fp = fopen(file_path.c_str(), "rb");
         char readBuffer[65536];
-        rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+        rapidjson::FileReadStream fs(fp, readBuffer, sizeof(readBuffer));
+
+        std::cout <<std::endl<< std::endl <<  readBuffer << std::endl << std::endl << std::endl;
+
         rapidjson::Document document;
-        document.ParseInsitu(readBuffer);
+        // if(document.Parse(json).HasParseError())
+        document.ParseStream(fs);
+        if (document.HasParseError()) {
+            std::cout << stderr << "Schema file is not a valid JSON\n";
+            std::cout<< stderr <<  "Error(offset)"<< static_cast<unsigned>(document.GetErrorOffset()) \
+            << rapidjson::GetParseError_En(document.GetParseError()) << std::endl;
+            fclose(fp);
+        }
 
         assert(document.IsObject());
-        assert(document.HasMember("houses"));
-        assert(document["houses"].HasMember("numofhouse"));
+        assert(document.HasMember("name"));
+        landInfoName = document["name"].GetString();
 
-        if(document["houses"]["numofhouse"].GetInt() > 0) {
-            cout << document["houses"]["numofhouse"].GetInt() << endl;
-
-            // for(int i=0; i < document["numofhouse"].GetInt(); i++) {
-            //     UpdateLandInfo();
-            // }
-        }
-        else {
-            cout << "Skipped reading in LandInfo. Your landInfo JSON not found at: " << file_path;
-        }
     } catch (...) {
         cout << "ASSERT" << file_path;
+        fclose(fp);
     }
+    fclose(fp);
 }
 
-void LandConfiguration::UpdateLandInfo()
+void LandConfiguration::UpdateLandInfo(rapidjson::Value jsonValues)
 {
-    cout << "Skipped reading in LandInfo. Your landInfo JSON not found at: " << cfg_path_;
-    std::fstream landCalConfig{ cfg_path_.c_str(), std::fstream::in };
+    cout << "Update House Info" << endl;
 }
+

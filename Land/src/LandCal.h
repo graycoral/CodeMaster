@@ -31,7 +31,8 @@ public:
     void expectLandRevnue(const LandCal& landCal);
     int getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase);
     const int getNumofHoouses() const {   return numoofHouse_; }
-    std::shared_ptr<LandTaxCal> makeLandInfo();
+    std::shared_ptr<LandTaxCal> makeLandInfo(int num);
 private:
     int numoofHouse_;
+    string name_;
 };

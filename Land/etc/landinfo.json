@@ -1,6 +1,6 @@
 {
-    "name" : "Youngho Kim",
-    "houses" : [
+    "name" : "YounghoKim",
+    "houses" :
         {
             "numofhouse" : 2,
             "houseInfos" :[
@@ -20,5 +20,4 @@
                 }
             ]
         }
-    ]
 }
