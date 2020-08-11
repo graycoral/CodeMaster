@@ -21,6 +21,8 @@ int LandCal::readData()
 {
     LandConfiguration readJson(kJsonPath, numoofHouse_, name_);
 
+    readJson.UpdateLandInfo("Bangbaedong", "squreMeter", 100);
+
     return numoofHouse_;
 }
 

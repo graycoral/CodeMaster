@@ -14,7 +14,10 @@ int main(int argc, const char* argv[])
         land.showMain();
 
         cin >> cmd;
-        if(cmd == 1) {
+
+        if(std::isdigit(cmd) != 0) {
+            cout << "please input vaild number" << endl;
+        } else if(cmd == 1) {
             land.addLandInfo();
         } else if (cmd == 2) {
             land.saveDatatoExcel();

@@ -11,7 +11,6 @@ void LandConfiguration::ReadJsonConfigurations(const std::string& file_path, int
         char readBuffer[65536];
         rapidjson::FileReadStream fs(fp, readBuffer, sizeof(readBuffer));
         std::cout <<std::endl<< std::endl <<  readBuffer << std::endl << std::endl << std::endl;
-        rapidjson::Document document;
 
         document.ParseStream(fs);
         if (document.HasParseError()) {
