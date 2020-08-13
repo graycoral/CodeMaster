@@ -1,18 +1,15 @@
 #include <LandCal.h>
-#include "landConfigurartion/LandConfigurartion.h"
 
 using namespace std;
 
-static const string kJsonPath = "./etc/landinfo.json";
-
 void LandCal::init()
 {
-    if( readData() == 0) {
+    if( getNumofHoouses() == 0) {
         cout << "No Land Info : " << kJsonPath << endl;
-        addLandInfo();
+        addLandInfo(increaseNumofHouse(), false);
     } else {
-        for(int i=0; i< numoofHouse_ ; i++){
-            // addLandInfo();
+        for(int i= 0; i < numoofHouse_ ; i++) {
+            addLandInfo(i, true);
         }
     }
 }
@@ -20,9 +17,6 @@ void LandCal::init()
 int LandCal::readData()
 {
     LandConfiguration readJson(kJsonPath, numoofHouse_, name_);
-
-    readJson.UpdateLandInfo("Bangbaedong", "squreMeter", 100);
-
     return numoofHouse_;
 }
 
@@ -38,21 +32,13 @@ void LandCal::showMain()
     cout << "please select number : ";
 }
 
-void LandCal::addLandInfo()
+void LandCal::addLandInfo(int idx, bool database)
 {
     cout << "Add Land your info" << endl;
-    numoofHouse_++;
-    std::shared_ptr<LandTaxCal> landTax = makeLandInfo(numoofHouse_);
+    std::shared_ptr<LandTaxCal> landTax = makeLandInfo(idx, database);
     calTax(landTax);
     landTaxCal.push_back(landTax);
-}
-
-void LandCal::addLandInfofromData(int idx)
-{
-    cout << "Add Land your info from : "<< kJsonPath <<"[" << idx << "]" << endl;
-    std::shared_ptr<LandTaxCal> landTax = makeLandInfo(idx);
-    calTax(landTax);
-    landTaxCal.push_back(landTax);
+    readJson.AddNewLandInfo(idx, landTax);
 }
 
 void LandCal::updateLandInfo()
@@ -60,9 +46,6 @@ void LandCal::updateLandInfo()
     int houseIdx;
     cout << "please Info house Id what you want to update" << endl;
     cin >> houseIdx;
-    std::shared_ptr<LandTaxCal> landTax = makeLandInfo(houseIdx);
-    calTax(landTax);
-    landTaxCal.push_back(landTax);
 }
 
 int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase)
@@ -72,7 +55,6 @@ int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTa
 
 void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 {
-    cout << "================== " << __func__  << "===================================" << endl;
     double tax = landTaxCal->calExpectedTax(landTaxCal->getTransferPrice());
     landTaxCal->setTax(tax);
 }
@@ -104,11 +86,12 @@ void LandCal::expectLandRevnue(const LandCal& landCal)
 
 }
 
-std::shared_ptr<LandTaxCal> LandCal::makeLandInfo(int num)
+std::shared_ptr<LandTaxCal> LandCal::makeLandInfo(int num, bool database = false)
 {
-    cout << "================== " << __func__ << "===================================" << endl;
-    std::shared_ptr<LandTaxCal> retLandInfo= std::make_shared<LandTaxCal>();
-    retLandInfo->addInfo(num);
+    std::shared_ptr<LandTaxCal> retLandInfo = std::make_shared<LandTaxCal>();
+
+    if(database) readJson.AddLandInfo(num, retLandInfo);
+    else retLandInfo->addInfo(num+1);
 
     return retLandInfo;
 }

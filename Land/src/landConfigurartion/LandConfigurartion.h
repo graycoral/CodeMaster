@@ -24,29 +24,26 @@ class LandConfiguration
 public:
     LandConfiguration(const string& path, int& numofHouse, string& landInfoName) : cfg_path_(path)
     {
+        cout  << "LandConfiguration" << endl;
         LandConfiguration::ReadJsonConfigurations(path, numofHouse, landInfoName);
     }
-    void UpdateLandInfo(Value jsonValues);
 
-    template<typename T> void UpdateLandInfo(const string&name, const string& member, T value)
+    template<typename T> void ModifyLandInfo(const string&name, const string& member, T value)
     {
-        // Value::MemberIterator houseInfos = document["houses"]["houseInfos"];
-        // assert(houseInfos != document.MemberEnd());
-
-        const Value& houseInfos = document["houses"]["houseInfos"]; // Using a reference for consecutive access is handy and faster.
+        Value& houseInfos = document["houses"]["houseInfos"];
 
         assert(houseInfos.IsArray());
-        for (SizeType i = 0; i < houseInfos.Size(); i++) // rapidjson uses SizeType instead of size_t.
-            if(houseInfos[i]["name"].HasMember(name.c_str())) {
-                cout << "houseInfos[ " << i << "] : " << houseInfos[i]["name"].GetString() << endl;
-                if(houseInfos[i].HasMember(member.c_str())) {
-                    // cout << "houseInfos[ " << i << "] : " << houseInfos[i][member.c_str()].GetInt() << endl;
-                    // houseInfos[i][member.c_str()] = value;
-
-                }
+        for (SizeType i = 0; i < houseInfos.Size(); i++) {
+            cout << "houseInfos[ " << i << "] : " << houseInfos[i]["name"].GetString() << endl;
+            if(houseInfos[i]["name"].GetString() == name) {
+                assert(houseInfos[i].HasMember(member.c_str()));
+                houseInfos[i][member.c_str()] = value;
             }
+        }
     }
-    void AddLandInfo(Document::AllocatorType& allocator);
+    void AddLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
+    void AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
+    void UpdateLandInfo(Value jsonValues);
 
 private:
     void ReadJsonConfigurations(const string& file_path, int& numofHouse, string& landInfoName);

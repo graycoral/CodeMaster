@@ -4,38 +4,32 @@ using namespace std;
 
 void LandTaxCal::addInfo(int numhouse)
 {
-    setNumofHouse(numhouse);
+    setNumofHouse(numhouse_);
 
     cout << " input jointTenancy  true(1) or fasle(0) : ";
     cin >> jointTenancy_;
-    setJointTenacy(jointTenancy_);
 
     cout << " input squrea meter(py) : ";
     cin >> py_;
-    setJointTenacy(jointTenancy_);
 
     cout << " input actual duration of stay(years) : ";
     cin >> liveYears_;
-    setActualDurationofStay(liveYears_);
 
     cout << " input acquisition Date : ";
     cin >> acquisitionDate_;
-    setAcquisitionDate(acquisitionDate_);
 
     cout << " input Transfer Date : ";
     cin >> transferDate_;
-    setTransferDate(transferDate_);
 
     cout << " input acquisition Price : ";
     cin >> acquisitionPrice_;
-    setAcquisitionPrice(acquisitionPrice_);
 
     cout << " input transfer Price : ";
     cin >> transferPrice_;
-    setTransferPrice(transferPrice_);
 }
 
 void LandTaxCal::setNumofHouse(const int& numofHouse)   { numhouse_ = numofHouse; }
+void LandTaxCal::setPy(const int& py)   { py_ = py; }
 void LandTaxCal::setJointTenacy(const bool& jointTenancy)
 {
     if (jointTenancy == 1 || jointTenancy == 0) {
@@ -107,19 +101,18 @@ double LandTaxCal::getTransferMargin()
 
 void LandTaxCal::show()
 {
-
-    cout << "[" << numhouse_  << "]" << setw(2) << std::endl;
-    cout << "jointTenancy_" << setw(2) << " : " << setw(2) << right << jointTenancy_ << std::endl;
-    cout << "acquisitionPrice_" << setw(2) << " : " << setw(2) << right << acquisitionPrice_ << std::endl;
-    cout << "acquisitionDate_" << setw(2) << " : " << setw(2) << right << acquisitionDate_ << std::endl;
-    cout << "transferPrice_" << setw(2) << " : " << setw(2) << right << transferPrice_ << std::endl;
-    cout << "transferDate_" << setw(2) << " : " << setw(2) << right << transferDate_ << std::endl;
-    cout << "tranferMargin_" << setw(2) << " : " << setw(2) << right << tranferMargin_ << std::endl;
-    cout << "commmision_" << setw(2) << " : " << setw(2) << right << commmision_ << std::endl;
-    cout << "years_ : " << setw(2) << right << years_ << std::endl;
-    cout << "liveYears_ : " << setw(2) << right << liveYears_ << std::endl;
-    cout << "py_ : " << setw(2) << right << py_ << std::endl;
-    cout << "tax_ : " << setw(2) << right << tax_ << std::endl;
+    cout << endl << "Your House Number is : [" << numhouse_  << "]" << setw(2) << std::endl;
+    cout << "jointTenancy" << setw(2) << " : " << setw(2) << right << jointTenancy_ << std::endl;
+    cout << "acquisitionPrice" << setw(2) << " : " << setw(2) << right << acquisitionPrice_ << std::endl;
+    cout << "acquisitionDate" << setw(2) << " : " << setw(2) << right << acquisitionDate_ << std::endl;
+    cout << "transferPrice" << setw(2) << " : " << setw(2) << right << transferPrice_ << std::endl;
+    cout << "transferDate" << setw(2) << " : " << setw(2) << right << transferDate_ << std::endl;
+    cout << "tranferMargin" << setw(2) << " : " << setw(2) << right << tranferMargin_ << std::endl;
+    cout << "commmision" << setw(2) << " : " << setw(2) << right << commmision_ << std::endl;
+    cout << "years : " << setw(2) << right << years_ << std::endl;
+    cout << "liveYears : " << setw(2) << right << liveYears_ << std::endl;
+    cout << "py : " << setw(2) << right << py_ << std::endl;
+    cout << "tax : " << setw(2) << right << tax_ << std::endl;
 
     fflush(stdin);
     getchar();

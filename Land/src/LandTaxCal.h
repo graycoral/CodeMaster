@@ -134,6 +134,8 @@ private:
 
 public:
     void setNumofHouse(const int& numofHouse);
+    void setPy(const int& py);
+    int getPy()    { return py_;}
     void setJointTenacy(const bool& jointTenancy);
     bool getJointTenacy() { return jointTenancy_; };
     void setAcquisitionPrice(const double& acquisitionPrice);

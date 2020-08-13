@@ -8,7 +8,7 @@ int main(int argc, const char* argv[])
     LandCal land;
 
     while(1) {
-        clrscr();
+        // clrscr();
         cout << "========== Land Calculator ==========" << endl;
         land.init();
         land.showMain();
@@ -18,7 +18,7 @@ int main(int argc, const char* argv[])
         if(std::isdigit(cmd) != 0) {
             cout << "please input vaild number" << endl;
         } else if(cmd == 1) {
-            land.addLandInfo();
+            land.addLandInfo(land.increaseNumofHouse(), false);
         } else if (cmd == 2) {
             land.saveDatatoExcel();
         } else if (cmd == 3) {
