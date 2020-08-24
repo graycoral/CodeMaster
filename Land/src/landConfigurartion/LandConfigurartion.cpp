@@ -59,16 +59,10 @@ void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newD
     Value& houseInfos = document["houses"]["houseInfos"];
     Document::AllocatorType& allocator = document.GetAllocator();
 
-    Value name;
-    std::map<std::string, std::string> dataSet;
-    dataSet.insert(std::make_pair<std::string, std::string>("name", "test"));
+    Value newHouse;
+    newHouse.SetObject();
+    newHouse.AddMember("name", "TEST", allocator);
 
-    document["houses"]["houseInfos"].PushBack("name", allocator);
-    // document["houses"]["houseInfos"][idx].AddMember("name", name, allocator);
-    // Value jointTenancy;
-    // document["houses"]["houseInfos"][idx].AddMember("jointTenancy", jointTenancy, allocator);
-    // Value squreMeter;
-    // document["houses"]["houseInfos"][idx].AddMember("squreMeter", squreMeter, allocator);
-
+    houseInfos.PushBack(newHouse, allocator);
 }
 

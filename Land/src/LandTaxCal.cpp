@@ -6,6 +6,9 @@ void LandTaxCal::addInfo(int numhouse)
 {
     setNumofHouse(numhouse_);
 
+    cout << " please input your house name ";
+    cin >> title_;
+
     cout << " input jointTenancy  true(1) or fasle(0) : ";
     cin >> jointTenancy_;
 
