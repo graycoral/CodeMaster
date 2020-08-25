@@ -90,7 +90,7 @@ std::shared_ptr<LandTaxCal> LandCal::makeLandInfo(int num, bool database = false
 {
     std::shared_ptr<LandTaxCal> retLandInfo = std::make_shared<LandTaxCal>();
 
-    if(database) readJson.AddLandInfo(num, retLandInfo);
+    if(database == true) readJson.AddLandInfo(num, retLandInfo);
     else retLandInfo->addInfo(num+1);
 
     return retLandInfo;

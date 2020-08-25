@@ -12,6 +12,7 @@
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/document.h> // rapidjson's DOM-style API
 #include "rapidjson/prettywriter.h" // for stringify JSON
+#include "rapidjson/filewritestream.h"
 #include "rapidjson/error/en.h"
 #include <cstdio>
 #include <fstream>
@@ -44,6 +45,7 @@ public:
     void AddLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
     void AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
     void UpdateLandInfo(Value jsonValues);
+    void PrintIt(const Value &doc);
 
 private:
     void ReadJsonConfigurations(const string& file_path, int& numofHouse, string& landInfoName);

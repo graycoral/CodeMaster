@@ -54,15 +54,47 @@ void LandConfiguration::AddLandInfo(int idx, std::shared_ptr<LandTaxCal> newData
     newData->setTransferPrice(houseInfos[idx]["transferPrice"].GetDouble());
 }
 
+void LandConfiguration::PrintIt(const Value &doc) {
+    cout << endl;
+    char writeBuffer[65536];
+    FileWriteStream os(stdout, writeBuffer, sizeof(writeBuffer));
+    PrettyWriter<FileWriteStream> writer(os);
+    doc.Accept(writer);
+    cout << endl;
+}
+
 void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData)
 {
+    cout << "TEST 0 start" << endl << endl;
+    PrintIt(document);
+    cout << "TEST 0 end" << endl << endl;
+
     Value& houseInfos = document["houses"]["houseInfos"];
-    Document::AllocatorType& allocator = document.GetAllocator();
 
     Value newHouse;
     newHouse.SetObject();
-    newHouse.AddMember("name", "TEST", allocator);
 
-    houseInfos.PushBack(newHouse, allocator);
+    Value name;
+    name.SetString(newData->getHouseTitle().c_str(), static_cast<SizeType>(newData->getHouseTitle().length()), document.GetAllocator());
+    newHouse.AddMember("name", name, document.GetAllocator());
+    newHouse.AddMember("jointTenancy", newData->getJointTenacy(), document.GetAllocator());
+    newHouse.AddMember("squreMeter", newData->getPy(), document.GetAllocator());
+    newHouse.AddMember("liveYears", newData->getActualDurationofStay(), document.GetAllocator());
+    newHouse.AddMember("acqutionPrice", newData->getAcquisitionPrice(), document.GetAllocator());
+    newHouse.AddMember("transferPrice", newData->getTransferPrice(), document.GetAllocator());
+
+    Value acqutionDate;
+    name.SetString(newData->getAcquisitionDate().c_str(), static_cast<SizeType>(newData->getAcquisitionDate().length()), document.GetAllocator());
+    newHouse.AddMember("acqutionDate", acqutionDate, document.GetAllocator());
+
+    Value transferDate;
+    name.SetString(newData->getTransferDate_().c_str(), static_cast<SizeType>(newData->getTransferDate_().length()), document.GetAllocator());
+    newHouse.AddMember("transferDate", transferDate, document.GetAllocator());
+
+    houseInfos.PushBack(newHouse, document.GetAllocator());
+
+    cout << "TEST 2" << endl;
+    PrintIt(document);
+    cout << "TEST 2 end" << endl;
 }
 

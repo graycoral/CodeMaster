@@ -6,13 +6,12 @@ int main(int argc, const char* argv[])
 {
     int cmd;
     LandCal land;
+    land.init();
 
     while(1) {
         // clrscr();
         cout << "========== Land Calculator ==========" << endl;
-        land.init();
         land.showMain();
-
         cin >> cmd;
 
         if(std::isdigit(cmd) != 0) {
