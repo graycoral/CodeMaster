@@ -133,6 +133,7 @@ private:
     int py_;                        // 평수
 
 public:
+    void setHouseTilte(const std::string& titleHouse);
     void setNumofHouse(const int& numofHouse);
     string getHouseTitle() { return title_; }
     void setPy(const int& py);

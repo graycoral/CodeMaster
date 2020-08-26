@@ -31,6 +31,7 @@ void LandTaxCal::addInfo(int numhouse)
     cin >> transferPrice_;
 }
 
+void LandTaxCal::setHouseTilte(const std::string& titleHouse) { title_ = titleHouse; }
 void LandTaxCal::setNumofHouse(const int& numofHouse)   { numhouse_ = numofHouse; }
 void LandTaxCal::setPy(const int& py)   { py_ = py; }
 void LandTaxCal::setJointTenacy(const bool& jointTenancy)

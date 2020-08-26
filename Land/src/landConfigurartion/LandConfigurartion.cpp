@@ -44,6 +44,7 @@ void LandConfiguration::AddLandInfo(int idx, std::shared_ptr<LandTaxCal> newData
 {
     Value& houseInfos = document["houses"]["houseInfos"];
 
+    newData->setHouseTilte(houseInfos[idx]["name"].GetString());
     newData->setNumofHouse(idx);
     newData->setJointTenacy(houseInfos[idx]["jointTenancy"].GetBool());
     newData->setPy(houseInfos[idx]["squreMeter"].GetInt());
