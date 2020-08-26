@@ -42,15 +42,17 @@ public:
             }
         }
     }
-    
+
     template<typename T> void AddNewHouseInfo(string name, string newMember, T value)
     {
+        cout << "Set Tax in Json" << endl;
         Value& houseInfos = document["houses"]["houseInfos"];
 
         assert(houseInfos.IsArray());
         for (SizeType i = 0; i < houseInfos.Size(); i++) {
-            cout << "houseInfos[ " << i << "] : " << houseInfos[i]["name"].GetString() << endl;
+            cout << houseInfos[i]["name"].GetString() << " : " << name << endl;
             if(houseInfos[i]["name"].GetString() == name) {
+                cout << "houseInfos[ " << i + 1 << "] : " << houseInfos[i]["name"].GetString() << endl;
                 houseInfos[i][newMember.c_str()] = value;
             }
         }

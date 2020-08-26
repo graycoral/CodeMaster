@@ -34,11 +34,12 @@ void LandCal::showMain()
 
 void LandCal::addLandInfo(int idx, bool database)
 {
+    cout << "================== " << __func__ << "===================================" << endl;
     cout << "Add Land your info" << endl;
     std::shared_ptr<LandTaxCal> landTax = makeLandInfo(idx, database);
     calTax(landTax);
     landTaxCal.push_back(landTax);
-    
+
     if(database == false)
         readJson.AddNewLandInfo(idx, landTax);
 }
@@ -57,11 +58,12 @@ int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTa
 
 void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 {
+    cout << "================== " << __func__ << "===================================" << endl;
+    cout << "Add tax your land : " << landTaxCal->getHouseTitle() <<  endl;
     string csTax= "tax";
     double tax = landTaxCal->calExpectedTax(landTaxCal->getTransferPrice());
     landTaxCal->setTax(tax);
-    //readJson.AddNewHouseInfo(landTaxCal->getHouseTitle().c_str(), "tax", tax);
-    readJson.AddNewHouseInfo("test", "tax", tax);
+    readJson.AddNewHouseInfo(landTaxCal->getHouseTitle().c_str(), "tax", tax);
 }
 
 void LandCal::showLandInfo()
@@ -70,7 +72,7 @@ void LandCal::showLandInfo()
     for (auto v : landTaxCal) {
         v->show();
     }
-    cout << endl << "please input any button";
+    cout << endl << "please input any button" << endl;
 }
 
 void LandCal::expectLandRevnue(const LandCal& landCal)

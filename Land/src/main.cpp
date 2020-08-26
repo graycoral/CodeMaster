@@ -28,6 +28,7 @@ int main(int argc, const char* argv[])
             land.expectLandRevnue(land);
         } else if (cmd == 6) {
             cout << " Exit Land Calculator " << endl;
+            clrscr();
             exit(0);
         }
         else {

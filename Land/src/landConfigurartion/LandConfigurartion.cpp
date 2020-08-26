@@ -13,7 +13,7 @@ void LandConfiguration::ReadJsonConfigurations(const std::string& file_path, int
         fp = fopen(file_path.c_str(), "rb");
         char readBuffer[65536];
         rapidjson::FileReadStream fs(fp, readBuffer, sizeof(readBuffer));
-        std::cout <<std::endl<< std::endl <<  readBuffer << std::endl << std::endl << std::endl;
+        // std::cout <<std::endl<< std::endl <<  readBuffer << std::endl << std::endl << std::endl;
 
         document.ParseStream(fs);
         if (document.HasParseError()) {
@@ -65,6 +65,7 @@ void LandConfiguration::PrintIt(const Value &doc) {
 
 void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData)
 {
+    document["houses"]["numofhouse"] = idx;
     Value& houseInfos = document["houses"]["houseInfos"];
 
     Value newHouse;
