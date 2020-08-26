@@ -65,10 +65,6 @@ void LandConfiguration::PrintIt(const Value &doc) {
 
 void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData)
 {
-    cout << "TEST 0 start" << endl << endl;
-    PrintIt(document);
-    cout << "TEST 0 end" << endl << endl;
-
     Value& houseInfos = document["houses"]["houseInfos"];
 
     Value newHouse;
@@ -84,17 +80,16 @@ void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newD
     newHouse.AddMember("transferPrice", newData->getTransferPrice(), document.GetAllocator());
 
     Value acqutionDate;
-    name.SetString(newData->getAcquisitionDate().c_str(), static_cast<SizeType>(newData->getAcquisitionDate().length()), document.GetAllocator());
+    acqutionDate.SetString(newData->getAcquisitionDate().c_str(), static_cast<SizeType>(newData->getAcquisitionDate().length()), document.GetAllocator());
     newHouse.AddMember("acqutionDate", acqutionDate, document.GetAllocator());
 
     Value transferDate;
-    name.SetString(newData->getTransferDate_().c_str(), static_cast<SizeType>(newData->getTransferDate_().length()), document.GetAllocator());
+    transferDate.SetString(newData->getTransferDate_().c_str(), static_cast<SizeType>(newData->getTransferDate_().length()), document.GetAllocator());
     newHouse.AddMember("transferDate", transferDate, document.GetAllocator());
 
     houseInfos.PushBack(newHouse, document.GetAllocator());
 
-    cout << "TEST 2" << endl;
+    cout << "Add New LandInfo" << endl;
     PrintIt(document);
-    cout << "TEST 2 end" << endl;
+    cout << "Add New LandInfo end" << endl;
 }
-

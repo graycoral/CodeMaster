@@ -38,7 +38,9 @@ void LandCal::addLandInfo(int idx, bool database)
     std::shared_ptr<LandTaxCal> landTax = makeLandInfo(idx, database);
     calTax(landTax);
     landTaxCal.push_back(landTax);
-    readJson.AddNewLandInfo(idx, landTax);
+    
+    if(database == false)
+        readJson.AddNewLandInfo(idx, landTax);
 }
 
 void LandCal::updateLandInfo()
@@ -55,8 +57,11 @@ int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTa
 
 void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 {
+    string csTax= "tax";
     double tax = landTaxCal->calExpectedTax(landTaxCal->getTransferPrice());
     landTaxCal->setTax(tax);
+    //readJson.AddNewHouseInfo(landTaxCal->getHouseTitle().c_str(), "tax", tax);
+    readJson.AddNewHouseInfo("test", "tax", tax);
 }
 
 void LandCal::showLandInfo()

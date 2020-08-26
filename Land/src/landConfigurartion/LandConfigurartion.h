@@ -42,6 +42,19 @@ public:
             }
         }
     }
+    
+    template<typename T> void AddNewHouseInfo(string name, string newMember, T value)
+    {
+        Value& houseInfos = document["houses"]["houseInfos"];
+
+        assert(houseInfos.IsArray());
+        for (SizeType i = 0; i < houseInfos.Size(); i++) {
+            cout << "houseInfos[ " << i << "] : " << houseInfos[i]["name"].GetString() << endl;
+            if(houseInfos[i]["name"].GetString() == name) {
+                houseInfos[i][newMember.c_str()] = value;
+            }
+        }
+    }
     void AddLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
     void AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
     void UpdateLandInfo(Value jsonValues);

@@ -104,7 +104,7 @@ double LandTaxCal::getTransferMargin()
 
 void LandTaxCal::show()
 {
-    cout << endl << "Your House Number is : [" << numhouse_  << "]" << setw(2) << std::endl;
+    cout << endl << "Your House Number is : [" << numhouse_ + 1  << "]" << setw(2) << std::endl;
     cout << "jointTenancy" << setw(2) << " : " << setw(2) << right << jointTenancy_ << std::endl;
     cout << "acquisitionPrice" << setw(2) << " : " << setw(2) << right << acquisitionPrice_ << std::endl;
     cout << "acquisitionDate" << setw(2) << " : " << setw(2) << right << acquisitionDate_ << std::endl;
