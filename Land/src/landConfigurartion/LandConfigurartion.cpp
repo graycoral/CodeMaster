@@ -89,6 +89,8 @@ void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newD
     transferDate.SetString(newData->getTransferDate_().c_str(), static_cast<SizeType>(newData->getTransferDate_().length()), document.GetAllocator());
     newHouse.AddMember("transferDate", transferDate, document.GetAllocator());
 
+    newHouse.AddMember("tax", newData->getTax(), document.GetAllocator());
+
     houseInfos.PushBack(newHouse, document.GetAllocator());
 
     cout << "Add New LandInfo" << endl;

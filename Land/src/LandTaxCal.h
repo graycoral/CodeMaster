@@ -161,10 +161,12 @@ public:
     int getHoldingYears() { return years_; }
     double calLongteramHoldingDeductionRate(bool realLive, int years, int holingYears);
     void setTax(double tax) { tax_ = tax; }
+    double getTax() { return tax_;}
     double getTrasferMarginTaxRate(double taxBaseTransferMargin);
     double getProgressiveTax(double trasferMarginTaxRate);
     string getAcquisitionDate()     {  return acquisitionDate_; }
     string getTransferDate_()       {  return transferDate_; }
+
 
     double calExpectedTax(double transferPrice);
     void expectLandRevnue(double diffence);

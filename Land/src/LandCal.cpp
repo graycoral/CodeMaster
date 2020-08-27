@@ -47,8 +47,19 @@ void LandCal::addLandInfo(int idx, bool database)
 void LandCal::updateLandInfo()
 {
     int houseIdx;
+    string member;
+    int idx = 0;
+
+    for(auto v : landTaxCal) {
+        cout << ++idx << " : "<< v->getHouseTitle() << endl;
+    }
     cout << "please Info house Id what you want to update" << endl;
     cin >> houseIdx;
+
+    cout << "please Input what you want memeber" << endl;
+    cin >> member;
+
+    readJson.ModifyLandInfo(landTaxCal[houseIdx-1]->getHouseTitle(), member, );
 }
 
 int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase)

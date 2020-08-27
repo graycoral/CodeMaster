@@ -53,7 +53,11 @@ public:
             cout << houseInfos[i]["name"].GetString() << " : " << name << endl;
             if(houseInfos[i]["name"].GetString() == name) {
                 cout << "houseInfos[ " << i + 1 << "] : " << houseInfos[i]["name"].GetString() << endl;
-                houseInfos[i][newMember.c_str()] = value;
+                Value newMem;
+                newMem.SetString(newMember.c_str(), static_cast<SizeType>(newMember.length()),document.GetAllocator());
+                houseInfos[i].AddMember(newMem, value, document.GetAllocator());
+                // houseInfos[i].PushBack(newMember.c_str(), document.GetAllocator());
+                // houseInfos[i][newMember.c_str()] = value;
             }
         }
     }
