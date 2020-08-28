@@ -34,8 +34,6 @@ void LandCal::showMain()
 
 void LandCal::addLandInfo(int idx, bool database)
 {
-    cout << "================== " << __func__ << "===================================" << endl;
-    cout << "Add Land your info" << endl;
     std::shared_ptr<LandTaxCal> landTax = makeLandInfo(idx, database);
     calTax(landTax);
     landTaxCal.push_back(landTax);
@@ -59,7 +57,34 @@ void LandCal::updateLandInfo()
     cout << "please Input what you want memeber" << endl;
     cin >> member;
 
-    readJson.ModifyLandInfo(landTaxCal[houseIdx-1]->getHouseTitle(), member, );
+    if((member == "name") || (member == "acqutionDate") || (member == "transferDate")) {
+        string newValue;
+        cout << "please Input new name" << endl;        cin >> newValue;
+        readJson.ModifyStringLandInfo(landTaxCal[houseIdx-1]->getHouseTitle(), member, newValue);
+        if(member == "name")    landTaxCal[houseIdx-1]->setHouseTilte(newValue);
+        else if(member == "acqutionDate")    landTaxCal[houseIdx-1]->setAcquisitionDate(newValue);
+        else if(member == "transferDate")    landTaxCal[houseIdx-1]->setTransferDate(newValue);
+    } else if(member == "jointTenancy") {
+        bool newValue;
+        cout << "please Input new name" << endl;        cin >> newValue;
+        readJson.ModifyLandInfo(landTaxCal[houseIdx-1]->getHouseTitle(), member, newValue);
+        landTaxCal[houseIdx-1]->setJointTenacy(newValue);
+    }
+    else if((member == "squreMeter") || (member == "liveYears")) {
+        int newValue;
+        cout << "please Input new value" << endl;        cin >> newValue;
+        readJson.ModifyLandInfo(landTaxCal[houseIdx-1]->getHouseTitle(), member, newValue);
+        if(member == "squreMeter")    landTaxCal[houseIdx-1]->setPy(newValue);
+        else if(member == "liveYears")    landTaxCal[houseIdx-1]->setActualDurationofStay(newValue);
+    }
+    else if((member == "acqutionPrice") || (member == "transferPrice")) {
+        double newValue;
+        cout << "please Input new name" << endl;
+        cin >> newValue;
+        readJson.ModifyLandInfo(landTaxCal[houseIdx-1]->getHouseTitle(), member, newValue);
+    } else {
+        cout << "please check out what you want to update value" << endl;
+    }
 }
 
 int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTaxBase)
@@ -69,9 +94,6 @@ int LandCal::getAssementStandardTaxBase(LandTaxCal landTaxCal, double standardTa
 
 void LandCal::calTax(std::shared_ptr<LandTaxCal> landTaxCal)
 {
-    cout << "================== " << __func__ << "===================================" << endl;
-    cout << "Add tax your land : " << landTaxCal->getHouseTitle() <<  endl;
-    string csTax= "tax";
     double tax = landTaxCal->calExpectedTax(landTaxCal->getTransferPrice());
     landTaxCal->setTax(tax);
     readJson.AddNewHouseInfo(landTaxCal->getHouseTitle().c_str(), "tax", tax);
@@ -88,15 +110,14 @@ void LandCal::showLandInfo()
 
 void LandCal::expectLandRevnue(const LandCal& landCal)
 {
-    cout << "================== " << __func__ << "===================================" << endl;
-
     if(getNumofHoouses()) {
         double diffValue = 0; int housenum = 0;
         cout << "please input what you want differce of value : ";
         cin >> diffValue;
         cout << "please input your house number : " ;
         cin >> housenum;
-        landCal.landTaxCal[housenum-1]->expectLandRevnue(diffValue);
+        landTaxCal[housenum-1]->expectLandRevnue(diffValue);
+        readJson.AddExpectLandRevnue(housenum-1, landTaxCal[housenum-1]->getExpectedRevenue());
     }
     else {
         cout << "please input your house info before expecting land revenue" << endl;

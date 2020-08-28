@@ -44,6 +44,8 @@ void LandConfiguration::AddLandInfo(int idx, std::shared_ptr<LandTaxCal> newData
 {
     Value& houseInfos = document["houses"]["houseInfos"];
 
+    cout << "["<< idx+1 <<"] "<< "Add Land your info : " << houseInfos[idx]["name"].GetString() << endl;
+    newData->setNumofHouse(idx);
     newData->setHouseTilte(houseInfos[idx]["name"].GetString());
     newData->setNumofHouse(idx);
     newData->setJointTenacy(houseInfos[idx]["jointTenancy"].GetBool());
@@ -96,4 +98,19 @@ void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newD
     cout << "Add New LandInfo" << endl;
     PrintIt(document);
     cout << "Add New LandInfo end" << endl;
+}
+
+void LandConfiguration::AddExpectLandRevnue(int idx, const vector<std::pair<double, double>>& expectedRevenue)
+{
+    document["houses"]["numofhouse"] = idx;
+    Value& houseInfos = document["houses"]["houseInfos"];
+    Value expectedRevenueValue;
+
+    expectedRevenueValue.SetArray();
+    assert(expectedRevenueValue.IsArray());
+    for(auto v : expectedRevenue) {
+        expectedRevenueValue.PushBack(v.second, document.GetAllocator());
+    }
+
+    houseInfos[idx].AddMember("expectedRevenue", expectedRevenueValue, document.GetAllocator());
 }

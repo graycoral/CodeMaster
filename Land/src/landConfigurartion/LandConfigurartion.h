@@ -43,24 +43,35 @@ public:
         }
     }
 
-    template<typename T> void AddNewHouseInfo(string name, string newMember, T value)
+    void ModifyStringLandInfo(const string&name, const string& member, string value)
     {
-        cout << "Set Tax in Json" << endl;
         Value& houseInfos = document["houses"]["houseInfos"];
 
         assert(houseInfos.IsArray());
         for (SizeType i = 0; i < houseInfos.Size(); i++) {
-            cout << houseInfos[i]["name"].GetString() << " : " << name << endl;
+            cout << "houseInfos[ " << i << "] : " << houseInfos[i]["name"].GetString() << endl;
             if(houseInfos[i]["name"].GetString() == name) {
-                cout << "houseInfos[ " << i + 1 << "] : " << houseInfos[i]["name"].GetString() << endl;
-                Value newMem;
-                newMem.SetString(newMember.c_str(), static_cast<SizeType>(newMember.length()),document.GetAllocator());
-                houseInfos[i].AddMember(newMem, value, document.GetAllocator());
-                // houseInfos[i].PushBack(newMember.c_str(), document.GetAllocator());
-                // houseInfos[i][newMember.c_str()] = value;
+                assert(houseInfos[i].HasMember(member.c_str()));
+                houseInfos[i][member.c_str()].SetString(value.c_str(), static_cast<SizeType>(value.length()),document.GetAllocator());
             }
         }
     }
+
+    template<typename T> void AddNewHouseInfo(string name, string newMember, T value)
+    {
+        Value& houseInfos = document["houses"]["houseInfos"];
+
+        assert(houseInfos.IsArray());
+        for (SizeType i = 0; i < houseInfos.Size(); i++) {
+            if(houseInfos[i]["name"].GetString() == name) {
+                Value newMem;
+                newMem.SetString(newMember.c_str(), static_cast<SizeType>(newMember.length()),document.GetAllocator());
+                houseInfos[i].AddMember(newMem, value, document.GetAllocator());
+            }
+        }
+    }
+
+    void AddExpectLandRevnue(int idx, const vector<std::pair<double, double>>& expectedRevenue);
     void AddLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
     void AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
     void UpdateLandInfo(Value jsonValues);

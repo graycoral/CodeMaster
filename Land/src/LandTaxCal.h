@@ -128,13 +128,17 @@ private:
     double extraExpense_;           // 기타경비
     double tax_;                    // 납부 세액(양도소득세)
     double commmision_;             // 복비
+    double diffValue_;              // 예상 증가 금액 차이
     int years_;                     // 보유기간
     int liveYears_;                 // 실제 거주기간
     int py_;                        // 평수
 
+    vector<std::pair<double, double>> expectedRevenue_;
+
 public:
     void setHouseTilte(const std::string& titleHouse);
     void setNumofHouse(const int& numofHouse);
+    int getNumofHouse() {   return numhouse_; }
     string getHouseTitle() { return title_; }
     void setPy(const int& py);
     int getPy()    { return py_;}
@@ -161,12 +165,14 @@ public:
     int getHoldingYears() { return years_; }
     double calLongteramHoldingDeductionRate(bool realLive, int years, int holingYears);
     void setTax(double tax) { tax_ = tax; }
+    void setDiffValue(const double& diffValue) { diffValue_ = diffValue; }
+    double getDiffValue()   {   return diffValue_; }
     double getTax() { return tax_;}
     double getTrasferMarginTaxRate(double taxBaseTransferMargin);
     double getProgressiveTax(double trasferMarginTaxRate);
     string getAcquisitionDate()     {  return acquisitionDate_; }
     string getTransferDate_()       {  return transferDate_; }
-
+    vector<std::pair<double, double>> getExpectedRevenue()  {   return expectedRevenue_; }
 
     double calExpectedTax(double transferPrice);
     void expectLandRevnue(double diffence);

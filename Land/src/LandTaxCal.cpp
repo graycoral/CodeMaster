@@ -105,7 +105,7 @@ double LandTaxCal::getTransferMargin()
 
 void LandTaxCal::show()
 {
-    cout << endl << "Your House Number is : [" << numhouse_ + 1  << "]" << setw(2) << std::endl;
+    cout << endl <<"[" << numhouse_ + 1  << "]" << "Your House Name is : "  << setw(2) << title_ << std::endl;
     cout << "jointTenancy" << setw(2) << " : " << setw(2) << right << jointTenancy_ << std::endl;
     cout << "acquisitionPrice" << setw(2) << " : " << setw(2) << right << acquisitionPrice_ << std::endl;
     cout << "acquisitionDate" << setw(2) << " : " << setw(2) << right << acquisitionDate_ << std::endl;
@@ -117,6 +117,12 @@ void LandTaxCal::show()
     cout << "liveYears : " << setw(2) << right << liveYears_ << std::endl;
     cout << "py : " << setw(2) << right << py_ << std::endl;
     cout << "tax : " << setw(2) << right << tax_ << std::endl;
+
+    if(diffValue_ > 0) {
+        for(int i=0; expectedRevenue_.size(); i++){
+            cout << "Trasfer Price : " << expectedRevenue_[i].first << setw(4) << " Expected Revenue : " << expectedRevenue_[i].second << std::endl;
+        }
+    }
 
     fflush(stdin);
     getchar();
@@ -211,23 +217,22 @@ double LandTaxCal::calExpectedTax(double transferPrice)
 
 void LandTaxCal::expectLandRevnue(double diffence)
 {
-    vector<std::pair<double, double>> expectedRevenue;
-
+    setDiffValue(diffence);
     for(int i=0; i < 5; i++) {
         double transferPrice = getTransferPrice() + (i * diffence);
         double expectedTax = calExpectedTax(transferPrice);
-        expectedRevenue.push_back({transferPrice, expectedTax});
+        expectedRevenue_.push_back({transferPrice, expectedTax});
     }
 
     cout << "양도가액" << setw(20) << "세금" << setw(20) << "손익" << endl;
-    for(auto revenue : expectedRevenue) {
+    for(auto revenue : expectedRevenue_) {
         cout << revenue.first << setw(20) << revenue.second << setw(20) << revenue.first - revenue.second << endl;
     }
     cout << endl << "please input any button" << endl;
     fflush(stdin);
     getchar(); getchar();
 
-    // TBD(save Json file)
+
 }
 
 void LandTaxCal::expectLandRevnuebyYear(int endYear)
