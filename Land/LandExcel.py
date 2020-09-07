@@ -10,8 +10,13 @@ class Excel:
         self.sh.append(["매도가격", "수익"])
 
     def saveData(self, data):
+        self.sh = self.wb.active
+        self.sh.title = 'LandCal'
+        self.sh.append(["매도가격", "수익"])
+
         for d in data:
-            self.sh.append([d[0], d[1]])
+            for i in range(len(d)):
+                self.sh.append([d[i][0], d[i][1]])
 
     def gridChart(self):
         chart = LineChart()

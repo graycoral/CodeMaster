@@ -6,4 +6,5 @@
 /usr
 /.vscode
 /__pycache__
+*.xlsx
 

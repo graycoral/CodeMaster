@@ -14,6 +14,7 @@ def main():
     ExcelData = LandExcel.Excel()
     ExcelData.saveData(readJsonData.expectedRevenue)
     ExcelData.gridChart()
+    ExcelData.write()
 
 if __name__ == '__main__':
     main()
