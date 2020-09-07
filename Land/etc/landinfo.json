@@ -1,29 +1,46 @@
 {
-    "name" : "YounghoKim",
-    "houses" :
-        {
-            "numofhouse" : 2,
-            "houseInfos" :[
-                {
-                    "name" : "Bangbaedong",
-                    "jointTenancy" : true,
-                    "squreMeter" : 84,
-                    "liveYears" : 2,
-                    "acqutionPrice" : 1000000000,
-                    "transferPrice" : 1500000000,
-                    "acqutionDate" : "20170520",
-                    "transferDate" : "20220520"
-                },
-                {
-                    "name" : "Gwahcheon",
-                    "jointTenancy" : false,
-                    "squreMeter" : 111,
-                    "liveYears" : 2,
-                    "acqutionPrice" : 1100000000,
-                    "transferPrice" : 1500000000,
-                    "acqutionDate" : "20170520",
-                    "transferDate" : "20220520"
-                }
-            ]
-        }
+    "name": "YounghoKim",
+    "houses": {
+        "numofhouse": 1,
+        "houseInfos": [
+            {
+                "name": "Bangbaedong",
+                "jointTenancy": true,
+                "squreMeter": 84,
+                "liveYears": 2,
+                "acqutionPrice": 1000000000,
+                "transferPrice": 1500000000,
+                "acqutionDate": "20170520",
+                "transferDate": "20220520",
+                "tax": 5082000.0,
+                "diff": 100000000.0,
+                "expectedRevenue": [
+                    5082000.0,
+                    20521875.0,
+                    44999059.0,
+                    72988667.0,
+                    102432000.0
+                ]
+            },
+            {
+                "name": "Gwahcheon",
+                "jointTenancy": false,
+                "squreMeter": 111,
+                "liveYears": 2,
+                "acqutionPrice": 1100000000,
+                "transferPrice": 1500000000,
+                "acqutionDate": "20170520",
+                "transferDate": "20220520",
+                "tax": 235400.0,
+                "diff": 100000000.0,
+                "expectedRevenue": [
+                    235400.0,
+                    9342300.0,
+                    28335676.0,
+                    53797822.0,
+                    81978600.0
+                ]
+            }
+        ]
     }
+}

@@ -148,6 +148,6 @@ std::shared_ptr<LandTaxCal> LandCal::makeLandInfo(int num, bool database = false
 void LandCal::saveDatatoExcel()
 {
     readJson.SaveData();
-    // system("python3 main.py")
+    system("python3 main.py");
 
 }
