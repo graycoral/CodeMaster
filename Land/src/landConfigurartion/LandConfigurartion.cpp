@@ -27,7 +27,6 @@ void LandConfiguration::ReadJsonConfigurations(const std::string& file_path, int
         assert(document.HasMember("name"));
         landInfoName = document["name"].GetString();
         numofHouse = document["houses"]["numofhouse"].GetInt();
-
     } catch (...) {
         cout << "ASSERT" << file_path;
         fclose(fp);
@@ -68,7 +67,7 @@ void LandConfiguration::PrintIt(const Value &doc) {
 
 void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData)
 {
-    document["houses"]["numofhouse"] = idx;
+    document["houses"]["numofhouse"] = idx+1;
     Value& houseInfos = document["houses"]["houseInfos"];
 
     Value newHouse;
@@ -91,7 +90,10 @@ void LandConfiguration::AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newD
     transferDate.SetString(newData->getTransferDate_().c_str(), static_cast<SizeType>(newData->getTransferDate_().length()), document.GetAllocator());
     newHouse.AddMember("transferDate", transferDate, document.GetAllocator());
 
-    newHouse.AddMember("tax", newData->getTax(), document.GetAllocator());
+    if(newHouse.HasMember("tax") == false)
+        newHouse.AddMember("tax", newData->getTax(), document.GetAllocator());
+    else
+        newHouse["tax"].SetDouble(newData->getTax());
 
     houseInfos.PushBack(newHouse, document.GetAllocator());
 
@@ -112,5 +114,24 @@ void LandConfiguration::AddExpectLandRevnue(int idx, const vector<std::pair<doub
         expectedRevenueValue.PushBack(v.second, document.GetAllocator());
     }
 
-    houseInfos[idx].AddMember("expectedRevenue", expectedRevenueValue, document.GetAllocator());
+    if(houseInfos[idx].HasMember("expectedRevenue") == false)
+        houseInfos[idx].AddMember("expectedRevenue", expectedRevenueValue, document.GetAllocator());
+    else
+        houseInfos[idx]["expectedRevenue"] = expectedRevenueValue;
+}
+
+void LandConfiguration::SaveData()
+{
+    try {
+        FILE* fp = fopen(cfg_path_.c_str(), "w");
+
+        char writeBuffer[65536];
+        FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+
+        PrettyWriter<FileWriteStream> writer(os);
+        document.Accept(writer);
+        fclose(fp);
+    } catch (...) {
+        cout << "ASSERT" << endl;
+    }
 }

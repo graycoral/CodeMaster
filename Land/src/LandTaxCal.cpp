@@ -119,7 +119,7 @@ void LandTaxCal::show()
     cout << "tax : " << setw(2) << right << tax_ << std::endl;
 
     if(diffValue_ > 0) {
-        for(int i=0; expectedRevenue_.size(); i++){
+        for(int i=0; i < expectedRevenue_.size(); i++){
             cout << "Trasfer Price : " << expectedRevenue_[i].first << setw(4) << " Expected Revenue : " << expectedRevenue_[i].second << std::endl;
         }
     }
@@ -185,34 +185,24 @@ double LandTaxCal::calExpectedTax(double transferPrice)
     taxBaseTransferMargin -= (taxBaseTransferMargin * longTermDeductuibRate);
 
     // 인별 양도소득금액
-    if (getJointTenacy() > 1) {
-        taxBaseTransferMargin /= getJointTenacy();
-    }
+    if (getJointTenacy() > 1) taxBaseTransferMargin /= getJointTenacy();
 
     // 과세표준
     taxBaseTransferMargin -= basicDeduction;
-
     // 양도소득세율
     double trasferMarginTaxRate = getTrasferMarginTaxRate(taxBaseTransferMargin);
-
     // 누진공제액
     double progressiveTax = getProgressiveTax(trasferMarginTaxRate);
-
     // 감면세액
     double deductionTax = 0; // TBD
-
     // 양도소득세 = 과세표준 * 양도소득세율 - 누진공제액 - 감면세액
     double retTax = taxBaseTransferMargin * trasferMarginTaxRate - deductionTax - progressiveTax;
-
     //지방소득세(10%)
     retTax *= 1.1;
-
     // 인별 납부금액
-    if (getJointTenacy() > 1) {
-        retTax *= getJointTenacy();
-    }
+    if (getJointTenacy() > 1) retTax *= getJointTenacy();
 
-    return retTax;
+    return round(retTax);
 }
 
 void LandTaxCal::expectLandRevnue(double diffence)
@@ -230,9 +220,7 @@ void LandTaxCal::expectLandRevnue(double diffence)
     }
     cout << endl << "please input any button" << endl;
     fflush(stdin);
-    getchar(); getchar();
-
-
+    getchar();
 }
 
 void LandTaxCal::expectLandRevnuebyYear(int endYear)

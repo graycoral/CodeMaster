@@ -111,13 +111,23 @@ void LandCal::showLandInfo()
 void LandCal::expectLandRevnue(const LandCal& landCal)
 {
     if(getNumofHoouses()) {
-        double diffValue = 0; int housenum = 0;
+        double diffValue = 0; string housenum;
+
         cout << "please input what you want differce of value : ";
         cin >> diffValue;
-        cout << "please input your house number : " ;
+        cout << "please input your house number or All: (eg, 1 or A(all)" ;
         cin >> housenum;
-        landTaxCal[housenum-1]->expectLandRevnue(diffValue);
-        readJson.AddExpectLandRevnue(housenum-1, landTaxCal[housenum-1]->getExpectedRevenue());
+        if (housenum == "Y" || "y") {
+            for( int i =0; i < getNumofHoouses(); i++ ){
+                landTaxCal[i]->expectLandRevnue(diffValue);
+                readJson.AddNewHouseInfo(landTaxCal[i]->getHouseTitle(), "diff", diffValue);
+                readJson.AddExpectLandRevnue(i, landTaxCal[i]->getExpectedRevenue());
+            }
+        } else {
+            int hNum = std::stoi(housenum) -1;
+            landTaxCal[hNum-1]->expectLandRevnue(diffValue);
+            readJson.AddExpectLandRevnue(hNum-1, landTaxCal[hNum-1]->getExpectedRevenue());
+        }
     }
     else {
         cout << "please input your house info before expecting land revenue" << endl;
@@ -137,5 +147,7 @@ std::shared_ptr<LandTaxCal> LandCal::makeLandInfo(int num, bool database = false
 
 void LandCal::saveDatatoExcel()
 {
-    cout << "================== " << __func__ << "===================================" << endl;
+    readJson.SaveData();
+    // system("python3 main.py")
+
 }

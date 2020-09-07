@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <cmath>
 
 using namespace std;
 
@@ -102,7 +103,7 @@ public:
             retAcquisitionTax = acquisitionPrice * 0.125;
         }
 
-        return retAcquisitionTax;
+        return round(retAcquisitionTax);
     }
 };
 
@@ -111,7 +112,7 @@ class LandTaxCal
     ILandTaxCal* landTax;
 
 public:
-    LandTaxCal() : numhouse_(0), jointTenancy_(false), acquisitionPrice_(0), transferPrice_(0),
+    LandTaxCal() : numhouse_(0), jointTenancy_(false), acquisitionPrice_(0), transferPrice_(0), expectedRevenue_(0),
         tranferMargin_(0), extraExpense_(0), tax_(0), commmision_(0), landTax(0), years_(0), acquisitionTax_(0) { }
 private:
     string title_;                  // 집 이름

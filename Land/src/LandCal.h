@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <sstream>
 
 #include <LandTaxCal.h>
 #include "landConfigurartion/LandConfigurartion.h"

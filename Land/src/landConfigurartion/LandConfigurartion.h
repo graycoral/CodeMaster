@@ -66,7 +66,12 @@ public:
             if(houseInfos[i]["name"].GetString() == name) {
                 Value newMem;
                 newMem.SetString(newMember.c_str(), static_cast<SizeType>(newMember.length()),document.GetAllocator());
-                houseInfos[i].AddMember(newMem, value, document.GetAllocator());
+                if(houseInfos[i].HasMember(newMem) == false) {
+                    houseInfos[i].AddMember(newMem, value, document.GetAllocator());
+                } else {
+                     houseInfos[i][newMember.c_str()] = value;
+                }
+
             }
         }
     }
@@ -76,6 +81,7 @@ public:
     void AddNewLandInfo(int idx, std::shared_ptr<LandTaxCal> newData);
     void UpdateLandInfo(Value jsonValues);
     void PrintIt(const Value &doc);
+    void SaveData();
 
 private:
     void ReadJsonConfigurations(const string& file_path, int& numofHouse, string& landInfoName);
