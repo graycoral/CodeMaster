@@ -8,13 +8,10 @@ def main():
     print("execute python LandCalculator")
 
     readJsonData = LandJson.Landjson()
-    readJsonData.readJson()
-    readJsonData.saveExpectedRevenue()
-
     ExcelData = LandExcel.Excel()
-    ExcelData.saveData(readJsonData.expectedRevenue)
-    ExcelData.gridChart()
-    ExcelData.write()
+
+    for i in range(readJsonData.getNumofHouses()):
+        ExcelData.saveData(readJsonData.saveExpectedRevenue(i), readJsonData.geTileofHouse(i), i)
 
 if __name__ == '__main__':
     main()
