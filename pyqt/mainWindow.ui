@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="lineEditMain">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>60</y>
+      <width>271</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>100</y>
+      <width>113</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>메뉴</string>
+    </property>
+    <widget class="QMenu" name="menuTest3">
+     <property name="title">
+      <string>Test3</string>
+     </property>
+     <addaction name="actionTest4"/>
+     <addaction name="actiontest5"/>
+    </widget>
+    <addaction name="actionTest1"/>
+    <addaction name="actionTest2"/>
+    <addaction name="separator"/>
+    <addaction name="menuTest3"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="menuMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actiontest1">
+   <property name="text">
+    <string>테스트1</string>
+   </property>
+  </action>
+  <action name="actiontest2">
+   <property name="text">
+    <string>test2</string>
+   </property>
+  </action>
+  <action name="actionTest1">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../../Downloads/iconfinder_facebook__social__media_icon_2986194.ico</normaloff>../../Downloads/iconfinder_facebook__social__media_icon_2986194.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Test1</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
+  <action name="actionTest2">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../Downloads/iconfinder_SocialMedia_Messenger-Outline_2959746.ico</normaloff>../../Downloads/iconfinder_SocialMedia_Messenger-Outline_2959746.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Test2</string>
+   </property>
+  </action>
+  <action name="actionTest4">
+   <property name="text">
+    <string>Test4</string>
+   </property>
+  </action>
+  <action name="actiontest5">
+   <property name="text">
+    <string>test5</string>
+   </property>
+  </action>
+  <action name="actionmeni2_1">
+   <property name="text">
+    <string>meni2-1</string>
+   </property>
+  </action>
+  <action name="actiontet2">
+   <property name="text">
+    <string>tet2</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

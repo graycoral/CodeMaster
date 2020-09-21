@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>529</width>
+    <height>407</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>40</y>
+      <width>301</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>제품명</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>수량</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>생산일</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>529</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuinput">
+    <property name="title">
+     <string>input</string>
+    </property>
+    <addaction name="actioninput"/>
+    <addaction name="actionshow"/>
+   </widget>
+   <addaction name="menuinput"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actioninput"/>
+   <addaction name="actionshow"/>
+  </widget>
+  <action name="actioninput">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../Downloads/iconfinder_facebook__social__media_icon_2986194.ico</normaloff>../../Downloads/iconfinder_facebook__social__media_icon_2986194.ico</iconset>
+   </property>
+   <property name="text">
+    <string>input</string>
+   </property>
+  </action>
+  <action name="actionshow">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../Downloads/iconfinder_SocialMedia_Messenger-Outline_2959746.ico</normaloff>../../Downloads/iconfinder_SocialMedia_Messenger-Outline_2959746.ico</iconset>
+   </property>
+   <property name="text">
+    <string>show</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
