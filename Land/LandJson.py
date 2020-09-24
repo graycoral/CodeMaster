@@ -4,25 +4,26 @@ class Landjson:
     def __init__(self):
         self.expectedRevenue = []
         self.jsonData = {}
+        self.numHouse = 0
+
+    def readJson(self):
         with open('./etc/landinfo.json', 'r') as f:
             self.jsonData = json.load(f)
-        self.numHouse = int(self.jsonData['houses']['numofhouse'])
+            self.numHouse = int(self.jsonData['houses']['numofhouse'])
+        # print(json.dumps(self.jsonData, indent="\t"))
 
-    def getNumofHouses(self):
-        return int(self.jsonData['houses']['numofhouse'])
+    def getNumofHouse(self):
+        return self.numHouse
 
-    def geTileofHouse(self, idx):
-        return self.jsonData['houses']['houseInfos'][idx]['name']
+    def saveExpectedRevenue(self):
+        for i in range(0, self.numHouse):
+            # print(self.jsonData['houses']['houseInfos'][i]['expectedRevenue'])
+            revenue = []
+            cnt = 0
+            for d in self.jsonData['houses']['houseInfos'][i]['expectedRevenue']:
+                diffValue = self.jsonData['houses']['houseInfos'][i]['diff']
+                transferPrice = self.jsonData['houses']['houseInfos'][i]['transferPrice'] + (diffValue*cnt)
+                revenue.append((transferPrice, self.jsonData['houses']['houseInfos'][i]['expectedRevenue'][cnt]))
+                cnt += 1
 
-    def saveExpectedRevenue(self, idx):
-        revenue = []
-        cnt = 0
-        diffValue = self.jsonData['houses']['houseInfos'][idx]['diff']
-
-        for d in self.jsonData['houses']['houseInfos'][idx]['expectedRevenue']:
-            transferPrice = self.jsonData['houses']['houseInfos'][idx]['transferPrice'] + (diffValue * cnt)
-            revenue.append((str(round(transferPrice/100000000, 2)) + '억', d))
-            cnt += 1
-        self.expectedRevenue.append(revenue)
-        # print("revenue : ", revenue)
-        return revenue
+            self.expectedRevenue.append(revenue)
