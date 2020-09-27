@@ -5,6 +5,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtCore import *
 
 import LandJson
+import LandTaxCal
 
 class AddLand:
     def __init__(self):
