@@ -34,7 +34,7 @@ while True:
             print(f'[CTS] RCV MSG : {retMessage.decode()}')
     except:
         print('[CTS] except Connection END')
-        brea
+        break
 
 cts_socket.close()
 
