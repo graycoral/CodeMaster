@@ -1,0 +1,282 @@
+{
+  "unicast" : "192.168.7.3",
+  "multicast" : "224.244.224.245",
+  "cts_config":
+  {
+    "ip": "192.168.7.4",
+    "port": 2500
+  },
+  "TC_COM" :
+  {
+    "TC_CM_001":
+    [
+      {"desc" : "[Skeleton TEST] event communication"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+         "eventgroups" :
+         [
+           {
+             "eventgroup" : "0x01",
+             "events" :
+             [
+               "0x8001"
+             ]
+           }
+         ],
+         "options":
+         {
+           "protocol": "UDP",
+           "port_number": 5000
+         }
+      }
+    ],
+    "TC_CM_002":
+    [
+      {"desc" : "[Skeleton TEST] field(notification) communication"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "eventgroups": [
+          {
+            "eventgroup": "0x03",
+            "events": [
+              "0x8bb8"
+            ]
+          },
+          {
+            "eventgroup": "0x4",
+            "events": [
+              "0x8bbc"
+            ]
+          }
+        ],
+        "options": {
+          "protocol": "UDP",
+          "port_number": 5000
+        }
+      }
+    ],
+    "TC_CM_003":
+    [
+      {"desc" : "[Skeleton TEST] SubscribeEventGroupNack"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "eventgroups" :
+         [
+           {
+             "eventgroup" : "0xdead",
+             "events" :
+             [
+               "0xdead"
+             ]
+           }
+         ],
+         "options":
+         {
+           "protocol": "UDP",
+           "port_number": 5000
+         }
+      }
+    ],
+    "TC_CM_004":
+    [
+      {"desc" : "[Skeleton TEST] response"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "methods" :
+         [
+           "0x80e8"
+         ],
+         "options":
+         {
+           "protocol": "UDP",
+           "port_number": 5000
+         }
+      }
+    ],
+    "TC_CM_005" :
+    [
+      {"desc" : "[Skeleton TEST] getter/setter"},
+      {
+
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "eventgroups" :
+        [
+          {
+            "eventgroup" : "0x03",
+            "events" :
+            [
+              "0x0bbe"
+            ]
+          }
+        ],
+        "options":
+        {
+          "protocol": "UDP",
+          "port_number": 5000
+        }
+      },
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "eventgroups" :
+        [
+          {
+            "eventgroup" : "0x00",
+            "events" :
+            [
+              "0x0bc3"
+            ]
+          }
+        ],
+        "options":
+        {
+          "protocol": "UDP",
+          "port_number": 5000
+        }
+      }
+    ],
+    "TC_CM_007":
+    [
+      {"desc" : "[Proxy TEST] event communication"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+         "eventgroups" :
+         [
+           {
+             "eventgroup" : "0x02",
+             "events" :
+             [
+               "0x8002"
+             ]
+           }
+         ],
+         "options":
+         {
+           "protocol": "UDP",
+           "port_number": 5000
+         }
+      }
+    ],
+    "TC_CM_008" :
+    [
+      {"desc" : "[Proxy TEST] field(notification) communication"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "eventgroups" :
+        [
+          {
+            "eventgroup" : "0x03",
+            "events" :
+            [
+              "0x8bb8"
+            ]
+          }
+        ],
+        "options":
+        {
+          "protocol": "UDP",
+          "port_number": 5000
+        }
+      }
+    ],
+    "TC_CM_009" :
+    [
+      {"desc" : "[Proxy TEST] request"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "methods" :
+         [
+           "0x80e8"
+         ],
+        "options":
+        {
+          "protocol": "UDP",
+          "port_number": 5001
+        }
+      }
+    ],
+    "TC_CM_012" :
+    [
+      {"desc" : "[Proxy TEST] getter/setter"},
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "eventgroups" :
+        [
+          {
+            "eventgroup" : "0x03",
+            "events" :
+            [
+              "0x0bb9"
+            ]
+          }
+        ],
+        "options":
+        {
+          "protocol": "UDP",
+          "port_number": 5001
+        }
+      },
+      {
+        "service" : "0x63",
+        "instance" : "0x13",
+        "major_version" : "0x01",
+        "ttl" : "0x3",
+        "minor_version" : "0x0",
+        "eventgroups" :
+        [
+          {
+            "eventgroup" : "0x00",
+            "events" :
+            [
+              "0x0bc3"
+            ]
+          }
+        ],
+        "options":
+        {
+          "protocol": "UDP",
+          "port_number": 5001
+        }
+      }
+    ]
+  }
+}

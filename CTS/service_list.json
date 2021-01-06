@@ -1,0 +1,62 @@
+{
+	"service": "0x63",
+	"instance": "0x13",
+	"major_version": "0x01",
+	"ttl": "0x3",
+	"minor_version": "0x0",
+	"entry": {
+		"eventgroups": [
+			{
+				"eventgroup": "0x00",
+				"events": [
+					{
+						"getter": "0x0bbe",
+						"setter": "0x0bc3"
+					}
+				]
+			},
+			{
+				"eventgroup": "0x01",
+				"events": [
+					{
+						"event": "0x8001"
+					}
+				]
+			},
+			{
+				"eventgroup": "0x02",
+				"events": [
+					{
+						"event": "0x8002"
+					}
+				]
+			},
+			{
+				"eventgroup": "0x03",
+				"events": [
+					{
+						"getter": "0x0bb9",
+						"setter": "0x0bba",
+						"notification": "0x8bb8"
+					}
+				]
+			},
+			{
+				"eventgroup": "0x04",
+				"events": [
+					{
+						"notification": "0x8bbc"
+					}
+				]
+			}
+		],
+		"methods": [
+			"0x80e8",
+			"0x80f2"
+		]
+	},
+	"options": {
+		"protocol": "UDP",
+		"port_number": 5000
+	}
+}

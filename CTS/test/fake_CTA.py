@@ -1,3 +1,7 @@
+'''
+Fake module(fakeCTA) for testing CTS connection
+'''
+
 import time
 from socket import *
 
@@ -5,7 +9,7 @@ port = 2500
 BUFSIZE = 1024
 
 fake_cta_socket=socket(AF_INET, SOCK_STREAM)
-fake_cta_socket.bind(('192.168.1.254', port))
+fake_cta_socket.bind(('192.168.7.2', port))
 
 fake_cta_socket.listen(5)
 
@@ -15,7 +19,7 @@ print('[FCTA] Connected CTS!!')
 
 while True:
     try:
-        print('[FCTA] Wating TC Num from CTS...')
+        print('[FCTA] Waiting TC Num from CTS...')
         data = c_sock.recv(BUFSIZE)
         if not data:
             c_sock.close()
@@ -37,3 +41,7 @@ while True:
 
 c_sock.close()
 fake_cta_socket.close()
+
+
+
+
