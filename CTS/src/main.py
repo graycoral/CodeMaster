@@ -12,25 +12,6 @@ from testcase.testcase import *
 from cts_manager import *
 
 
-def run(tc, all_test_cases=False):
-    if all_test_cases is True:
-        for i in range(0, len(tc.GetTestCase())):
-            tc.read_test_case_desc(i)
-            tc.run_test_case(i)
-    else:
-        while True:
-            try:
-                tc.read_test_case_all_desc()
-                print("\n Enter test number:", end=' ')
-                idx = int(input())
-                tc.run_test_case(idx - 1)
-            except ValueError:
-                print("Invalid Test Index")
-                continue
-            except:
-                sys.exit()
-
-
 ### Simple commandline parser ###
 def parseCommandLine():
     parser = argparse.ArgumentParser(description='AUTOSAR COM Test Suite(CTS)')
@@ -43,6 +24,7 @@ def parseCommandLine():
                         help='Test Mode(single, all)')
 
     return parser.parse_args()
+
 
 def make_logger(name=None):
     logger = logging.getLogger(name)
@@ -63,25 +45,43 @@ def make_logger(name=None):
 
     return logger
 
+def run(tc, all_test_cases=False):
+    if all_test_cases is True:
+        for i in range(0, len(tc.GetTestCase())):
+            tc.read_test_case_desc(i)
+            tc.run_test_case(i)
+    else:
+        while True:
+            try:
+                tc.read_test_case_all_desc()
+                print("\n Enter test number:", end=' ')
+                idx = int(input())
+                tc.run_test_case(idx - 1)
+            except ValueError:
+                print("Invalid Test Index")
+                continue
+            except:
+                sys.exit()
+
 def main():
     logger = make_logger('CTS')
 
     args = parseCommandLine()
-    testcase = TestCase(logger)
     testMode = args.m
     if testMode == 'single':
+        testcase = TestCase(logger)
         run(testcase)
         saveResult()
     else:
         testCM = TestLoader().loadTestsFromTestCase(TC_CM)
         suite = TestSuite([testCM])
-        runner = HTMLTestRunner(output='TestResult', report_name='LARA_COM_Test_Result', report_title='LARA COM Test',
-                                combine_reports=True)
+        runner = HTMLTestRunner(output='../TestResult', report_name='LARA_COM_Test_Result',
+                                report_title='LARA COM Test Result', combine_reports=True)
         runner.run(suite)
 
 
-if sys.version_info < (3,8):
-    sys.exit('This program requires Python version 3.6 or newer!')
+if sys.version_info < (3, 8):
+    sys.exit('This program requires Python version 3.8 or newer!')
 
 if __name__ == '__main__':
     main()

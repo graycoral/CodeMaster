@@ -20,6 +20,7 @@ class CtsManager:
     def __init__(self, lock, logger):
         self.lock = lock
         self.logger_ = logger
+        self.check_received_message = False
 
     def process_initial_cts_manager(self, ip_address, cts_port):
         self.logger_.info('Start Connecting to CTA')
@@ -39,6 +40,7 @@ class CtsManager:
 
     def send_test_case(self, tc):
         self.logger_.info('Sending TC : {}'.format(tc))
+        self.lock.acquire()
         try:
             self.cts_socket.sendall(str(tc).encode())  # send tc num
         except:
@@ -59,3 +61,12 @@ class CtsManager:
                 self.logger_.error('except Connection END')
                 break
         self.lock.release()
+        self.check_received_message = True
+
+    def wait_message(self):
+        while True:
+            if self.check_received_message is True:
+                self.check_received_message = False
+                break
+
+

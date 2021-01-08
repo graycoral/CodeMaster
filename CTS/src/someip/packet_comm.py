@@ -1,6 +1,7 @@
 import time
 import threading
 from someip.packet_generator import *
+from conf.netconf import *
 
 RECEIVE = "[TESTER <<< TARGET] "
 SEND = "[TESTER >>> TARGET] "

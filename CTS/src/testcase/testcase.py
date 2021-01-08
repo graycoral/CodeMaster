@@ -19,8 +19,7 @@ from testcase import *
 # [TESTER <<< TARGET] receive subscribe ack
 # [TESTER <<< TARGET] receive event message
 
-def TC_CM_001(cts_manager):
-    cts_manager.send_test_case('TC_CM_001')
+def TC_CM_001():
     f_info = getframeinfo(currentframe())
     function_name = f_info.function
     service_list = tc_com[f_info.function][1:]
@@ -67,8 +66,7 @@ def TC_CM_001(cts_manager):
 # [TESTER >>> TARGET] send subscribe
 # [TESTER <<< TARGET] receive subscribe ack
 # [TESTER <<< TARGET] receive event message
-def TC_CM_002(cts_manager):
-    cts_manager.send_test_case('TC_CM_002')
+def TC_CM_002():
     f_info = getframeinfo(currentframe())
     function_name = f_info.function
     service_list = tc_com[f_info.function][1:]
@@ -115,9 +113,7 @@ def TC_CM_002(cts_manager):
 # [TESTER <<< TARGET] found offer
 # [TESTER >>> TARGET] send subscribe
 # [TESTER <<< TARGET] receive subscribe Nack
-def TC_CM_003(cts_manager):
-    cts_manager.send_test_case('TC_CM_003')
-
+def TC_CM_003():
     interval = 2000
     f_info = getframeinfo(currentframe())
     function_name = f_info.function
@@ -164,9 +160,7 @@ def TC_CM_003(cts_manager):
 # [TESTER <<< TARGET] found offer
 # [TESTER >>> TARGET] send request message
 # [TESTER <<< TARGET] receive response message
-def TC_CM_004(cts_manager):
-    cts_manager.send_test_case('TC_CM_004')
-
+def TC_CM_004():
     payload_list = ['0000008200000156000001be']  # payload: x = 00000082, y = 00000156, z = 000001be
     client_id = 0x00
     f_info = getframeinfo(currentframe())
@@ -213,8 +207,7 @@ def TC_CM_004(cts_manager):
 # [TESTER <<< TARGET] found offer
 # [TESTER >>> TARGET] send request message
 # [TESTER <<< TARGET] receive response message
-def TC_CM_005(cts_manager):
-    cts_manager.send_test_case('TC_CM_005')
+def TC_CM_005():
     payload_list = ['', '0100']
     client_id = 0x1234
     f_info = getframeinfo(currentframe())
@@ -263,8 +256,7 @@ def TC_CM_005(cts_manager):
 # [TESTER >>> TARGET] send subscribe ack
 # [TESTER >>> TARGET] send event message
 
-def TC_CM_007(cts_manager):
-    cts_manager.send_test_case('TC_CM_007')
+def TC_CM_007():
     payload_list = ['0100000001be']
     offer_cycle = 2000
     f_info = getframeinfo(currentframe())
@@ -310,8 +302,7 @@ def TC_CM_007(cts_manager):
 # [TESTER <<< TARGET] receive subscribe
 # [TESTER >>> TARGET] send subscribe ack
 # [TESTER >>> TARGET] send event message
-def TC_CM_008(cts_manager):
-    cts_manager.send_test_case('TC_CM_008')
+def TC_CM_008():
     # skeleton
     payload_list = ['000222e0']
     offer_cycle = 2000
@@ -354,8 +345,7 @@ def TC_CM_008(cts_manager):
 # [TESTER >>> TARGET] send offer
 # [TESTER <<< TARGET] receive request message
 # [TESTER >>> TARGET] send response message
-def TC_CM_009(cts_manager):
-    cts_manager.send_test_case('TC_CM_009')
+def TC_CM_009():
     payload_list = ['010000008200000156000001be']  # active = 01
     offer_cycle = 2000
     f_info = getframeinfo(currentframe())
@@ -395,8 +385,7 @@ def TC_CM_009(cts_manager):
 # [TESTER <<< TARGET] receive request message(getter)
 # [TESTER >>> TARGET] send response message
 # [TESTER <<< TARGET] receive request message(setter)
-def TC_CM_012(cts_manager):
-    cts_manager.send_test_case('TC_CM_012')
+def TC_CM_012():
     payload_list = ['0100']  # 256(uint16)
     offer_cycle = 2000
     f_info = getframeinfo(currentframe())
@@ -445,8 +434,7 @@ TC = {"TC_CM_001": TC_CM_001, "TC_CM_002": TC_CM_002, "TC_CM_003": TC_CM_003, "T
       "TC_CM_005": TC_CM_005, "TC_CM_007": TC_CM_007, "TC_CM_008": TC_CM_008, "TC_CM_009": TC_CM_009,
       "TC_CM_012": TC_CM_012}
 
-ABS_PATH = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE_PATH = ABS_PATH + '/../../config.json'
+CONFIG_FILE_PATH = os.path.dirname(os.path.abspath(__file__)) + '/../../config.json'
 
 class TestCase:
     def __init__(self, logger):
@@ -455,7 +443,6 @@ class TestCase:
         self.add_test_case(list(self.configJson.testData.keys()))
         self.lock = threading.Lock()
         self.logger_ = logger
-
         self.cts_manager = CtsManager(self.lock, logger)
         self.connect_cta()
 
@@ -468,8 +455,9 @@ class TestCase:
 
     def run_test_case(self, idx):
         if len(self.test_case_list) > idx:
-            self.lock.acquire()
-            self.test_case_list[idx](self.cts_manager)
+            self.cts_manager.send_test_case(list(TC)[idx])
+            self.test_case_list[idx]()
+            self.cts_manager.wait_message()
         else:
             self.logger_.error("Invalid Test Index")
 
