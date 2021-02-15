@@ -28,7 +28,7 @@ int countMap()
 }
 
 void show_idx_arr()
-{	
+{
 	for (int i = 0; i < N; i++) {
 		cout << idx_arr[i] << " ";
 	}
@@ -41,7 +41,7 @@ void input()
 		for (int c = 0; c < H; c++) {
 			cin >> arr[r][c];
 			c_arr[r][c] = arr[r][c];
-			visiited[r][c] = 0;
+			visiited[r][c] = 0xffff;
 		}
 	}
 }
@@ -67,24 +67,22 @@ int findR(int c)
 void rebuild()
 {
 	int tmpArr[15] = { 0 };
+	memset(tmpArr, 0, sizeof(tmpArr));
 
 	for (int c = 0; c < W; c++) {
 		int idx = 0;
 		for (int r = 0; r < H; r++) {
 			if (c_arr[r][c] > 0)	tmpArr[idx++] = c_arr[r][c];
 		}
-		for (int i = H -1; i > H; i++) {			
-			c_arr[i][c] = tmpArr[i];
-		}
 		for (int i = 0; i < H; i++) {
-			c_arr[i][c] = tmpArr[idx - i - 1];
+			c_arr[i][c] = tmpArr[idx - 1 -i];
 			visiited[i][c] = 0;
 		}
-	} 
+	}
 }
 
 void DFS(int r, int c)
-{	
+{
 	visiited[r][c] = 1;
 	c_arr[r][c] = 0;
 
@@ -96,9 +94,9 @@ void DFS(int r, int c)
 			if (nr < 0 || nc < 0 || nr >= H || nc >= W)	continue;
 			if (visiited[nr][nc] == 1)	continue;
 
-			DFS(nr, nc);			
+			DFS(nr, nc);
 		}
-	}	
+	}
 }
 
 int breaBrick(int revC, int cnt)
@@ -116,7 +114,7 @@ int breaBrick(int revC, int cnt)
 	if (r == -1)	return retVal;
 	DFS(r, revC);
 	rebuild();
-	
+
 	// copy
 	for (int i = 0; i < H; i++) {
 		for (int j = 0; j < W; j++) {
@@ -139,13 +137,54 @@ int breaBrick(int revC, int cnt)
 	return retVal;
 }
 
+int breakBrick2(int c, int idx)
+{
+	int retVal = 0xffff;
+	int tmpArr[15][15] = { 0 };
+
+	if(idx > N){
+		show_idx_arr();
+		return countMap();
+	}
+
+
+	int r = findR(c);
+	if (r == -1)	return retVal;
+	c_arr[r][c] = 0;
+	visiited[r][c] = 1;
+	DFS(r, c);
+	rebuild();
+
+	// copy
+	for (int i = 0; i < H; i++) {
+		for (int j = 0; j < W; j++) {
+			tmpArr[i][j] = c_arr[i][j];
+		}
+	}
+
+	for(int i = 0; i<W; i++) {
+		idx_arr[idx] = i;
+		int tmpCnt =  breakBrick2(i, idx+1);
+		retVal = MIN(tmpCnt, retVal);
+
+		// init
+		for (int i = 0; i < H; i++) {
+			for (int j = 0; j < W; j++) {
+				c_arr[i][j] = tmpArr[i][j];
+			}
+		}
+	}
+}
+
 int sol()
 {
 	int retVal = 0xffff;
 
 	for (int c = 0; c < W; c++) {
 		init_map();
-		int tmpCnt = breaBrick(c, 1);
+		idx_arr[0] = c;
+		// int tmpCnt = breaBrick(c, 1);
+		int tmpCnt = breakBrick2(c, 0);
 		retVal = MIN(retVal, tmpCnt);
 	}
 
@@ -161,10 +200,10 @@ int main(int argc, char** argv)
 	int T;
 
 	freopen("5656_input.txt", "r", stdin);
-	
+
 	cin >> T;
 	/*
-	   ¿©·¯ °³ÀÇ Å×½ºÆ® ÄÉÀÌ½º°¡ ÁÖ¾îÁö¹Ç·Î, °¢°¢À» Ã³¸®ÇÕ´Ï´Ù.
+	   ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 	*/
 	for (test_case = 1; test_case <= T; ++test_case)
 	{
@@ -174,5 +213,5 @@ int main(int argc, char** argv)
 		cout << "#" << test_case << " " << sol() << endl;
 
 	}
-	return 0;//Á¤»óÁ¾·á½Ã ¹Ýµå½Ã 0À» ¸®ÅÏÇØ¾ßÇÕ´Ï´Ù.
+	return 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ýµï¿½ï¿½ 0ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½Õ´Ï´ï¿½.
 }
