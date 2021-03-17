@@ -50,9 +50,10 @@ void sol(int test_case)
 	
 	for (int i = 1; i <= N; i++) {
 		for (int j = 1; j <= N; j++) {
+			if (map[i][j] != 0) continue;
+
 			for (int d = 0; d < 4; d++) {
-				int dic = d;
-				if (map[i][j] != 0) continue;
+				int dic = d;				
 				int startFlag = 0;
 				start.r = i;
 				start.c = j;
@@ -62,6 +63,11 @@ void sol(int test_case)
 					if (startFlag == 1 && cur.r == start.r && cur.c == start.c)	break;
 					if (cur.r == bh.r && cur.c == bh.c)	break;
 
+					if (cur.r < 1)		{ cur.r = 2; dic = 1; }
+					else if (cur.r > N) { cur.r = N-1; dic = 0; }
+					else if (cur.c < 1) { cur.c = 2; dic = 2; }
+					else if (cur.c > N) { cur.c = N-1; dic = 3; }
+					
 					// change start Flag
 					startFlag = 1;
 
@@ -76,114 +82,79 @@ void sol(int test_case)
 							cur.c = wh[map[cur.r][cur.c]][0].c;
 						}
 					}
+					// block 
+					else if (map[cur.r][cur.c] >= 1 && map[cur.r][cur.c] <= 4) {
+						ans += map[cur.r][cur.c];
 
-					int nr = cur.r + dr[dic];
-					int nc = cur.c + dc[dic];
+						int nr = cur.r + dr[dic];
+						int nc = cur.c + dc[dic];
 
-					if (nr <= 0 || nc <= 0 || nr > N || nc > N)	continue;
 
-					if (map[nr][nc] == 1) {
-						if (nc < cur.c) {
-							nr -= 1;
-							dic = 0;
-						}
-						else if (nr < cur.r) {
-							nc + 1;
-							dic = 2;
-							
+						if (nr > cur.r) {
+							if ((map[nr][nc] == 2) || (map[nr][nc] == 3) || (map[nr][nc] == 5)) {
+								nr -= 2;
+								dic = 0;
+							}
+							else if ((map[nr][nc] == 1)) {
+								nc += 1;
+								dic = 2;
+
+							}
+							else if ((map[nr][nc] == 4)) {
+								nc -= 1;
+								dic = 3;
+							}
 						}
 						else if (nc > cur.c) {
-							nc -= 2;
-							dic = 3;
+							if ((map[nr][nc] == 1) || (map[nr][nc] == 2) || (map[nr][nc] == 5)) {
+								nc -= 2;
+								dic = 3;
+							}
+							else if ((map[nr][nc] == 3)) {
+								nr += 1;
+								dic = 1;
+							}
+							else if ((map[nr][nc] == 4)) {
+								nr -= 1;
+								dic = 0;
+							}
 						}
-						else if (nr > cur.r) {
-							nr -= 2;
-							dic = 1;							
-						}
-					}
-					else if (map[nr][nc] == 2) {
-						// right
-						if (nc < cur.c) {
-							nc += 1;
-							dic = 1;
-						}
-						// up
 						else if (nr < cur.r) {
-							nc -= 2;
-							dic = 0;
+							if ((map[nr][nc] == 1) || (map[nr][nc] == 4) || (map[nr][nc] == 5)) {
+								nr += 2;
+								dic = 1;
+							}
+							else if ((map[nr][nc] == 2)) {
+								nc += 1;
+								dic = 2;
+							}
+							else if ((map[nr][nc] == 3)) {
+								nc -= 1;
+								dic = 3;
+							}
 						}
-						// left
-						else if (nc > cur.c) {
-							nr -= 2;
-							dic = 3;
+						else if (nc < cur.c) {
+							if ((map[nr][nc] == 3) || (map[nr][nc] == 4) || (map[nr][nc] == 5)) {
+								nc += 2;
+								dic = 2;
+							}
+							else if ((map[nr][nc] == 1)) {
+								nr -= 1;
+								dic = 0;
+							}
+							else if ((map[nr][nc] == 2)) {
+								nr += 1;
+								dic = 1;
+							}
 						}
-						// down
-						else if (nr > cur.r) {
-							nr += 1;
-							dic = 2;
-						}
+						
+						cur.r = nr;
+						cur.c = nc;
 					}
-					else if (map[nr][nc] == 3) {
-						// right
-						if (nc < cur.c) {
-							nc += 2;
-							dic = 3;
-						}
-						// up
-						else if (nr < cur.r) {
-							nc -= 2;
-						}
-						// left
-						else if (nc > cur.c) {
-							nc += 1;
-						}
-						// down
-						else if (nr > cur.r) {
-							nr -= 1;
-						}
+					else {
+						cur.r += dr[dic];
+						cur.c += dc[dic];
 					}
-					else if (map[nr][nc] == 4) {
-						// right
-						if (nc < cur.c) {
-							nc += 2;
-						}
-						// up
-						else if (nr < cur.r) {
-							nc -= 1;
-						}
-						// left
-						else if (nc > cur.c) {
-							nr += 1;
-						}
-						// down
-						else if (nr > cur.r) {
-							nc -= 2;
-						}
-					}
-					else if (map[nr][nc] == 5) {
-						// right
-						if (nc < cur.c) {
-							nc += 2;
-						}
-						// up
-						else if (nr < cur.r) {
-							nc -= 2;
-						}
-						// left
-						else if (nc > cur.c) {
-							nc -= 2;
-						}
-						// down
-						else if (nr > cur.r) {
-							nr += 2;
-						}
-					}
-
-					ans += map[cur.r][cur.c];
-
-					cur.r = nr;
-					cur.c = nc;
-
 				}
 				ansCnt = MAX(ansCnt, ans);
 			}
@@ -207,7 +178,8 @@ int main()
 
 	for (test_case = 1; test_case <= T; ++test_case)
 	{
-
+		input();
+		sol(test_case);
 	}
 	return 0;
 }
