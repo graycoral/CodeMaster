@@ -12,7 +12,6 @@ struct pos {
 };
 
 struct pos wh[10][2];
-int visited[MAXN][MAXN][4] = { -1 };
 int ansCnt = 0;
 const int dr[] = { 1, -1, 0, 0 };
 const int dc[] = { 0, 0, 1, -1 };
@@ -33,7 +32,6 @@ void input()
 
 	memset(map, 0, sizeof(map));
 	memset(wh, 0, sizeof(wh));
-	/*memset(visited, -1, sizeof(visited));*/
 
 	for (int i = 1; i <= N; i++) {
 		for (int j = 1; j <= N; j++) {
@@ -54,8 +52,8 @@ void input()
 	for (int i = 0; i <= N; i++) {
 		map[0][i] = 5;
 		map[i][0] = 5;
-		map[N+1][i] = 5;
-		map[i][N+1] = 5;
+		map[N + 1][i] = 5;
+		map[i][N + 1] = 5;
 	}
 }
 
@@ -63,51 +61,42 @@ void move(int r, int c, int d)
 {
 	int ans = 0;
 	int dic = d;
-	int startFlag = 0;
-	int startDic = 0;
 	int startR = r;
 	int startC = c;
 
 	int curR = r;
 	int curC = c;
 
-
-	cout << "Start : " << startR << "," << startC << "," << d << " : ";
+	//cout << "Start : " << startR << "," << start.c << "," << dic;
 	while (1) {
-		if ((startFlag == 1 && curR == startR && curC == startC) || (map[curR][curC] == -1)) {
+		curR= curR+ dr[dic];
+		curC = curC + dc[dic];
+
+		if ((curR== startR && curC == startC) || (map[curR][curC] == -1)) {
 			ansCnt = MAX(ansCnt, ans);
-			cout << ans << endl;
+			//cout << " : " << ans << endl;
 			break;
 		}
-
-		// change start Flag
-		startFlag = 1;
 
 		if (map[curR][curC]) {
 			// Warmhole Check and change current position
 			if (map[curR][curC] >= 6 && map[curR][curC] <= 10) {
 				int whR = curR;
 				int whC = curC;
-				if (wh[map[whR][whC]][0].r == curR) {
-					curR = wh[map[whR][whC]][1].r + dr[dic];
-					curC = wh[map[whR][whC]][1].c + dc[dic];
+				if (wh[map[whR][whC]][0].r == curR&& wh[map[whR][whC]][0].c == curC) {
+					curR= wh[map[whR][whC]][1].r;
+					curC = wh[map[whR][whC]][1].c;
 				}
 				else {
-					curR = wh[map[whR][whC]][0].r + +dr[dic];
-					curC = wh[map[whR][whC]][0].c + +dc[dic];
+					curR= wh[map[whR][whC]][0].r;
+					curC = wh[map[whR][whC]][0].c ;
 				}
 			}
-			// block
+			// block 
 			else if (map[curR][curC] <= 5) {
 				ans++;
 				dic = changeDirection[dic][map[curR][curC]];
-				curR += dr[dic];
-				curC += dc[dic];
 			}
-		}
-		else {
-			curR += dr[dic];
-			curC += dc[dic];
 		}
 	}
 }
@@ -134,7 +123,7 @@ int main()
 	int test_case;
 	int T;
 
-	freopen("pin_ball_input.txt", "r", stdin);
+	//freopen("pin_ball_input_1.txt", "r", stdin);
 	cin >> T;
 
 	for (test_case = 1; test_case <= T; ++test_case)
