@@ -76,7 +76,7 @@ int main()
 
     for(int i= 0; i<t; i++) {
         getData();
-        sol();
+        sol(i);
     }
     return 0;
 }
