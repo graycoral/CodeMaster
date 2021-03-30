@@ -1,0 +1,73 @@
+[2021-01-07 13:31:01,030][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:31:04,041][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:31:04,041][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 13:31:31,153][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:31:31,157][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 13:32:30,591][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:32:33,599][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:32:35,101][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 13:48:53,772][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:48:56,779][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:48:59,781][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:49:02,784][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:49:05,789][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:49:06,289][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 13:49:22,887][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:49:32,276][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:49:35,291][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:49:36,293][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 13:50:05,589][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:50:08,597][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:50:08,597][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 13:57:09,787][CTS][INFO] Start Connecting to CTA
+[2021-01-07 13:57:12,797][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 13:57:12,797][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:06:18,503][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:06:20,016][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:07:00,215][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:07:00,227][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:15:53,872][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:15:56,881][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 14:15:59,885][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 14:15:59,885][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:16:02,123][CTS][INFO] Sending TC : <function TC_CM_001 at 0x000001FE7BE2C4C0>
+[2021-01-07 14:16:07,219][CTS][INFO] RCV MSG(unpack) : 49
+[2021-01-07 14:44:54,473][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:44:54,477][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:44:58,860][CTS][ERROR] except Connection END
+[2021-01-07 14:45:04,071][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:45:04,075][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:45:06,635][CTS][INFO] Sending TC : <function TC_CM_001 at 0x000001C2499EF4C0>
+[2021-01-07 14:45:21,820][CTS][INFO] RCV MSG(unpack) : 49
+[2021-01-07 14:50:02,818][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:50:05,829][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-07 14:50:06,831][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:50:08,907][CTS][INFO] Sending TC : <function TC_CM_001 at 0x000002B2FFACD4C0>
+[2021-01-07 14:50:35,406][CTS][INFO] Sending TC : <function TC_CM_002 at 0x000002B2FFACD550>
+[2021-01-07 14:50:40,676][CTS][INFO] RCV MSG(unpack) : 49
+[2021-01-07 14:59:10,223][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:59:10,228][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:59:11,459][CTS][ERROR] except Connection END
+[2021-01-07 14:59:19,700][CTS][INFO] Start Connecting to CTA
+[2021-01-07 14:59:19,704][CTS][INFO] Connected : 127.0.0.1
+[2021-01-07 14:59:22,252][CTS][INFO] Sending TC : TC_CM_001
+[2021-01-07 14:59:27,915][CTS][INFO] RCV MSG(unpack) : 49
+[2021-01-07 14:59:34,812][CTS][INFO] Sending TC : TC_CM_002
+[2021-01-08 09:13:19,507][CTS][INFO] Sending TC : TC_CM_001
+[2021-01-08 09:13:30,359][CTS][INFO] Start Connecting to CTA
+[2021-01-08 09:13:30,369][CTS][INFO] Connected : 127.0.0.1
+[2021-01-08 09:13:35,979][CTS][INFO] Sending TC : TC_CM_001
+[2021-01-08 09:13:53,883][CTS][INFO] Sending TC : TC_CM_002
+[2021-01-08 09:13:59,138][CTS][INFO] RCV MSG(unpack) : 112
+[2021-01-08 09:19:07,503][CTS][INFO] Start Connecting to CTA
+[2021-01-08 09:19:07,507][CTS][INFO] Connected : 127.0.0.1
+[2021-01-08 09:19:09,091][CTS][ERROR] except Connection END
+[2021-01-08 09:19:22,508][CTS][INFO] Start Connecting to CTA
+[2021-01-08 09:19:25,518][CTS][INFO] Waiting CTA Connection 1s...!
+[2021-01-08 09:19:26,520][CTS][INFO] Connected : 127.0.0.1
+[2021-01-08 09:19:31,122][CTS][INFO] Sending TC : TC_CM_001
+[2021-01-08 09:19:46,144][CTS][INFO] RCV MSG(unpack) : 49
+[2021-01-08 09:39:14,165][CTS][INFO] Start Connecting to CTA
+[2021-01-08 09:39:16,174][CTS][INFO] Connected : 127.0.0.1
+[2021-01-08 09:39:19,202][CTS][INFO] Sending TC : TC_CM_001
+[2021-01-08 09:39:25,379][CTS][INFO] RCV MSG(unpack) : 49

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LARA COM Test Result</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="text-capitalize">LARA COM Test Result</h2>
+                <p class='attribute'><strong>Start Time: </strong>2021-01-08 09:27:43</p>
+                <p class='attribute'><strong>Duration: </strong>90.30 s</p>
+                <p class='attribute'><strong>Summary: </strong>Total: 9, Pass: 0, Fail: 5, Error: 4</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-md-10">
+                <table class='table table-hover table-responsive'>
+                    <thead>
+                        <tr>
+                            <th>testcase.testSuites.TC_CM</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class='danger'>
+                            <td class="col-xs-10">test_001</td>
+                            <td class="col-xs-1">
+                                <span class="label label-danger" style="display:block;width:40px;">Fail</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>socket timeout
+TC_CM_001 Fail
+</p><p style="color:maroon;">AssertionError: False is not true</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 21, in test_001
+    self.assertTrue(ret)
+AssertionError: False is not true
+</p>
+                            </td>
+                        </tr>
+                        <tr class='danger'>
+                            <td class="col-xs-10">test_002</td>
+                            <td class="col-xs-1">
+                                <span class="label label-danger" style="display:block;width:40px;">Fail</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>socket timeout
+TC_CM_002 Fail
+</p><p style="color:maroon;">AssertionError: False is not true</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 26, in test_002
+    self.assertTrue(ret)
+AssertionError: False is not true
+</p>
+                            </td>
+                        </tr>
+                        <tr class='danger'>
+                            <td class="col-xs-10">test_003</td>
+                            <td class="col-xs-1">
+                                <span class="label label-danger" style="display:block;width:40px;">Fail</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>sd_socket timeout : offer packet wait
+TC_CM_003 Fail
+</p><p style="color:maroon;">AssertionError: None is not true</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 31, in test_003
+    self.assertTrue(ret)
+AssertionError: None is not true
+Exception in thread Thread-3:
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\data_study\lib\threading.py", line 932, in _bootstrap_inner
+    self.run()
+  File "C:\ProgramData\Anaconda3\envs\data_study\lib\threading.py", line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\someip\packet_comm.py", line 42, in sendFind
+    self.find_packet.sendSomeipMessage(sd_socket, multicast_address, SD_PORT)
+NameError: name 'sd_socket' is not defined
+except Connection END
+</p>
+                            </td>
+                        </tr>
+                        <tr class='danger'>
+                            <td class="col-xs-10">test_004</td>
+                            <td class="col-xs-1">
+                                <span class="label label-danger" style="display:block;width:40px;">Fail</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>multicast_socket timeout
+TC_CM_004 Fail
+</p><p style="color:maroon;">AssertionError: None is not true</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 36, in test_004
+    self.assertTrue(ret)
+AssertionError: None is not true
+</p>
+                            </td>
+                        </tr>
+                        <tr class='danger'>
+                            <td class="col-xs-10">test_005</td>
+                            <td class="col-xs-1">
+                                <span class="label label-danger" style="display:block;width:40px;">Fail</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>someip_socket timeout
+TC_CM_005 Fail
+</p><p style="color:maroon;">AssertionError: False is not true</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 41, in test_005
+    self.assertTrue(ret)
+AssertionError: False is not true
+</p>
+                            </td>
+                        </tr>
+                        <tr class='warning'>
+                            <td class="col-xs-10">test_007</td>
+                            <td class="col-xs-1">
+                                <span class="label label-warning" style="display:block;width:40px;">Error</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p style="color:maroon;">NameError: name 'ip_version' is not defined</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 45, in test_007
+    ret = TC_CM_007()
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testcase.py", line 266, in TC_CM_007
+    offer_service = CreateOfferService(service_list)
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\someip\packet_comm.py", line 61, in __init__
+    if ip_version == 6:
+NameError: name 'ip_version' is not defined
+</p>
+                            </td>
+                        </tr>
+                        <tr class='warning'>
+                            <td class="col-xs-10">test_008</td>
+                            <td class="col-xs-1">
+                                <span class="label label-warning" style="display:block;width:40px;">Error</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p style="color:maroon;">NameError: name 'ip_version' is not defined</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 50, in test_008
+    ret = TC_CM_008()
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testcase.py", line 313, in TC_CM_008
+    offer_service = CreateOfferService(service_list)
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\someip\packet_comm.py", line 61, in __init__
+    if ip_version == 6:
+NameError: name 'ip_version' is not defined
+</p>
+                            </td>
+                        </tr>
+                        <tr class='warning'>
+                            <td class="col-xs-10">test_009</td>
+                            <td class="col-xs-1">
+                                <span class="label label-warning" style="display:block;width:40px;">Error</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p style="color:maroon;">NameError: name 'ip_version' is not defined</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 55, in test_009
+    ret = TC_CM_009()
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testcase.py", line 355, in TC_CM_009
+    offer_service = CreateOfferService(service_list)
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\someip\packet_comm.py", line 61, in __init__
+    if ip_version == 6:
+NameError: name 'ip_version' is not defined
+</p>
+                            </td>
+                        </tr>
+                        <tr class='warning'>
+                            <td class="col-xs-10">test_012</td>
+                            <td class="col-xs-1">
+                                <span class="label label-warning" style="display:block;width:40px;">Error</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p style="color:maroon;">NameError: name 'ip_version' is not defined</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testSuites.py", line 60, in test_012
+    ret = TC_CM_012()
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\testcase\testcase.py", line 397, in TC_CM_012
+    offer_service = CreateOfferService(service_list)
+  File "C:\Users\admin\source\repos\graycoral\CodeMaster\CTS\src\someip\packet_comm.py", line 61, in __init__
+    if ip_version == 6:
+NameError: name 'ip_version' is not defined
+</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                Total: 9, Pass: 0, Fail: 5, Error: 4 -- Duration: 90.30 s
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('td').on('click', '.btn', function(e){
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var $this = $(this);
+                var $nextRow = $this.closest('tr').next('tr');
+                $nextRow.slideToggle("fast");
+                $this.text(function(i, text){
+                    if (text === 'View') {
+                        return 'Hide';
+                    } else {
+                        return 'View';
+                    };
+                });
+            });
+        });
+    </script>
+</body>
+</html
