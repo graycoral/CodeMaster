@@ -20,3 +20,7 @@
 *.out
 /DesignPattern/*
 *Test.cpp
+/
+*/__pycache__/*
+CTS/.idea/*
+CTS/src/__pycache__/*
