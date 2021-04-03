@@ -18,7 +18,7 @@ char input[100 + 1];
 void init()
 {
 	for (int i = 0; i < sizeof(input); i++) {
-		input[i] = 0;
+		input[i] = -1;
 	}
 	cin >> input;
 	cnt = 1;
@@ -27,7 +27,7 @@ void init()
 pos GetPos(char ch)
 {
 	pos ret = {0,0};
-	
+
 	for (int r = 0; r < 3; r++) {
 		for (int c = 0; c < 10; c++) {
 			if (map[r][c] == ch) {
@@ -42,7 +42,7 @@ pos GetPos(char ch)
 
 void countKey()
 {
-	int curIdx = 0;	
+	int curIdx = 0;
 
 	while (input[curIdx+1] != 0) {
 		pos cur = GetPos(input[curIdx]);
@@ -77,7 +77,7 @@ void countKey()
 			}
 			else {
 				cur.r = newPos.r; cur.c = newPos.c;
-			}			
+			}
 		}
 	}
 }
