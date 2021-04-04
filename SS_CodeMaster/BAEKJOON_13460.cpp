@@ -195,9 +195,8 @@ void DFS(pos red, pos blue, int preDir, int ballCnt)
 	for (int i = 0; i < 4; i++) {
 		int dfsFlag = 1;
 		int dir = i;
-		//if (findFlag)	return;
-		if (preDir == dir) continue;
-		//if (map[red.r + dr[dir]][red.c + dc[dir]] == '#') continue;
+		
+		if (preDir == dir) continue;		
 		if (!(map[red.r + dr[dir]][red.c + dc[dir]] == '.' || (map[red.r + dr[dir]][red.c + dc[dir]] == 'O')) && \
 			!(map[blue.r + dr[dir]][blue.c + dc[dir]] == '.') )continue;
 
