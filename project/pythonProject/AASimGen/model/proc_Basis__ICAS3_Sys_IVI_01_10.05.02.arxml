@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00043.xsd">
+ <AR-PACKAGES>
+  <AR-PACKAGE>
+   <SHORT-NAME>vwg</SHORT-NAME>
+   <ADMIN-DATA>
+    <SDGS>
+     <SDG>
+      <SD GID="GENERATOR-VERSION">0.3.6</SD>
+     </SDG>
+     <SDG>
+      <SD GID="VERSION">10.05.02</SD>
+     </SDG>
+    </SDGS>
+   </ADMIN-DATA>
+   <AR-PACKAGES>
+    <AR-PACKAGE>
+     <SHORT-NAME>applications</SHORT-NAME>
+     <AR-PACKAGES>
+      <AR-PACKAGE>
+       <SHORT-NAME>Basis__ICAS3_Sys_IVI_01</SHORT-NAME>
+       <ELEMENTS>
+        <EXECUTABLE>
+         <SHORT-NAME>Basis__ICAS3_Sys_IVI_01_Exe</SHORT-NAME>
+         <ROOT-SW-COMPONENT-PROTOTYPE>
+          <SHORT-NAME>Basis__ICAS3_Sys_IVI_01</SHORT-NAME>
+          <APPLICATION-TYPE-TREF DEST="ADAPTIVE-APPLICATION-SW-COMPONENT-TYPE">/vwg/applications/Basis__ICAS3_Sys_IVI_01/Basis__ICAS3_Sys_IVI_01</APPLICATION-TYPE-TREF>
+         </ROOT-SW-COMPONENT-PROTOTYPE>
+        </EXECUTABLE>
+        <PROCESS>
+         <SHORT-NAME>Basis__ICAS3_Sys_IVI_01_instance1</SHORT-NAME>
+         <APPLICATION-MODE-MACHINE>
+          <SHORT-NAME>BasisModes</SHORT-NAME>
+          <TYPE-TREF DEST="MODE-DECLARATION-GROUP">/vwg/applications/Basis__ICAS3_Sys_IVI_01/ApplicationStates</TYPE-TREF>
+         </APPLICATION-MODE-MACHINE>
+         <EXECUTABLE-REF DEST="EXECUTABLE">/vwg/applications/Basis__ICAS3_Sys_IVI_01/Basis__ICAS3_Sys_IVI_01_Exe</EXECUTABLE-REF>
+         <MODE-DEPENDENT-STARTUP-CONFIGS>
+          <MODE-DEPENDENT-STARTUP-CONFIG>
+           <MACHINE-MODE-IREFS>
+            <MACHINE-MODE-IREF>
+             <CONTEXT-MODE-DECLARATION-GROUP-PROTOTYPE-REF DEST="MODE-DECLARATION-GROUP-PROTOTYPE">/vwg/applications/Basis__ICAS3_Sys_IVI_01/ICAS3Machine/ICAS3MachineMode</CONTEXT-MODE-DECLARATION-GROUP-PROTOTYPE-REF>
+             <TARGET-MODE-DECLARATION-REF DEST="MODE-DECLARATION">/vwg/MachineStates/Startup</TARGET-MODE-DECLARATION-REF>
+            </MACHINE-MODE-IREF>
+           </MACHINE-MODE-IREFS>
+           <STARTUP-CONFIG-REF DEST="STARTUP-CONFIG">/vwg/applications/Basis__ICAS3_Sys_IVI_01/ICAS3_BasisConfigs/Startup</STARTUP-CONFIG-REF>
+          </MODE-DEPENDENT-STARTUP-CONFIG>
+         </MODE-DEPENDENT-STARTUP-CONFIGS>
+        </PROCESS>
+        <PROCESS-TO-MACHINE-MAPPING-SET>
+         <SHORT-NAME>basis_app_MachineMappingSet</SHORT-NAME>
+         <PROCESS-TO-MACHINE-MAPPINGS>
+          <PROCESS-TO-MACHINE-MAPPING>
+           <SHORT-NAME>basis_app_MachineMapping</SHORT-NAME>
+           <MACHINE-REF DEST="MACHINE">/vwg/applications/Basis__ICAS3_Sys_IVI_01/ICAS3Machine</MACHINE-REF>
+           <PROCESS-REF DEST="PROCESS">/vwg/applications/Basis__ICAS3_Sys_IVI_01/Basis__ICAS3_Sys_IVI_01_instance1</PROCESS-REF>
+          </PROCESS-TO-MACHINE-MAPPING>
+         </PROCESS-TO-MACHINE-MAPPINGS>
+        </PROCESS-TO-MACHINE-MAPPING-SET>
+        <ADAPTIVE-AUTOSAR-APPLICATION>
+         <SHORT-NAME>ICAS3_Basis_App</SHORT-NAME>
+         <CATEGORY>PLATFORM_LEVEL</CATEGORY>
+         <EXECUTABLE-REFS>
+          <EXECUTABLE-REF DEST="EXECUTABLE">/vwg/applications/Basis__ICAS3_Sys_IVI_01/Basis__ICAS3_Sys_IVI_01_Exe</EXECUTABLE-REF>
+         </EXECUTABLE-REFS>
+        </ADAPTIVE-AUTOSAR-APPLICATION>
+        <STARTUP-CONFIG-SET>
+         <SHORT-NAME>ICAS3_BasisConfigs</SHORT-NAME>
+         <STARTUP-CONFIGS>
+          <STARTUP-CONFIG>
+           <SHORT-NAME>Startup</SHORT-NAME>
+           <SCHEDULING-POLICY>SCHEDULING-POLICY-ROUND-ROBIN</SCHEDULING-POLICY>
+           <SCHEDULING-PRIORITY>10</SCHEDULING-PRIORITY>
+           <STARTUP-OPTIONS>
+            <STARTUP-OPTION>
+             <OPTION-ARGUMENT>/opt/soc_app/etc/application.json</OPTION-ARGUMENT>
+             <OPTION-KIND>COMMAND-LINE-SHORT-FORM</OPTION-KIND>
+             <OPTION-NAME>c</OPTION-NAME>
+            </STARTUP-OPTION>
+            <STARTUP-OPTION>
+             <OPTION-KIND>COMMAND-LINE-SHORT-FORM</OPTION-KIND>
+             <OPTION-NAME>v</OPTION-NAME>
+            </STARTUP-OPTION>
+           </STARTUP-OPTIONS>
+          </STARTUP-CONFIG>
+         </STARTUP-CONFIGS>
+        </STARTUP-CONFIG-SET>
+       </ELEMENTS>
+      </AR-PACKAGE>
+     </AR-PACKAGES>
+    </AR-PACKAGE>
+   </AR-PACKAGES>
+  </AR-PACKAGE>
+ </AR-PACKAGES>
+</AUTOSAR>

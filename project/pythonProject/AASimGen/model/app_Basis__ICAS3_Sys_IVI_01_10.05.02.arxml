@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00043.xsd">
+ <AR-PACKAGES>
+  <AR-PACKAGE>
+   <SHORT-NAME>vwg</SHORT-NAME>
+   <ADMIN-DATA>
+    <SDGS>
+     <SDG>
+      <SD GID="GENERATOR-VERSION">0.3.6</SD>
+     </SDG>
+     <SDG>
+      <SD GID="VERSION">10.05.02</SD>
+     </SDG>
+    </SDGS>
+   </ADMIN-DATA>
+   <AR-PACKAGES>
+    <AR-PACKAGE>
+     <SHORT-NAME>applications</SHORT-NAME>
+     <AR-PACKAGES>
+      <AR-PACKAGE>
+       <SHORT-NAME>Basis__ICAS3_Sys_IVI_01</SHORT-NAME>
+       <ELEMENTS>
+        <ADAPTIVE-APPLICATION-SW-COMPONENT-TYPE>
+         <SHORT-NAME>Basis__ICAS3_Sys_IVI_01</SHORT-NAME>
+         <PORTS>
+          <R-PORT-PROTOTYPE>
+           <SHORT-NAME>Positioning_RPort</SHORT-NAME>
+           <REQUIRED-INTERFACE-TREF DEST="SERVICE-INTERFACE">/vwg/services/Positioning/Positioning</REQUIRED-INTERFACE-TREF>
+          </R-PORT-PROTOTYPE>
+          <P-PORT-PROTOTYPE>
+           <SHORT-NAME>Psd2_PPort</SHORT-NAME>
+           <PROVIDED-INTERFACE-TREF DEST="SERVICE-INTERFACE">/vwg/services/Psd2/Psd2</PROVIDED-INTERFACE-TREF>
+          </P-PORT-PROTOTYPE>
+         </PORTS>
+        </ADAPTIVE-APPLICATION-SW-COMPONENT-TYPE>
+       </ELEMENTS>
+      </AR-PACKAGE>
+     </AR-PACKAGES>
+    </AR-PACKAGE>
+   </AR-PACKAGES>
+  </AR-PACKAGE>
+ </AR-PACKAGES>
+</AUTOSAR>

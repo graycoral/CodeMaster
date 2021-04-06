@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00043.xsd">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>vwg</SHORT-NAME>
+      <AR-PACKAGES>
+        <AR-PACKAGE>
+          <SHORT-NAME>applications</SHORT-NAME>
+          <AR-PACKAGES>
+            <AR-PACKAGE>
+              <SHORT-NAME>ICAS1</SHORT-NAME>
+              <ELEMENTS>
+                <ADAPTIVE-APPLICATION-SW-COMPONENT-TYPE>
+                  <SHORT-NAME>ICAS1_Consumer</SHORT-NAME>
+                  <PORTS>
+                    <R-PORT-PROTOTYPE>
+                      <SHORT-NAME>Psd2_RPort</SHORT-NAME>
+                      <REQUIRED-INTERFACE-TREF DEST="SERVICE-INTERFACE">/vwg/services/Psd2/Psd2</REQUIRED-INTERFACE-TREF>
+                    </R-PORT-PROTOTYPE>
+                  </PORTS>
+                </ADAPTIVE-APPLICATION-SW-COMPONENT-TYPE>
+              </ELEMENTS>
+            </AR-PACKAGE>
+          </AR-PACKAGES>
+        </AR-PACKAGE>
+      </AR-PACKAGES>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

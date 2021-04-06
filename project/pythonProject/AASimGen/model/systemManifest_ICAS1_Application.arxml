@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00043.xsd">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>vwg</SHORT-NAME>
+      <ELEMENTS>
+        <MODE-DECLARATION-GROUP>
+          <SHORT-NAME>MachineStates</SHORT-NAME>
+          <INITIAL-MODE-REF DEST="MODE-DECLARATION">/vwg/MachineStates/Startup</INITIAL-MODE-REF>
+          <MODE-DECLARATIONS>
+            <MODE-DECLARATION>
+              <SHORT-NAME>Startup</SHORT-NAME>
+              <VALUE>0</VALUE>
+            </MODE-DECLARATION>
+          </MODE-DECLARATIONS>
+        </MODE-DECLARATION-GROUP>
+      </ELEMENTS>
+      <AR-PACKAGES>
+        <AR-PACKAGE>
+          <SHORT-NAME>applications</SHORT-NAME>
+          <ELEMENTS>
+            <MACHINE>
+              <SHORT-NAME>ICAS1Machine</SHORT-NAME>
+              <COMMUNICATION-CONNECTORS>
+                <ETHERNET-COMMUNICATION-CONNECTOR>
+                  <SHORT-NAME>myCommunicationConnector1</SHORT-NAME>
+                  <UNICAST-NETWORK-ENDPOINT-REF DEST="NETWORK-ENDPOINT">/system/theEthCluster/theEthPhysChannel/myNetworkEndpoint_1</UNICAST-NETWORK-ENDPOINT-REF>
+                </ETHERNET-COMMUNICATION-CONNECTOR>
+                <ETHERNET-COMMUNICATION-CONNECTOR>
+                  <SHORT-NAME>myCommunicationConnector2</SHORT-NAME>
+                  <UNICAST-NETWORK-ENDPOINT-REF DEST="NETWORK-ENDPOINT">/system/theEthCluster/theEthPhysChannel/myNetworkEndpoint_2</UNICAST-NETWORK-ENDPOINT-REF>
+                </ETHERNET-COMMUNICATION-CONNECTOR>
+              </COMMUNICATION-CONNECTORS>
+              <MACHINE-MODE-MACHINES>
+                <MODE-DECLARATION-GROUP-PROTOTYPE>
+                  <SHORT-NAME>ICAS1MachineMode</SHORT-NAME>
+                  <TYPE-TREF DEST="MODE-DECLARATION-GROUP">/vwg/MachineStates</TYPE-TREF>
+                </MODE-DECLARATION-GROUP-PROTOTYPE>
+              </MACHINE-MODE-MACHINES>
+              <SERVICE-DISCOVER-CONFIGS>
+                <SOMEIP-SERVICE-DISCOVERY>
+                  <MULTICAST-SD-IP-ADDRESS-REF DEST="NETWORK-ENDPOINT">/system/theEthCluster/theEthPhysChannel/mySDNetworkEndpoint_1</MULTICAST-SD-IP-ADDRESS-REF>
+                  <SOMEIP-SERVICE-DISCOVERY-PORT>30490</SOMEIP-SERVICE-DISCOVERY-PORT>
+                </SOMEIP-SERVICE-DISCOVERY>
+              </SERVICE-DISCOVER-CONFIGS>
+            </MACHINE>
+            <MODE-DECLARATION-GROUP>
+              <SHORT-NAME>ApplicationStates</SHORT-NAME>
+              <INITIAL-MODE-REF DEST="MODE-DECLARATION">/vwg/applications/ApplicationStates/Running</INITIAL-MODE-REF>
+              <MODE-DECLARATIONS>
+                <MODE-DECLARATION>
+                  <SHORT-NAME>Running</SHORT-NAME>
+                  <VALUE>0</VALUE>
+                </MODE-DECLARATION>
+                <MODE-DECLARATION>
+                  <SHORT-NAME>Terminating</SHORT-NAME>
+                  <VALUE>1</VALUE>
+                </MODE-DECLARATION>
+              </MODE-DECLARATIONS>
+            </MODE-DECLARATION-GROUP>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </AR-PACKAGES>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

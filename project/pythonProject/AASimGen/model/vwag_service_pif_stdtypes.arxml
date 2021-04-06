@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00043.xsd">
+ <AR-PACKAGES>
+  <AR-PACKAGE>
+   <SHORT-NAME>vwg</SHORT-NAME>
+   <AR-PACKAGES>
+    <AR-PACKAGE>
+     <SHORT-NAME>services</SHORT-NAME>
+     <AR-PACKAGES>
+      <AR-PACKAGE>
+       <SHORT-NAME>pif</SHORT-NAME>
+       <AR-PACKAGES>
+        <AR-PACKAGE>
+         <SHORT-NAME>datatypes</SHORT-NAME>
+         <ELEMENTS>
+           
+        <APPLICATION-PRIMITIVE-DATA-TYPE>
+          <SHORT-NAME>OperationStatus_ADT</SHORT-NAME>
+          <CATEGORY>VALUE</CATEGORY>
+          <SW-DATA-DEF-PROPS>
+            <SW-DATA-DEF-PROPS-VARIANTS>
+              <SW-DATA-DEF-PROPS-CONDITIONAL>
+                <COMPU-METHOD-REF DEST="COMPU-METHOD">/vwg/services/pif/datatypes/OperationStatus_CM</COMPU-METHOD-REF>
+              </SW-DATA-DEF-PROPS-CONDITIONAL>
+            </SW-DATA-DEF-PROPS-VARIANTS>
+          </SW-DATA-DEF-PROPS>
+        </APPLICATION-PRIMITIVE-DATA-TYPE>
+           
+        <IMPLEMENTATION-DATA-TYPE>
+		  <!-- [PIF-LAH_248], [PIF-LAH_173] -->
+          <SHORT-NAME>OperationStatus</SHORT-NAME>
+          <CATEGORY>TYPE_REFERENCE</CATEGORY>
+          <SW-DATA-DEF-PROPS>
+            <SW-DATA-DEF-PROPS-VARIANTS>
+              <SW-DATA-DEF-PROPS-CONDITIONAL>
+			    <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/ara/stdtypes/UInt16</IMPLEMENTATION-DATA-TYPE-REF>
+              </SW-DATA-DEF-PROPS-CONDITIONAL>
+              <SW-DATA-DEF-PROPS-CONDITIONAL>
+                <COMPU-METHOD-REF DEST="COMPU-METHOD">/vwg/services/pif/datatypes/OperationStatus_CM</COMPU-METHOD-REF>
+              </SW-DATA-DEF-PROPS-CONDITIONAL>
+            </SW-DATA-DEF-PROPS-VARIANTS>
+          </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+           
+        <DATA-TYPE-MAPPING-SET>
+          <SHORT-NAME>OperationStatus_DTM</SHORT-NAME>
+          <DATA-TYPE-MAPS>
+            <DATA-TYPE-MAP>
+              <APPLICATION-DATA-TYPE-REF DEST="APPLICATION-PRIMITIVE-DATA-TYPE">/vwg/services/pif/datatypes/OperationStatus_ADT</APPLICATION-DATA-TYPE-REF>
+              <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/OperationStatus</IMPLEMENTATION-DATA-TYPE-REF>
+            </DATA-TYPE-MAP>
+          </DATA-TYPE-MAPS>
+        </DATA-TYPE-MAPPING-SET>
+
+             
+        <COMPU-METHOD>
+		  <!-- [PIF-LAH_297] -->
+          <SHORT-NAME>OperationStatus_CM</SHORT-NAME>
+          <CATEGORY>TEXTTABLE</CATEGORY>
+          <COMPU-INTERNAL-TO-PHYS>
+            <COMPU-SCALES>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">-2</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">-2</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>operation_timeout</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">-1</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">-1</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>protocol_error</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">0</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">0</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>successful</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">202</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">202</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>accepted</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">300</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">300</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>multiple_choice</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">304</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">304</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>not_modified</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">401</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">401</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>unauthorized</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">403</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">403</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>forbidden</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">404</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">404</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>not_found</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">408</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">408</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>request_time_out</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">409</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">409</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>conflict</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">414</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">414</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>request_too_large</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">429</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">429</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>too_many_requests</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">431</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">431</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>request_header_fields_too_large</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">451</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">451</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>unavailable_for_legal_reasons</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">500</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">500</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>internal_server_error</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">503</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">503</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>service_unavailable</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">504</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">504</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>gateway_time_out</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">511</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">511</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>network_authentication_required</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+
+            </COMPU-SCALES>
+          </COMPU-INTERNAL-TO-PHYS>
+        </COMPU-METHOD>
+           
+
+           
+             
+        <APPLICATION-PRIMITIVE-DATA-TYPE>
+          <SHORT-NAME>SubscriptionStatus_ADT</SHORT-NAME>
+          <CATEGORY>VALUE</CATEGORY>
+          <SW-DATA-DEF-PROPS>
+            <SW-DATA-DEF-PROPS-VARIANTS>
+              <SW-DATA-DEF-PROPS-CONDITIONAL>
+                <COMPU-METHOD-REF DEST="COMPU-METHOD">/vwg/services/pif/datatypes/SubscriptionStatus_CM</COMPU-METHOD-REF>
+              </SW-DATA-DEF-PROPS-CONDITIONAL>
+            </SW-DATA-DEF-PROPS-VARIANTS>
+          </SW-DATA-DEF-PROPS>
+        </APPLICATION-PRIMITIVE-DATA-TYPE>
+           
+        <IMPLEMENTATION-DATA-TYPE>
+		  <!-- [PIF-LAH_249], [PIF-LAH_174] -->
+          <SHORT-NAME>SubscriptionStatus</SHORT-NAME>
+          <CATEGORY>TYPE_REFERENCE</CATEGORY>
+          <SW-DATA-DEF-PROPS>
+            <SW-DATA-DEF-PROPS-VARIANTS>
+              <SW-DATA-DEF-PROPS-CONDITIONAL>
+                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/ara/stdtypes/UInt16</IMPLEMENTATION-DATA-TYPE-REF>
+              </SW-DATA-DEF-PROPS-CONDITIONAL>
+              <SW-DATA-DEF-PROPS-CONDITIONAL>
+                <COMPU-METHOD-REF DEST="COMPU-METHOD">/vwg/services/pif/datatypes/SubscriptionStatus_CM</COMPU-METHOD-REF>
+              </SW-DATA-DEF-PROPS-CONDITIONAL>
+            </SW-DATA-DEF-PROPS-VARIANTS>
+          </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+           
+        <DATA-TYPE-MAPPING-SET>
+          <SHORT-NAME>SubscriptionStatus_DTM</SHORT-NAME>
+          <DATA-TYPE-MAPS>
+            <DATA-TYPE-MAP>
+              <APPLICATION-DATA-TYPE-REF DEST="APPLICATION-PRIMITIVE-DATA-TYPE">/vwg/services/pif/datatypes/SubscriptionStatus_ADT</APPLICATION-DATA-TYPE-REF>
+              <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/SubscriptionStatus</IMPLEMENTATION-DATA-TYPE-REF>
+            </DATA-TYPE-MAP>
+          </DATA-TYPE-MAPS>
+        </DATA-TYPE-MAPPING-SET>             
+             
+        <COMPU-METHOD>
+		  <!-- [PIF-LAH_298] -->
+          <SHORT-NAME>SubscriptionStatus_CM</SHORT-NAME>
+          <CATEGORY>TEXTTABLE</CATEGORY>
+          <COMPU-INTERNAL-TO-PHYS>
+            <COMPU-SCALES>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">-2</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">-2</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>subscription_timeout</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">-1</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">-1</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>subscription_error</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">0</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">0</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>accepted</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">1</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">1</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>running</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">2</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">2</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>cancelled</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+              <COMPU-SCALE>
+                <LOWER-LIMIT INTERVAL-TYPE="CLOSED">3</LOWER-LIMIT>
+                <UPPER-LIMIT INTERVAL-TYPE="CLOSED">3</UPPER-LIMIT>
+                <COMPU-CONST>
+                  <VT>target_deleted</VT>
+                </COMPU-CONST>
+              </COMPU-SCALE>
+
+            </COMPU-SCALES>
+          </COMPU-INTERNAL-TO-PHYS>
+        </COMPU-METHOD>
+
+        
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>Status</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_int8_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        
+        
+        
+        
+        
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>Boolean</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                         <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/cpp_bool</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>Int8</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_int8_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>Int16</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_int16_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>Int32</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_int32_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>Int64</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_int64_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>UInt8</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint8_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>UInt16</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint16_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>UInt32</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint32_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>UInt64</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint64_t</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		  <!-- [PIF-LAH_247] -->
+          <SHORT-NAME>UUID</SHORT-NAME>
+          <CATEGORY>ARRAY</CATEGORY>
+          <SW-DATA-DEF-PROPS>
+            <SW-DATA-DEF-PROPS-VARIANTS>
+              <SW-DATA-DEF-PROPS-CONDITIONAL/>
+            </SW-DATA-DEF-PROPS-VARIANTS>
+          </SW-DATA-DEF-PROPS>
+          <SUB-ELEMENTS>
+            <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+              <SHORT-NAME>UUID_byte</SHORT-NAME>
+              <CATEGORY>TYPE_REFERENCE</CATEGORY>
+              <ARRAY-SIZE>16</ARRAY-SIZE>
+              <ARRAY-SIZE-SEMANTICS>FIXED-SIZE</ARRAY-SIZE-SEMANTICS>
+              <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                    <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/UInt8</IMPLEMENTATION-DATA-TYPE-REF>
+                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+              </SW-DATA-DEF-PROPS>
+            </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+          </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_245] -->
+            <SHORT-NAME>String</SHORT-NAME>
+            <CATEGORY>STRING</CATEGORY>
+              <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint8_t</BASE-TYPE-REF>
+                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+              </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_250] -->
+            <SHORT-NAME>ServiceIdentifier</SHORT-NAME>
+            <CATEGORY>STRING</CATEGORY>
+              <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint8_t</BASE-TYPE-REF>
+                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+              </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_251] -->
+            <SHORT-NAME>InstanceIdentifier</SHORT-NAME>
+            <CATEGORY>STRING</CATEGORY>
+              <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint8_t</BASE-TYPE-REF>
+                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+              </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_252] -->
+            <SHORT-NAME>ResourceIdentifier</SHORT-NAME>
+            <CATEGORY>STRING</CATEGORY>
+              <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                    <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/std_uint8_t</BASE-TYPE-REF>
+                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+              </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>Float</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/cpp_float</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_169] -->
+            <SHORT-NAME>Double</SHORT-NAME>
+            <CATEGORY>VALUE</CATEGORY>
+            <SW-DATA-DEF-PROPS>
+                <SW-DATA-DEF-PROPS-VARIANTS>
+                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/ara/stdtypes/cpp_double</BASE-TYPE-REF>
+                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                </SW-DATA-DEF-PROPS-VARIANTS>
+            </SW-DATA-DEF-PROPS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>ByteArray</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>Dim1Element</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/UInt8</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>UInt8Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/UInt8</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>UInt16Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/UInt16</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>UInt32Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/UInt32</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>UInt64Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/UInt64</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>Int8Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/Int8</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>Int16Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/Int16</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>Int32Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/Int32</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>Int64Vector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/Int64</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>FloatVector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/Float</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>DoubleVector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/Double</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        <IMPLEMENTATION-DATA-TYPE>
+		    <!-- [PIF-LAH_???] -->
+            <SHORT-NAME>UUIDVector</SHORT-NAME>
+            <CATEGORY>VECTOR</CATEGORY>
+            <DYNAMIC-ARRAY-SIZE-PROFILE>VSA_LINEAR</DYNAMIC-ARRAY-SIZE-PROFILE>
+            <SUB-ELEMENTS>
+                <IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                    <SHORT-NAME>subElement</SHORT-NAME>
+                    <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                    <SW-DATA-DEF-PROPS>
+                        <SW-DATA-DEF-PROPS-VARIANTS>
+                            <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/vwg/services/pif/datatypes/UUID</IMPLEMENTATION-DATA-TYPE-REF>
+                            </SW-DATA-DEF-PROPS-CONDITIONAL>
+                        </SW-DATA-DEF-PROPS-VARIANTS>
+                    </SW-DATA-DEF-PROPS>
+                </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+            </SUB-ELEMENTS>
+        </IMPLEMENTATION-DATA-TYPE>
+        
+
+         </ELEMENTS>
+        </AR-PACKAGE>
+       </AR-PACKAGES>
+      </AR-PACKAGE>
+     </AR-PACKAGES>
+    </AR-PACKAGE>
+   </AR-PACKAGES>
+  </AR-PACKAGE>
+ </AR-PACKAGES>
+</AUTOSAR>

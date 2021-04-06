@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00043.xsd">
+	<AR-PACKAGES>
+		<AR-PACKAGE>
+			<SHORT-NAME>vwg</SHORT-NAME>
+			<AR-PACKAGES>
+				<AR-PACKAGE>
+					<SHORT-NAME>stdtypes</SHORT-NAME>
+					<ELEMENTS>
+                        <IMPLEMENTATION-DATA-TYPE>
+                          <SHORT-NAME>DT_uuid</SHORT-NAME>
+                          <CATEGORY>ARRAY</CATEGORY>
+                          <SW-DATA-DEF-PROPS>
+                            <SW-DATA-DEF-PROPS-VARIANTS>
+                              <SW-DATA-DEF-PROPS-CONDITIONAL/>
+                            </SW-DATA-DEF-PROPS-VARIANTS>
+                          </SW-DATA-DEF-PROPS>
+                          <SUB-ELEMENTS>
+                            <IMPLEMENTATION-DATA-TYPE-ELEMENT UUID="d3fc50cd-f68a-4a7d-9eea-584e9fbe2349">
+                              <SHORT-NAME>DT_uuid_elementsImpl</SHORT-NAME>
+                              <CATEGORY>TYPE_REFERENCE</CATEGORY>
+                              <ARRAY-SIZE>16</ARRAY-SIZE>
+                              <ARRAY-SIZE-SEMANTICS>FIXED-SIZE</ARRAY-SIZE-SEMANTICS>
+                              <SW-DATA-DEF-PROPS>
+                                <SW-DATA-DEF-PROPS-VARIANTS>
+                                  <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                    <IMPLEMENTATION-DATA-TYPE-REF DEST="IMPLEMENTATION-DATA-TYPE">/ara/stdtypes/UInt8</IMPLEMENTATION-DATA-TYPE-REF>
+                                  </SW-DATA-DEF-PROPS-CONDITIONAL>
+                                </SW-DATA-DEF-PROPS-VARIANTS>
+                              </SW-DATA-DEF-PROPS>
+                            </IMPLEMENTATION-DATA-TYPE-ELEMENT>
+                          </SUB-ELEMENTS>
+                        </IMPLEMENTATION-DATA-TYPE>
+					</ELEMENTS>
+				</AR-PACKAGE>
+			</AR-PACKAGES>
+		</AR-PACKAGE>
+	</AR-PACKAGES>
+</AUTOSAR>

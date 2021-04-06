@@ -1,0 +1,783 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00043.xsd">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>vwg</SHORT-NAME>
+      <AR-PACKAGES>
+        <AR-PACKAGE>
+          <SHORT-NAME>applications</SHORT-NAME>
+          <AR-PACKAGES>
+            <AR-PACKAGE>
+              <SHORT-NAME>ICAS1</SHORT-NAME>
+              <AR-PACKAGES>
+                <AR-PACKAGE>
+                  <SHORT-NAME>mapping</SHORT-NAME>
+                  <ELEMENTS>
+                    <SERVICE-INSTANCE-TO-PORT-PROTOTYPE-MAPPING>
+                      <SHORT-NAME>PortMappingProvidedPositioning_Someip</SHORT-NAME>
+                      <PORT-PROTOTYPE-IREF>
+                        <CONTEXT-ROOT-SW-COMPONENT-PROTOTYPE-REF DEST="ROOT-SW-COMPONENT-PROTOTYPE">/vwg/applications/Basis__ICAS3_Sys_IVI_01/Basis__ICAS3_Sys_IVI_01_Exe/Basis__ICAS3_Sys_IVI_01</CONTEXT-ROOT-SW-COMPONENT-PROTOTYPE-REF>
+                        <TARGET-PORT-PROTOTYPE-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</TARGET-PORT-PROTOTYPE-REF>
+                      </PORT-PROTOTYPE-IREF>
+                      <PROCESS-REF DEST="PROCESS">/vwg/applications/ICAS1/ICAS1_Provider_Process</PROCESS-REF>
+                      <SERVICE-INSTANCE-REF DEST="PROVIDED-SOMEIP-SERVICE-INSTANCE">/vwg/applications/ICAS1/instance/Positioning_ProvidedSomeipServiceInstance</SERVICE-INSTANCE-REF>
+                    </SERVICE-INSTANCE-TO-PORT-PROTOTYPE-MAPPING>
+                    <SOMEIP-SERVICE-INSTANCE-TO-MACHINE-MAPPING>
+                      <SHORT-NAME>Positioning_Provided_ServiceInstance_toMachine</SHORT-NAME>
+                      <COMMUNICATION-CONNECTOR-REF DEST="ETHERNET-COMMUNICATION-CONNECTOR">/vwg/applications/ICAS1Machine/myCommunicationConnector1</COMMUNICATION-CONNECTOR-REF>
+                      <SERVICE-INSTANCE-REF DEST="PROVIDED-SOMEIP-SERVICE-INSTANCE">/vwg/applications/ICAS1/instance/Positioning_ProvidedSomeipServiceInstance</SERVICE-INSTANCE-REF>
+                      <UDP-PORT>42813</UDP-PORT>
+                    </SOMEIP-SERVICE-INSTANCE-TO-MACHINE-MAPPING>
+                  </ELEMENTS>
+                </AR-PACKAGE>
+                <AR-PACKAGE>
+                  <SHORT-NAME>instance</SHORT-NAME>
+                  <ELEMENTS>
+                    <PROVIDED-SOMEIP-SERVICE-INSTANCE>
+                      <SHORT-NAME>Positioning_ProvidedSomeipServiceInstance</SHORT-NAME>
+                      <SERVICE-INTERFACE-REF DEST="SOMEIP-SERVICE-INTERFACE-DEPLOYMENT">/vwg/applications/Basis__ICAS3_Sys_IVI_01/deployment/Positioning_Someip</SERVICE-INTERFACE-REF>
+                      <PROVIDED-EVENT-GROUPS>
+                        <SOMEIP-PROVIDED-EVENT-GROUP>
+                          <SHORT-NAME>positions__EventGroup</SHORT-NAME>
+                          <EVENT-GROUP-REF DEST="SOMEIP-EVENT-GROUP">/vwg/applications/Basis__ICAS3_Sys_IVI_01/deployment/Positioning_Someip/positions_EventGroup</EVENT-GROUP-REF>
+                        </SOMEIP-PROVIDED-EVENT-GROUP>
+                        <SOMEIP-PROVIDED-EVENT-GROUP>
+                          <SHORT-NAME>posMapInfo__EventGroup</SHORT-NAME>
+                          <EVENT-GROUP-REF DEST="SOMEIP-EVENT-GROUP">/vwg/applications/Basis__ICAS3_Sys_IVI_01/deployment/Positioning_Someip/posMapInfo_EventGroup</EVENT-GROUP-REF>
+                        </SOMEIP-PROVIDED-EVENT-GROUP>
+                      </PROVIDED-EVENT-GROUPS>
+                      <SD-SERVER-CONFIG>
+                        <INITIAL-OFFER-BEHAVIOR>
+                          <INITIAL-DELAY-MAX-VALUE>0</INITIAL-DELAY-MAX-VALUE>
+                          <INITIAL-DELAY-MIN-VALUE>0</INITIAL-DELAY-MIN-VALUE>
+                          <INITIAL-REPETITIONS-BASE-DELAY>0.1</INITIAL-REPETITIONS-BASE-DELAY>
+                          <INITIAL-REPETITIONS-MAX>3</INITIAL-REPETITIONS-MAX>
+                        </INITIAL-OFFER-BEHAVIOR>
+                        <OFFER-CYCLIC-DELAY>1</OFFER-CYCLIC-DELAY>
+                        <REQUEST-RESPONSE-DELAY>
+                          <MAX-VALUE>0</MAX-VALUE>
+                          <MIN-VALUE>0</MIN-VALUE>
+                        </REQUEST-RESPONSE-DELAY>
+                        <SERVICE-OFFER-TIME-TO-LIVE>3</SERVICE-OFFER-TIME-TO-LIVE>
+                      </SD-SERVER-CONFIG>
+                      <SERVICE-INSTANCE-ID>1</SERVICE-INSTANCE-ID>
+                    </PROVIDED-SOMEIP-SERVICE-INSTANCE>
+                    <SOMEIP-DATA-PROTOTYPE-TRANSFORMATION-PROPS>
+                      <SHORT-NAME>Positioning_TLV</SHORT-NAME>
+                      <DATA-PROTOTYPES>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/posType</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>0</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/messageCounter</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>1</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/latitude</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>2</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/longitude</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>3</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/altitudeMeanSeaLevel</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>4</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/altitudeWGS84</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>5</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/headingVelocityDirection</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>6</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/headingYawAngle</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>7</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyHeadingVelocityDirection</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>8</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyHeadingYawAngle</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>9</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/speed3D</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>10</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/speed2D</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>11</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/velocityNorthDirection</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>12</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/velocityEastDirection</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>13</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/velocityUpwardDirection</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>14</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracySpeed3D</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>15</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracySpeed2D</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>16</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyHorizontal</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>17</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyEllipseSemiMajorAxis</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>18</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyEllipseSemiMajorAxisHeading</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>19</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyEllipseSemiMinorAxis</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>20</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyVertical</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>21</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyPitchAngle</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>22</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/accuracyRollAngle</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>23</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/pitchAngle</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>24</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/rollAngle</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>25</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/drivingDirection</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>26</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/statusFrontCamera</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>27</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/statusGNSS</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>28</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/statusLandmarks</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>29</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/statusTopView</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>30</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/statusLidar</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>31</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/statusSystem</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>32</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/latency</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>33</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/preciseLocalTimeSeconds</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>34</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/positions</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_positions_struct/preciseLocalTimeNanoseconds</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>35</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/elementId</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>0</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/accuracyIsLaneAccurate</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>1</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/numberOfLanes</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>2</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/laneNumber</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>3</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/linkId</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>4</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/distanceOnLink</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>5</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/offsetOnLane</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>6</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/laneId</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>7</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/laneGroupId</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>8</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/tileId</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>9</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/updateRegionId</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>10</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/productId</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>11</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/distanceLeftMarking</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>12</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/distanceRightMarking</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>13</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/locationIsCarTrain</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>14</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/locationIsFerry</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>15</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/locationIsParkingStructure</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>16</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/locationIsParkingArea</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>17</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/offRoadStatus</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>18</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/gradient</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>19</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/slope</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>20</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/trafficDirection</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>21</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/laneType</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>22</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/isMotorwayRoad</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>23</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/isUrbanRoad</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>24</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/mapMatchingSource</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>25</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/preciseLocalTimeSeconds</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>26</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                        <COMPOSITION-DATA-PROTOTYPE-REF>
+                          <DATA-PROTOTYPE-IREF>
+                            <CONTEXT-PORT-REF DEST="P-PORT-PROTOTYPE">/vwg/applications/ICAS1/ICAS1_Provider/Positioning_PPort</CONTEXT-PORT-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</TARGET-DATA-PROTOTYPE-REF>
+                          </DATA-PROTOTYPE-IREF>
+                          <ELEMENT-IN-IMPL-DATATYPE>
+                            <ROOT-DATA-PROTOTYPE-REF DEST="FIELD">/vwg/services/Positioning/Positioning/posMapInfo</ROOT-DATA-PROTOTYPE-REF>
+                            <TARGET-DATA-PROTOTYPE-REF DEST="IMPLEMENTATION-DATA-TYPE-ELEMENT">/vwg/services/Positioning/datatypes/DT_posMapInfo_struct/preciseLocalTimeNanoseconds</TARGET-DATA-PROTOTYPE-REF>
+                          </ELEMENT-IN-IMPL-DATATYPE>
+                          <TLV-DATA-ID>27</TLV-DATA-ID>
+                        </COMPOSITION-DATA-PROTOTYPE-REF>
+                      </DATA-PROTOTYPES>
+                    </SOMEIP-DATA-PROTOTYPE-TRANSFORMATION-PROPS>
+                  </ELEMENTS>
+                </AR-PACKAGE>
+              </AR-PACKAGES>
+            </AR-PACKAGE>
+          </AR-PACKAGES>
+        </AR-PACKAGE>
+      </AR-PACKAGES>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>
