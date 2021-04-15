@@ -101,7 +101,7 @@ https://www.acmicpc.net/problem/13460
 예제 출력 7
 -1
 */
-#define SOL (1)
+#define SOL (0)
 using namespace std;
 
 #ifdef SOL
@@ -271,8 +271,8 @@ int main()
 	std::ios_base::sync_with_stdio(0);
 	std::cin.tie(0); std::cout.tie(0);
 	
-	/*freopen("BAEKJOON_13460.txt", "r", stdin);
-	cin >> T;*/	
+	freopen("BAEKJOON_13460.txt", "r", stdin);
+	cin >> T;
 
 	for (int i = 0; i < T; i++) {
 		cin >> N >> M;
