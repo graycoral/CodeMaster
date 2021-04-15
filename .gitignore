@@ -24,3 +24,15 @@
 */__pycache__/*
 CTS/.idea/*
 CTS/src/__pycache__/*
+/SS_CodeMaster/Debug
+/SS_CodeMaster/.vscode
+/SS_CodeMaster/.vs/SS_CodeMaster/v16
+/Land/out/build/x64-Debug/CMakeFiles
+/Land/out/build/x64-Debug/.cmake/api/v1
+/Land/out/build/x64-Debug/rapidjson
+*.cmake
+/Land/out/build/x64-Debug
+/SS_CodeMaster/SS_CodeMaster.vcxproj.user
+/SS_CodeMaster/SS_CodeMaster.vcxproj.filters
+/SS_CodeMaster/SS_CodeMaster.vcxproj
+/SS_CodeMaster/SS_CodeMaster.sln
