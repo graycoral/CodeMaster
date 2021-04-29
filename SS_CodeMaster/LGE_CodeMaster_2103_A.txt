@@ -1,7 +1,1492 @@
-6
-QWERTY
-LOM
-FFGGFF
-VGTRDCF
-MPML
-ZPZPZPZPZPZPZPZPZPZPZPZPZPZPZPZPZPZPZPZP
+# Copyright (c) 2018 LG Electronics, Inc.
+
+BUILD_SCRIPT_VERSION="1.0.66"
+BUILD_SCRIPT_NAME=`basename ${0}`
+
+BUILD_TOPDIR="${WORKSPACE}/elsa"
+BUILD_DL_DIR="/mnt/mirrors/elsa/master/downloads"
+BUILD_SSTATE_DIR="/mnt/mirrors/elsa/master/sstate-cache"
+BUILD_RASP_DL_DIR="/mnt/mirrors/elsa/master/rasp/downloads"
+BUILD_RASP_SSTATE_DIR="/mnt/mirrors/elsa/master/rasp/sstate-cache"
+BUILD_ARTIFACTS_TARGET_DIR="${JOB_NAME}/${BUILD_NUMBER}"
+BUILD_ARTIFACTS="/mnt/artifacts"
+BUILD_PARALLEL_NUMBER="16"
+
+BUILD_FILESERVER="10.178.92.34"
+BUILD_ENABLE_DL_DIR="N"
+BUILD_ENABLE_SSTATE_DIR="N"
+BUILD_ENABLE_PREMIRROR="N"
+BUILD_ENABLE_SSTATEMIRROR="N"
+BUILD_ENABLE_RSYNC_SSTATE="N"
+BUILD_ENABLE_COM_TEST="N"
+
+GERRIT_SERVER="text.lge.com"
+GERRIT_PORT=29411
+ENABLE_DEBUG=true
+
+ICAS3_MANIFEST="ICAS3-R19-11.xml"
+ICAS3_FULL_MANIFEST="ICAS3-FULL-R19-11.xml -g qnx"
+COCKPIT_QNX_LARA_MANIFEST="-b cockpit_release -g qnx --repo-url=ssh://vgit.lge.com:29430/repo.git"
+ICAS3_VERSION_NAME="I782.00"
+QEMU_MANIFEST="LARA-R20-11-dev.xml"
+NXP_MANIFEST="GATEWAY-R19-11.xml"
+
+ICAS3_BUILD_TOPDIR=${BUILD_TOPDIR}
+
+REAL_TARGET="Target"
+EMULATOR="Emulator"
+
+pushd `dirname $0` > /dev/null
+BUILD_JENKINS_SCRIPTS_DIR=`pwd -P`
+popd > /dev/null
+
+RELEASE_INFO_PATH=${WORKSPACE}/get_release_info.html
+
+declare -i RESULT=0
+
+function parse_job_name {
+    JOB_BUILD_DISTRO="elsa"
+    case ${JOB_NAME} in
+        *-official-*)
+            JOB_BUILD_TYPE="official"
+            ;;
+        *-verify-*)
+            JOB_BUILD_TYPE="verify"
+            if [ -f "${WORKSPACE}/commit_parser.txt" ]; then
+                JOB_BUILD_TYPE="integrate"
+            fi
+            echo "JOB_BUILD_TYPE : ${JOB_BUILD_TYPE}"
+            ;;
+        *)
+            echo "ERROR: ${BUILD_SCRIPT_NAME}-${BUILD_SCRIPT_VERSION} Unrecognized JOB_BUILD_TYPE in '${JOB_NAME}'" && exit 1
+            ;;
+    esac
+    case ${JOB_NAME} in
+        *-minnowboard*)
+            JOB_BUILD_MACHINE="minnowboard-max-64"
+            ;;
+        *-comtest*)
+            JOB_BUILD_MACHINE="qemux86-64"
+            BUILD_ENABLE_COM_TEST="Y"
+            echo "BUILD_ENABLE_COM_TEST - BUILD_ENABLE_COM_TEST: ${JOB_BUILD_MACHINE}-${BUILD_ENABLE_COM_TEST}"
+            ;;
+        *-qemu*)
+            JOB_BUILD_MACHINE="qemux86-64"
+            ;;
+        *-rasp*)
+            JOB_BUILD_MACHINE="raspberrypi3"
+            ;;
+        *-rcar*)
+            JOB_BUILD_MACHINE="h3ulcb"
+            ;;
+        *-ICAS3*)
+            JOB_BUILD_MACHINE="ICAS3"
+            ;;
+        *-nxp*)
+            JOB_BUILD_MACHINE="s32g274aevb"
+            ;;
+        *-cockpit*)
+            JOB_BUILD_MACHINE="COCKPIT"
+            ;;
+        *)
+            echo "ERROR: ${BUILD_SCRIPT_NAME}-${BUILD_SCRIPT_VERSION} Unrecognized JOB_BUILD_MACHINE in '${JOB_NAME}'" && exit 1
+            ;;
+    esac
+    case ${JOB_NAME} in
+        *-R19-11-*)
+            JOB_BUILD_BRANCH="R19-11"
+            ;;
+        *-R20-11-*)
+            JOB_BUILD_BRANCH="R20-11"
+            ;;
+    esac
+}
+
+function apply_build_rules {
+    echo "apply_build_rules : JOB_BUILD_TYPE : ${JOB_BUILD_TYPE}"
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        #BUILD_ENABLE_DL_DIR="Y"
+        BUILD_ENABLE_PREMIRROR="Y"
+        BUILD_ENABLE_RSYNC_SSTATE="Y"
+        BUILD_ENABLE_SSTATEMIRROR="Y"
+    elif [ "${JOB_BUILD_TYPE}"  = "verify" ]; then
+        BUILD_ENABLE_PREMIRROR="Y"
+        BUILD_ENABLE_SSTATEMIRROR="Y"
+    elif [ "${JOB_BUILD_TYPE}"  = "integrate" ]; then
+        BUILD_ENABLE_PREMIRROR="Y"
+        BUILD_ENABLE_SSTATEMIRROR="Y"
+    fi
+}
+
+function set_build_images {
+    if [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+        BUILD_IMAGES="fsl-image-auto"
+    else
+        if [ "${BUILD_ENABLE_COM_TEST}" = "Y" ]; then
+            BUILD_IMAGES="core-image-lara-validation-com"
+        else
+            BUILD_IMAGES="core-image-lara-devel"
+        fi
+    fi
+    echo "BUILD IMG : ${BUILD_IMAGES}"
+}
+
+function clone_init {
+    rm -rf ${BUILD_TOPDIR}
+    mkdir -p ${BUILD_TOPDIR}
+
+    pushd ${BUILD_TOPDIR} > /dev/null
+        if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+            if [ "${JOB_BUILD_TYPE}" != "official" ]; then
+                FINAL_MANIFEST=${ICAS3_MANIFEST}
+            else
+                if [ "${ICAS3_SET_MANIFEST}" != "" ]; then
+                    ICAS3_FULL_MANIFEST=${ICAS3_SET_MANIFEST}
+                fi
+
+                FINAL_MANIFEST=${ICAS3_FULL_MANIFEST}
+            fi
+        elif [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+            FINAL_MANIFEST=${COCKPIT_SET_MANIFEST}
+        elif [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+            FINAL_MANIFEST=${NXP_MANIFEST}
+        else
+            if [ "${JOB_BUILD_BRANCH}" = "R19-11" ]; then
+                FINAL_MANIFEST="LARA-R19-11-dev.xml"
+            else
+                FINAL_MANIFEST=${QEMU_MANIFEST}
+            fi
+        fi
+        if [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+            repo init -u ssh://vgit.lge.com:29430/vw/manifest ${FINAL_MANIFEST}
+        else
+            repo init -u ssh://text.lge.com/LARA/manifest -m ${FINAL_MANIFEST}
+        fi
+        repo sync -c -j${BUILD_PARALLEL_NUMBER}
+    popd > /dev/null
+}
+
+function cherrypick_meta_repo {
+    pushd  ${BUILD_TOPDIR}/meta-lara > /dev/null
+        git fetch ssh://text.lge.com/LARA/meta-lara ${GERRIT_REFSPEC}
+        git cherry-pick FETCH_HEAD
+    popd > /dev/null
+}
+
+function cherrypick_ara_repo {
+    if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+        pushd  ${BUILD_TOPDIR}/Apps/source/autosar/ara-api > /dev/null
+    else
+        pushd  ${BUILD_TOPDIR}/ara-api > /dev/null
+    fi
+        git fetch ssh://text.lge.com/adp/ara-api ${GERRIT_REFSPEC}
+        git cherry-pick FETCH_HEAD
+    popd > /dev/null
+}
+
+function cherrypick_icas3_repo {
+    pushd  ${BUILD_TOPDIR}/Apps/source > /dev/null
+        git fetch ssh://text.lge.com/ecu_task/vw/icas3 ${GERRIT_REFSPEC}
+        git cherry-pick FETCH_HEAD
+    popd > /dev/null
+}
+
+function cherrypick_manifest_repo {
+    pushd ${BUILD_TOPDIR} > /dev/null
+        git clone ssh://text.lge.com/LARA/manifest
+    popd > /dev/null
+    pushd  ${BUILD_TOPDIR}/manifest > /dev/null
+        mv ${WORKSPACE}/commit_parser.txt .
+        sed -i 's/.*\[+\]//g' commit_parser.txt
+        sed -i "s/ Change.*//g" commit_parser.txt
+        sed -i "s/.*\//ManifestChangeId=/g" commit_parser.txt
+        source commit_parser.txt
+        git ls-remote | grep $ManifestChangeId > commit_parser.txt
+        sed -i "s/.*refs/MANIFEST_REFSPEC=refs/" commit_parser.txt
+        source commit_parser.txt
+        git fetch ssh://text.lge.com/LARA/manifest ${MANIFEST_REFSPEC}
+        git cherry-pick FETCH_HEAD
+        cp default.xml ${BUILD_TOPDIR}/.repo/manifest.xml
+    popd > /dev/null
+}
+
+function dependency_handling {
+#1.store the dependency project data to result.txt
+    pushd ${WORKSPACE} > /dev/null
+        sed -i 's/\]\s*/\]/g' commit_parser.txt
+        text=$(cat commit_parser.txt | tr " " "\n")
+
+        for depend in $text
+        do
+        if [[ "$depend" == "[+]"* ]]; then
+            number=$(echo $depend | sed 's/[^0-9]//g')
+            echo $number >>  result.txt
+
+            branch=$(ssh -p ${GERRIT_PORT} ${GERRIT_SERVER} gerrit query $number | grep branch: | tr -d '\n' | sed 's/\ branch: //g' | tr -d ' ')
+            echo $branch >> result.txt
+
+            project=$(ssh -p ${GERRIT_PORT} ${GERRIT_SERVER} gerrit query $number | grep project: | tr -d '\n' | sed 's/\ project: //g' | tr -d ' ')
+            echo $project >> result.txt
+
+            pushd ${BUILD_TOPDIR}/.repo/manifests/ > /dev/null
+                location="$(grep -r $project ${FINAL_MANIFEST} | sed 's/.*path="//g' | sed 's/".*//g')"
+            popd > /dev/null
+            echo $location >> result.txt
+
+            dep_count=$(($dep_count+1))
+
+            if $ENABLE_DEBUG ; then
+                echo "Dependency_handling In"
+                echo "number: $number"
+                echo "branch: $branch"
+                echo "project: $project"
+                echo "location: $location"
+                echo "FINAL_MANIFEST: ${FINAL_MANIFEST}"
+            fi
+        fi
+        done
+    popd > /dev/null
+
+    #2.git fetch
+    #2.1parse the result.txt
+    if [ -f "${WORKSPACE}/result.txt" ]; then
+        pushd ${WORKSPACE} > /dev/null
+        temp_count=0
+        while read line
+        do
+            temp_count=$((temp_count+1))
+                if [ $temp_count -eq 1 ]
+                    then
+                        final_number=$line
+                elif [ $temp_count -eq 2 ]
+                    then
+                        final_branch=$line
+                elif [ $temp_count -eq 3 ]
+                    then
+                        final_project=$line
+                elif [ $temp_count -eq 4 ]
+                    then
+                        final_location=$line
+                        #2.2change the dependent project
+                        pushd ${BUILD_TOPDIR}/${final_location}/ > /dev/null
+                            final_manifest_refspec="$(git ls-remote | sed 's/.*refs/refs/' | grep $final_number | sort -r)"
+                            git fetch ssh://${GERRIT_SERVER}/${final_project} ${final_manifest_refspec}
+                            git cherry-pick FETCH_HEAD
+                        popd > /dev/null
+                        temp_count=0
+                fi
+                if $ENABLE_DEBUG ;
+                    then
+                    echo "line:  $line"
+                fi
+
+        done < result.txt
+        rm -rf result.txt
+        popd > /dev/null
+    fi
+}
+
+function call_build_rcar {
+    pushd ${BUILD_TOPDIR}/meta-rcar > /dev/null
+        sh meta-rcar-gen3/docs/sample/copyscript/copy_evaproprietary_softwares.sh -f ../meta-lara/proprietary
+    popd > /dev/null
+
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source poky/oe-init-build-env
+        bitbake-layers add-layer ../meta-openembedded/meta-oe
+        bitbake-layers add-layer ../meta-openembedded/meta-python
+        bitbake-layers add-layer ../meta-opendds
+        bitbake-layers add-layer ../meta-rcar/meta-rcar-gen3
+        bitbake-layers add-layer ../meta-linaro/meta-optee
+        bitbake-layers add-layer ../yocto-layers/meta-ara
+        bitbake-layers add-layer ../meta-lara
+
+        rm -f conf/local.conf
+        cp ../meta-rcar/meta-rcar-gen3/docs/sample/conf/h3ulcb/poky-gcc/bsp/local.conf conf/
+
+        echo "DISTRO_FEATURES_append = \" use_eva_pkg\"" >> conf/local.conf
+        echo "BB_DANGLINGAPPENDS_WARNONLY = \"true\"" >> conf/local.conf
+        echo "PARALLEL_MAKE ?= \"-j 4\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_opendds=\"1.0+git%\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_opendds-native=\"1.0+git%\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_nativesdk-opendds=\"1.0+git%\"" >> conf/local.conf
+        [ ${BUILD_ENABLE_DL_DIR} = "Y" ] && echo "DL_DIR = \"${BUILD_DL_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_SSTATE_DIR} = "Y" ] && echo "SSTATE_DIR = \"${BUILD_SSTATE_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+
+        [ ${BUILD_ENABLE_PREMIRROR} = "Y" ] && echo "SOURCE_MIRROR_URL = \"file://${BUILD_DL_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_PREMIRROR} = "Y" ] && echo "INHERIT += \"own-mirrors\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_SSTATEMIRROR} = "Y" ] && echo "SSTATE_MIRRORS = \"file://.* file://${BUILD_SSTATE_DIR}/PATH\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+
+
+        bitbake ${BUILD_IMAGES}
+        RESULT+=${PIPESTATUS[0]}
+    popd > /dev/null
+}
+
+function call_build {
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source poky/oe-init-build-env
+        bitbake-layers add-layer ../meta-openembedded/meta-oe
+        bitbake-layers add-layer ../meta-openembedded/meta-python
+        bitbake-layers add-layer ../meta-openembedded/meta-networking
+        bitbake-layers add-layer ../meta-opendds
+        bitbake-layers add-layer ../meta-intel
+        bitbake-layers add-layer ../yocto-layers/meta-ara
+        bitbake-layers add-layer ../meta-lara
+
+        echo "MACHINE = \"${JOB_BUILD_MACHINE}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        echo "BB_DANGLINGAPPENDS_WARNONLY = \"true\"" >> conf/local.conf
+        echo "PARALLEL_MAKE ?= \"-j 4\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_opendds=\"1.0+git%\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_opendds-native=\"1.0+git%\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_nativesdk-opendds=\"1.0+git%\"" >> conf/local.conf
+        [ ${BUILD_ENABLE_DL_DIR} = "Y" ] && echo "DL_DIR = \"${BUILD_DL_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_SSTATE_DIR} = "Y" ] && echo "SSTATE_DIR = \"${BUILD_SSTATE_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+
+        [ ${BUILD_ENABLE_PREMIRROR} = "Y" ] && echo "SOURCE_MIRROR_URL = \"file://${BUILD_DL_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_PREMIRROR} = "Y" ] && echo "INHERIT += \"own-mirrors\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_SSTATEMIRROR} = "Y" ] && echo "SSTATE_MIRRORS = \"file://.* file://${BUILD_SSTATE_DIR}/PATH\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+
+        # bitbake ${BUILD_IMAGES}-ecu1 ${BUILD_IMAGES}-ecu2 lara-sdk
+        echo "bitbake ${BUILD_IMAGES}"
+        bitbake ${BUILD_IMAGES}
+        RESULT+=${PIPESTATUS[0]}
+    popd > /dev/null
+}
+
+function call_build_cockpit {
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source build.sh icas3eu-gp qnx 3 --extra-features "use_qnx_autosar_lara"
+        #source build.sh icas3eu-gp qnx 0 --extra-features "use_qnx_autosar_lara"
+    popd > /dev/null
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source build.sh icas3eu-gp qnx-baremetal 3
+        #source build.sh icas3eu-gp qnx-baremetal 0
+    popd > /dev/null
+}
+
+function call_build_cockpit_vector {
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source build.sh icas3eu-gp qnx 3
+        #source build.sh icas3eu-gp qnx 0
+    popd > /dev/null
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source build.sh icas3eu-gp qnx-baremetal 3
+    popd > /dev/null
+}
+
+function call_build_nxp {
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source nxp-setup-alb-lge-lara.sh -m s32g274aevb
+
+        bitbake ${BUILD_IMAGES}
+        RESULT+=${PIPESTATUS[0]}
+    popd > /dev/null
+}
+
+function call_build_rasp {
+    echo "call_build_rasp"
+    pushd ${BUILD_TOPDIR} > /dev/null
+        source poky/oe-init-build-env
+        bitbake-layers add-layer ../meta-openembedded/meta-oe
+        bitbake-layers add-layer ../meta-openembedded/meta-python
+        bitbake-layers add-layer ../meta-openembedded/meta-multimedia
+        bitbake-layers add-layer ../meta-openembedded/meta-networking
+        bitbake-layers add-layer ../meta-opendds
+        bitbake-layers add-layer ../meta-raspberrypi
+        bitbake-layers add-layer ../yocto-layers/meta-ara
+        bitbake-layers add-layer ../meta-lara
+
+
+        echo "MACHINE = \"${JOB_BUILD_MACHINE}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        echo "BB_DANGLINGAPPENDS_WARNONLY = \"true\"" >> conf/local.conf
+        echo "PARALLEL_MAKE ?= \"-j 4\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_opendds=\"1.0+git%\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_opendds-native=\"1.0+git%\"" >> conf/local.conf
+        echo "PREFERRED_VERSION_nativesdk-opendds=\"1.0+git%\"" >> conf/local.conf
+        [ ${BUILD_ENABLE_DL_DIR} = "Y" ] && echo "DL_DIR = \"${BUILD_DL_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_SSTATE_DIR} = "Y" ] && echo "SSTATE_DIR = \"${BUILD_SSTATE_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+
+        [ ${BUILD_ENABLE_PREMIRROR} = "Y" ] && echo "SOURCE_MIRROR_URL = \"file://${BUILD_RASP_DL_DIR}\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_PREMIRROR} = "Y" ] && echo "INHERIT += \"own-mirrors\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+        [ ${BUILD_ENABLE_SSTATEMIRROR} = "Y" ] && echo "SSTATE_MIRRORS = \"file://.* file://${BUILD_RASP_SSTATE_DIR}/PATH\"" >> ${BUILD_TOPDIR}/build/conf/local.conf
+
+        # bitbake ${BUILD_IMAGES}-ecu1 ${BUILD_IMAGES}-ecu2 lara-sdk
+        bitbake ${BUILD_IMAGES}
+        RESULT+=${PIPESTATUS[0]}
+    popd > /dev/null
+}
+
+function call_build_icas3 {
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+#    #Emulator
+#    echo "Emulator build start"
+#
+#    #0. Make flashed emulator image repository
+#    mkdir -p ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${EMULATOR}
+#
+#    #1. Edit bsp dir name to avoid IF conditional statement in RUN_build_all.sh
+#    mv ${BUILD_TOPDIR}/CPU/QNX/bsp ${BUILD_TOPDIR}/CPU/QNX/bsp_modi
+#
+#    #2. Emulator Build start
+#    pushd ${BUILD_TOPDIR}/CPU/QNX/Apps/source > /dev/null
+#        source jenkins_RUN_build_all.sh -t x86 -j 4
+#    popd > /dev/null
+#
+#    #3. Image flash in Elsa server and store flashed image in the repository
+#    sshpass -p "lge123" ssh arirang@10.177.222.156 /home/arirang/Emulator_release/flash.sh
+#    sleep 5
+#    mv ${BUILD_TOPDIR}/ICAS3_VMWARE_*.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${EMULATOR}
+#    mv ${BUILD_TOPDIR}/CPU/QNX/Apps/install/x86_64-nonstrip.tar ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${EMULATOR}
+#
+#    #4. Return bsp_edit to bsp for Target build
+#    mv ${BUILD_TOPDIR}/CPU/QNX/bsp_modi ${BUILD_TOPDIR}/CPU/QNX/bsp
+#
+#    #5. Return to initial status
+#    pushd ${BUILD_TOPDIR}/CPU/QNX/Apps/source > /dev/null
+#        source RUN_clean_all.sh
+#    popd > /dev/null
+#
+#    pushd ${BUILD_TOPDIR} > /dev/null
+#        repo forall -c git clean -dfx ; repo forall -c git reset --hard HEAD
+#    popd > /dev/null
+
+    #Target
+    echo "Target debug build start"
+        pushd ${BUILD_TOPDIR}/Common/images/exe > /dev/null
+            ./build.sh q -v=${ICAS3_VERSION_NAME}
+            pushd ${BUILD_TOPDIR}/CPU/QNX/Apps/source > /dev/null
+                ./Check_qnx_system_build.sh
+                if [ $? != 0 ]; then
+                    echo $?
+                    exit 1
+                fi
+            popd > /dev/null
+            ./all.sh p
+            RESULT+=${PIPESTATUS[0]}
+        popd > /dev/null
+
+    echo "Target release build start"
+        pushd ${BUILD_TOPDIR}/Common/images/exe > /dev/null
+            ./build.sh q -v=${ICAS3_VERSION_NAME} -R
+            pushd ${BUILD_TOPDIR}/CPU/QNX/Apps/source > /dev/null
+                ./Check_qnx_system_build.sh
+                if [ $? != 0 ]; then
+                    echo $?
+                    exit 1
+                fi
+            popd > /dev/null
+            ./all.sh p -R
+            RESULT+=${PIPESTATUS[0]}
+        popd > /dev/null
+
+    #SWpackage generation
+        pushd ${BUILD_TOPDIR}/CPU/QNX/Apps/source/tools/sw_package_gen/AVIN_generator
+            if [ -d "${BUILD_TOPDIR}/Common/images/IMG_DEBUG" ]; then
+                rm -rf SWpacakge*.bin pkg-safe*.gz
+                cp -rf ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/pkg*vw_eu.gz pkg-safe_vw_eu.gz
+                #./script/BinGenerator.sh -m manifest/software_package.json -i pkg-safe_vw_eu.gz -p keys/private.key -v $(date +"%m%d") -n SWpackage
+                ./script/BinGenerator.sh -m manifest/software_package.json -i pkg-safe_vw_eu.gz -p keys/private.key -v 1.0.0.0 -n SWpackage
+                mv -f SWpackage* ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/
+            fi
+            if [ -d "${BUILD_TOPDIR}/Common/images/IMG_RELEASE" ]; then
+                rm -rf SWpacakge*.bin pkg-safe*.gz
+                cp -rf ${BUILD_TOPDIR}/Common/images/IMG_RELEASE/pkg*vw_eu.gz pkg-safe_vw_eu.gz
+                #./script/BinGenerator.sh -m manifest/software_package.json -i pkg-safe_vw_eu.gz -p keys/private.key -v $(date +"%m%d") -n SWpackage
+                ./script/BinGenerator.sh -m manifest/software_package.json -i pkg-safe_vw_eu.gz -p keys/private.key -v 1.0.0.0 -n SWpackage
+                mv -f SWpackage* ${BUILD_TOPDIR}/Common/images/IMG_RELEASE/
+            fi
+    else
+        pushd ${BUILD_TOPDIR}/Apps/source > /dev/null
+        source jenkins_RUN_build_all.sh -t x86 -j 4
+        mv ${BUILD_TOPDIR}/Apps/install/x86_64 ${BUILD_TOPDIR}/Apps/install/aarch64le
+        ./Check_qnx_jenkins_build.sh
+        if [ $? != 0 ]; then
+            RESULT+=1
+        fi
+        mv ${BUILD_TOPDIR}/Apps/install/aarch64le ${BUILD_TOPDIR}/Apps/install/x86_64
+    fi
+    popd > /dev/null
+}
+
+function rsync_sstate {
+    if [ -d ${BUILD_TOPDIR}/build/sstate-cache ] && ls ${BUILD_TOPDIR}/build/sstate-cache/* >/dev/null; then
+        rsync -arz --no-p --no-g --chmod=ugo=rwX --no-links ${BUILD_TOPDIR}/build/sstate-cache/ ${BUILD_SSTATE_DIR} 2>&1  | tee /dev/stderr
+    else
+        echo "INFO: ${BUILD_SCRIPT_NAME}-${BUILD_SCRIPT_VERSION} No sstate archives to rsync"
+    fi
+}
+
+function copy_build_output {
+    mkdir -p ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+
+    # image copy
+
+    if [ "${JOB_BUILD_MACHINE}" = "qemux86-64" ]; then
+        pushd ${BUILD_TOPDIR}/build/tmp/deploy/images/ > /dev/null
+        zip -r ${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${JOB_BUILD_MACHINE} > /dev/null
+        #tar zcvf ${BUILD_IMAGES}-ecu1-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${JOB_BUILD_MACHINE} > /dev/null
+        #tar zcvf ${BUILD_IMAGES}-ecu2-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${JOB_BUILD_MACHINE} > /dev/null
+        popd > /dev/null
+        pushd ${BUILD_TOPDIR}/build/tmp/deploy/ > /dev/null
+        #tar zcvf SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz sdk > /dev/null
+        popd > /dev/null
+        cp -L ${BUILD_TOPDIR}/build/tmp/deploy/images/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip
+        #cp -L ${BUILD_TOPDIR}/build/tmp/deploy/images/${BUILD_IMAGES}-ecu1-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-ecu1-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+        #cp -L ${BUILD_TOPDIR}/build/tmp/deploy/images/${BUILD_IMAGES}-ecu2-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-ecu2-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+        #cp -L ${BUILD_TOPDIR}/build/tmp/deploy/SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+
+    elif [ "${JOB_BUILD_MACHINE}" = "raspberrypi3" ]; then
+        pushd ${BUILD_TOPDIR}/build/tmp/deploy/images/ > /dev/null
+        zip -r ${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${JOB_BUILD_MACHINE} > /dev/null
+        #tar zcvf ${BUILD_IMAGES}-ecu1-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${JOB_BUILD_MACHINE} > /dev/null
+        #tar zcvf ${BUILD_IMAGES}-ecu2-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${JOB_BUILD_MACHINE} > /dev/null
+        popd > /dev/null
+        pushd ${BUILD_TOPDIR}/build/tmp/deploy/ > /dev/null
+        #tar zcvf SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz sdk > /dev/null
+        popd > /dev/null
+        cp -L ${BUILD_TOPDIR}/build/tmp/deploy/images/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip
+        #cp -L ${BUILD_TOPDIR}/build/tmp/deploy/images/${BUILD_IMAGES}-ecu1-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-ecu1-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+        #cp -L ${BUILD_TOPDIR}/build/tmp/deploy/images/${BUILD_IMAGES}-ecu2-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-ecu2-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+        #cp -L ${BUILD_TOPDIR}/build/tmp/deploy/SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+    elif [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+        pushd ${BUILD_TOPDIR}/build_s32g274aevb/tmp/deploy/images > /dev/null
+            zip -r ${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${JOB_BUILD_MACHINE} > /dev/null
+        popd > /dev/null
+
+        cp -L ${BUILD_TOPDIR}/build_s32g274aevb/tmp/deploy/images/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip
+    elif [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+        echo "COCKPIT BUILD copy build output"
+        BUILD_TIME=$(date +%m%d_%H%M)
+        pushd ${BUILD_TOPDIR}/images/evt1/vm/qnx-sys > /dev/null
+            mkdir -p ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/LARA_IMAGE
+
+            # UCM Package Generate
+            pushd ${BUILD_TOPDIR}/sources/qnx/Apps/source/lara/laraTools/packageGenerator > /dev/null
+            mkdir -p origin_pkg
+            cp -rf ${BUILD_TOPDIR}/images/evt1/baremetal/qnx/ifs-exynosauto9_evt1-bare.bin      origin_pkg/
+            cp -rf ${BUILD_TOPDIR}/images/evt1/vm/qnx-sys/qtd/ifs-exynosauto9_evt1-qla_qtd.bin  origin_pkg/
+            cp -rf ${BUILD_TOPDIR}/images/evt1/vm/qnx-sys/qtd/system.part_qtd.qnx6              origin_pkg/
+            rm -rf generated_pkg/*
+            ./run_package_generator.sh package -b samsung
+            cp -rf generated_pkg/SWPkg*.bin                 ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/LARA_IMAGE/
+            cp -rf origin_pkg/ifs-exynosauto9_evt1-bare.bin ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/LARA_IMAGE/
+            popd > /dev/null
+
+            cp ${WORKSPACE}/fastboot_qnx_dev.bat ${WORKSPACE}/fastboot_qnx_dev.sh dev
+            cp ${WORKSPACE}/fastboot_qnx_qtd.bat ${WORKSPACE}/fastboot_qnx_qtd.sh qtd
+
+            zip -r LARA_IMAGE_${BUILD_TIME}_dev.zip dev > /dev/null
+            zip -r LARA_IMAGE_${BUILD_TIME}_qtd.zip qtd > /dev/null
+            cp -L LARA_IMAGE_${BUILD_TIME}_dev.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/LARA_IMAGE
+            cp -L LARA_IMAGE_${BUILD_TIME}_qtd.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/LARA_IMAGE
+            cp -L QNX_symbol.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/LARA_IMAGE
+        popd > /dev/null
+
+        #mv ${BUILD_TOPDIR}/sources/qnx/Apps/source/lara ${BUILD_TOPDIR}/sources/qnx/Apps/source/remove_lara
+        #rm -rf ${BUILD_TOPDIR}/sources/qnx/Apps/source/install
+        #rm -rf ${BUILD_TOPDIR}/images
+        #pushd ${BUILD_TOPDIR}/sources/qnx/kernel
+        #    git clean -dfx
+        #    git checkout .
+        #popd > /dev/null
+        #call_build_cockpit_vector
+
+        #pushd ${BUILD_TOPDIR}/images/evt1/vm/qnx-sys > /dev/null
+        #    mkdir -p ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/VECTOR_IMAGE
+
+        #    cp ${WORKSPACE}/fastboot_qnx_dev.bat ${WORKSPACE}/fastboot_qnx_dev.sh dev
+        #    cp ${WORKSPACE}/fastboot_qnx_qtd.bat ${WORKSPACE}/fastboot_qnx_qtd.sh qtd
+
+        #    zip -r VECTOR_IMAGE_${BUILD_TIME}_dev.zip dev > /dev/null
+        #    zip -r VECTOR_IMAGE_${BUILD_TIME}_qtd.zip qtd > /dev/null
+        #    cp -L VECTOR_IMAGE_${BUILD_TIME}_dev.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/VECTOR_IMAGE
+        #    cp -L VECTOR_IMAGE_${BUILD_TIME}_qtd.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/VECTOR_IMAGE
+        #    cp -L QNX_symbol.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/VECTOR_IMAGE
+        #popd > /dev/null
+    else
+        pushd ${BUILD_TOPDIR}/build/tmp/deploy/images/ > /dev/null
+        zip -r ${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${JOB_BUILD_MACHINE} > /dev/null
+        popd > /dev/null
+        pushd ${BUILD_TOPDIR}/build/tmp/deploy/ > /dev/null
+        #tar zcvf SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz sdk > /dev/null
+        popd > /dev/null
+        cp -L ${BUILD_TOPDIR}/build/tmp/deploy/images/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.zip
+        #cp -L ${BUILD_TOPDIR}/build/tmp/deploy/SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/SDK-${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+    fi
+
+    cp -L ${RELEASE_INFO_PATH} ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/get_release_info.html
+
+    RESULT+=${PIPESTATUS[0]}
+}
+
+function copy_build_output_icas3 {
+    mkdir -p ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+
+    # image copy
+
+    pushd ${BUILD_TOPDIR}/Apps/install > /dev/null
+    #tar zcvf ${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz * > /dev/null
+    popd > /dev/null
+    cp -L ${BUILD_TOPDIR}/Apps/install/x86_64.tar ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar
+    cp -L ${BUILD_TOPDIR}/Apps/install/x86_64-nonstrip.tar ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}-nonstrip.tar
+    #cp -L ${BUILD_TOPDIR}/Apps/install/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${BUILD_IMAGES}-${JOB_BUILD_MACHINE}-${JOB_BUILD_TYPE}-${BUILD_NUMBER}.tar.gz
+    cp -L ${RELEASE_INFO_PATH} ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/get_release_info.html
+    RESULT+=${PIPESTATUS[0]}
+}
+
+function copy_build_output_icas3_full {
+    mkdir -p ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}
+
+    find ${BUILD_TOPDIR}/Common/images/IMG_DEBUG -size -1000M -name "pkg*.zip" -type f -exec rm -rf {} \;
+    if [ ! -e ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/pkg-all-*.zip* ]; then
+        echo "pkg-all-*.zip not found"
+        exit 1
+    fi
+
+    cp -rf ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/*.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}
+    RET=${PIPESTATUS[0]}
+    cp -rf ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/pkg*vw_eu.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}
+    cp -rf ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/SWpackage*.bin ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}
+    cp -rf ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/*.txt ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/
+    cp -rf ${BUILD_TOPDIR}/Common/images/IMG_DEBUG/out ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/out
+    cp -L ${RELEASE_INFO_PATH} ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/get_release_info.html
+
+    if [ -d "${BUILD_TOPDIR}/Common/images/IMG_RELEASE" ]; then
+        mkdir -p ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}/IMG_RELEASE
+        find ${BUILD_TOPDIR}/Common/images/IMG_RELEASE -size -1000M -name "pkg*.zip" -type f -exec rm -rf {} \;
+        if [ ! -e ${BUILD_TOPDIR}/Common/images/IMG_RELEASE/pkg-all-*.zip ]; then
+            echo "pkg-all-*.zip not found"
+            exit 1
+        fi
+        cp -rf ${BUILD_TOPDIR}/Common/images/IMG_RELEASE/pkg*.zip ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}/IMG_RELEASE/
+        RET=${PIPESTATUS[0]}
+        cp -rf ${BUILD_TOPDIR}/Common/images/IMG_RELEASE/pkg*vw_eu.gz ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}/IMG_RELEASE/
+        cp -rf ${BUILD_TOPDIR}/Common/images/IMG_RELEASE/SWpackage*.bin ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/${REAL_TARGET}/IMG_RELEASE/
+    fi
+
+    if [ $RET -eq 1 ]; then
+        echo "pkg-all-*.zip not found"
+        exit 1
+    fi
+}
+
+
+LAST_COMMIT_adp_araApi="N"
+LAST_COMMIT_adp_sampleApp="N"
+LAST_COMMIT_ecu_task_vw_icas3="N"
+LAST_COMMIT_AVIN_araApi="N"
+LAST_COMMIT_AVIN_sampleApp="N"
+LAST_COMMIT_LARA_meta_lara="N"
+
+function get_last_commit {
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        #LAST_BUILD_NUMBER=`expr ${BUILD_NUMBER} - 1`
+        #LAST_COMMIT_DIR=${BUILD_ARTIFACTS}/${JOB_NAME}/${LAST_BUILD_NUMBER}/last_commit_info
+        if [ -d ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR} ]; then
+            rm -rf ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+        fi
+
+        LAST_BUILD_NUMBER=$(find ${BUILD_ARTIFACTS}/${JOB_NAME} -maxdepth 1 | sort -V | tail -1)
+        LAST_COMMIT_DIR=${LAST_BUILD_NUMBER}/last_commit_info
+        echo "pre-build : ${LAST_COMMIT_DIR}"
+        if [ -d "${LAST_COMMIT_DIR}" ]; then
+            if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+                pushd  ${LAST_COMMIT_DIR} > /dev/null
+                LAST_COMMIT_ecu_task_vw_icas3=$(cat ecu_task_vw_icas3)
+                popd > /dev/null
+            elif [ "${JOB_BUILD_MACHINE}" = "qemux86-64" ] || [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ] [ "${JOB_BUILD_MACHINE}" = "COM-Test" ]; then
+                pushd  ${LAST_COMMIT_DIR} > /dev/null
+                LAST_COMMIT_LARA_meta_lara=$(cat LARA_meta_lara)
+                popd > /dev/null
+            fi
+
+            pushd  ${LAST_COMMIT_DIR} > /dev/null
+            LAST_COMMIT_adp_araApi=$(cat adp_araApi)
+            LAST_COMMIT_adp_sampleApp=$(cat adp_sampleApp)
+            LAST_COMMIT_AVIN_araApi=$(cat AVIN_araApi)
+            LAST_COMMIT_AVIN_sampleApp=$(cat AVIN_sampleApp)
+            popd > /dev/null
+        else
+            if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+                TMP_BUILD_TOPDIR=${BUILD_TOPDIR}/CPU/QNX
+                if [ -d "${TMP_BUILD_TOPDIR}" ]; then
+                    ARA_API_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/ara-api
+                    SAMPLE_APPLICATIONS_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/sample-applications
+                    AVIN_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/avin
+                    AVIN_SAMPLE_APP_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/avin/sample-app
+
+                    pushd  ${TMP_BUILD_TOPDIR}/Apps/source > /dev/null
+                    LAST_COMMIT_ecu_task_vw_icas3="$(git log --pretty=format:"%h" -1)"
+                    popd > /dev/null
+                fi
+            elif [ "${JOB_BUILD_MACHINE}" = "qemux86-64" ] || [ "${JOB_BUILD_MACHINE}" = "COM-Test" ]; then
+                ARA_API_PATH=${BUILD_TOPDIR}/ara-api
+                SAMPLE_APPLICATIONS_PATH=${BUILD_TOPDIR}/sample-applications
+                AVIN_PATH=${BUILD_TOPDIR}/avin
+                AVIN_SAMPLE_APP_PATH=${BUILD_TOPDIR}/avin/sample-app
+
+                pushd  ${BUILD_TOPDIR}/meta-lara > /dev/null
+                    LAST_COMMIT_LARA_meta_lara="$(git log --pretty=format:"%h" -1)"
+                popd > /dev/null
+            elif [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+                ARA_API_PATH=${BUILD_TOPDIR}/sources/ara-api
+                SAMPLE_APPLICATIONS_PATH=${BUILD_TOPDIR}/sources/sample-applications
+                AVIN_PATH=${BUILD_TOPDIR}/sources/avin
+                AVIN_SAMPLE_APP_PATH=${BUILD_TOPDIR}/sources/avin/sample-app
+
+                pushd  ${BUILD_TOPDIR}/sources/meta-lara > /dev/null
+                LAST_COMMIT_LARA_meta_lara="$(git log --pretty=format:"%h" -1)"
+                popd > /dev/null
+            fi
+
+            pushd  ${ARA_API_PATH} > /dev/null
+            LAST_COMMIT_adp_araApi="$(git log --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${SAMPLE_APPLICATIONS_PATH} > /dev/null
+            LAST_COMMIT_adp_sampleApp="$(git log --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${AVIN_PATH} > /dev/null
+            LAST_COMMIT_AVIN_araApi="$(git log --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${AVIN_SAMPLE_APP_PATH} > /dev/null
+            LAST_COMMIT_AVIN_sampleApp="$(git log --pretty=format:"%h" -1)"
+            popd > /dev/null
+        fi
+    fi
+}
+
+LAST_COMMIT_CmnBase="N"
+LAST_COMMIT_MgrTsk="N"
+LAST_COMMIT_AdasService="N"
+LAST_COMMIT_AudiondicatorService="N"
+LAST_COMMIT_CarStatisticsService="N"
+LAST_COMMIT_ClusterServices="N"
+LAST_COMMIT_DiagHandler="N"
+LAST_COMMIT_DiagStartSync="N"
+LAST_COMMIT_EthernetmonitorService="N"
+LAST_COMMIT_NmHandler="N"
+LAST_COMMIT_PdureceiverfasService="N"
+LAST_COMMIT_SpeedService="N"
+LAST_COMMIT_UpdateAdapter="N"
+LAST_COMMIT_AppModel="N"
+LAST_COMMIT_QNXApps="N"
+LAST_COMMIT_QNXKernel="N"
+LAST_COMMIT_QNXLara="N"
+
+function get_last_commit_cockpit {
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        if [ -d ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR} ]; then
+            rm -rf ${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+        fi
+
+        TMP_BUILD_TOPDIR=${BUILD_TOPDIR}/sources/qnx
+
+        cd ${TMP_BUILD_TOPDIR}/Apps/source/CmnBase
+        LAST_TAG=$(git tag | grep COCKPIT_$(date +'%y')* | sort -V | tail -2 | head -1)
+        echo "FIND last tag ${LAST_TAG}"
+
+        if [ -d "${TMP_BUILD_TOPDIR}" ]; then
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/CmnBase > /dev/null
+            LAST_COMMIT_CmnBase="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/middleware/Src/MgrTsk > /dev/null
+            LAST_COMMIT_MgrTsk="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/adas_service > /dev/null
+            LAST_COMMIT_AdasService="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/audioindicator_service > /dev/null
+            LAST_COMMIT_AudiondicatorService="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/carStatistics_service > /dev/null
+            LAST_COMMIT_CarStatisticsService="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/cluster_services > /dev/null
+            LAST_COMMIT_ClusterServices="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/DiagHandler > /dev/null
+            LAST_COMMIT_DiagHandler="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/DiagStartSync > /dev/null
+            LAST_COMMIT_DiagStartSync="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/ethernetmonitor_service > /dev/null
+            LAST_COMMIT_EthernetmonitorService="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/nm_handler > /dev/null
+            LAST_COMMIT_NmHandler="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/pdureceiverfas_service > /dev/null
+            LAST_COMMIT_PdureceiverfasService="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/speed_service > /dev/null
+            LAST_COMMIT_SpeedService="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/update_adapter > /dev/null
+            LAST_COMMIT_UpdateAdapter="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/model > /dev/null
+            LAST_COMMIT_AppModel="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps > /dev/null
+            LAST_COMMIT_QNXApps="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/kernel > /dev/null
+            LAST_COMMIT_QNXKernel="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/lara > /dev/null
+            LAST_COMMIT_QNXLara="$(git log ${LAST_TAG} --pretty=format:"%h" -1)"
+            popd > /dev/null
+        fi
+    fi
+}
+
+function save_last_commit {
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        LAST_COMMIT_DIR=${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/last_commit_info
+        mkdir -p ${LAST_COMMIT_DIR}
+        if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+            TMP_BUILD_TOPDIR=${BUILD_TOPDIR}/CPU/QNX
+
+            if [ -d "${TMP_BUILD_TOPDIR}" ]; then
+                ARA_API_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/ara-api
+                SAMPLE_APPLICATIONS_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/sample-applications
+                AVIN_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/avin
+                AVIN_SAMPLE_APP_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/avin/sample-app
+
+                pushd  ${TMP_BUILD_TOPDIR}/Apps/source > /dev/null
+                git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/ecu_task_vw_icas3
+                popd > /dev/null
+            fi
+        elif [ "${JOB_BUILD_MACHINE}" = "qemux86-64" ] || [ "${JOB_BUILD_MACHINE}" = "raspberrypi3" ] || [ "${JOB_BUILD_MACHINE}" = "COM-Test"; then
+            if [ -d "${BUILD_TOPDIR}" ]; then
+                ARA_API_PATH=${BUILD_TOPDIR}/ara-api
+                SAMPLE_APPLICATIONS_PATH=${BUILD_TOPDIR}/sample-applications
+                AVIN_PATH=${BUILD_TOPDIR}/avin
+                AVIN_SAMPLE_APP_PATH=${BUILD_TOPDIR}/avin/sample-app
+
+                pushd  ${BUILD_TOPDIR}/meta-lara > /dev/null
+                git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/LARA_meta_lara
+                popd > /dev/null
+
+            fi
+        elif [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+            if [ -d "${BUILD_TOPDIR}" ]; then
+                ARA_API_PATH=${BUILD_TOPDIR}/sources/ara-api
+                SAMPLE_APPLICATIONS_PATH=${BUILD_TOPDIR}/sources/sample-applications
+                AVIN_PATH=${BUILD_TOPDIR}/sources/avin
+                AVIN_SAMPLE_APP_PATH=${BUILD_TOPDIR}/sources/avin/sample-app
+
+                pushd  ${BUILD_TOPDIR}/sources/meta-lara > /dev/null
+                git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/LARA_meta_lara
+                popd > /dev/null
+            fi
+        fi
+
+        pushd  ${ARA_API_PATH} > /dev/null
+        git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/adp_araApi
+        popd > /dev/null
+
+        pushd  ${SAMPLE_APPLICATIONS_PATH} > /dev/null
+        git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/adp_sampleApp
+        popd > /dev/null
+
+        pushd  ${AVIN_PATH} > /dev/null
+        git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/AVIN_araApi
+        popd > /dev/null
+
+        pushd  ${AVIN_SAMPLE_APP_PATH} > /dev/null
+        git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/AVIN_sampleApp
+        popd > /dev/null
+    fi
+}
+
+function save_last_commit_cockpit {
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        LAST_COMMIT_DIR=${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}/last_commit_info
+        mkdir -p ${LAST_COMMIT_DIR}
+        TMP_BUILD_TOPDIR=${BUILD_TOPDIR}/sources/qnx
+
+        if [ -d "${TMP_BUILD_TOPDIR}" ]; then
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/CmnBase > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/CmnBase
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/middleware/Src/MgrTsk > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/MgrTsk
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/adas_service > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/AdasService
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/audioindicator_service > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/AudiondicatorService
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/carStatistics_service > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/CarStatisticsService
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/cluster_services > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/ClusterServices
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/DiagHandler > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/DiagHandler
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/DiagStartSync > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/DiagStartSync
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/ethernetmonitor_service > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/EthernetmonitorService
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/nm_handler > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/NmHandler
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/pdureceiverfas_service > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/PdureceiverfasService
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/speed_service > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/SpeedService
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/update_adapter > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/UpdateAdapter
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/model > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/AppModel
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/QNXApps
+            popd > /dev/null
+
+            pushd  ${TMP_BUILD_TOPDIR}/kernel > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/QNXKernel
+            popd > /dev/null
+
+            #remove_lara
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source/lara > /dev/null
+            git log --pretty=format:"%h" -1 > ${LAST_COMMIT_DIR}/QNXLara
+            popd > /dev/null
+        fi
+    fi
+}
+
+function print_commit_info() {
+    PRJ_NAME=$1
+    LAST_COMMIT=$2
+    echo "<tr>" >> ${RELEASE_INFO_PATH}
+    echo "<th>Project</th>" >> ${RELEASE_INFO_PATH}
+    echo "<td colspan=3>${PRJ_NAME}</td>" >> ${RELEASE_INFO_PATH}
+    echo "</tr>" >> ${RELEASE_INFO_PATH}
+
+    echo "<tr>" >> ${RELEASE_INFO_PATH}
+    echo "<th>Branch</th>" >> ${RELEASE_INFO_PATH}
+    echo "<td colspan=3>" >> ${RELEASE_INFO_PATH}
+    git log --pretty=format:"%d" -1 >> ${RELEASE_INFO_PATH}
+    echo "</td>" >> ${RELEASE_INFO_PATH}
+    echo "</tr>" >> ${RELEASE_INFO_PATH}
+
+    echo "<tr>" >> ${RELEASE_INFO_PATH}
+    echo "<th>Hash</th>" >> ${RELEASE_INFO_PATH}
+    echo "<th>Merged Time</th>" >> ${RELEASE_INFO_PATH}
+    echo "<th>Author</th>" >> ${RELEASE_INFO_PATH}
+    echo "<th>Title</th>" >> ${RELEASE_INFO_PATH}
+    echo "</tr>" >> ${RELEASE_INFO_PATH}
+
+    if [ ${JOB_BUILD_MACHINE} = "COCKPIT" ]; then
+        HREF="http://vgit.lge.com/eu/#/q/%H"
+        MAX_LOG_CNT=3
+    else
+        HREF="http://text.lge.com/swp/gerrit/#/q/%H"
+        MAX_LOG_CNT=5
+    fi
+
+    if [ "${LAST_COMMIT}" = "N" ]; then
+        git log --pretty=format:"<tr class='normal_log'><td>%h</td><td>%cd</td><td>%an</td><td><a href='${HREF}' target='_gerrit'>%s</a></td></tr>" --date=format:"%Y/%m/%d %H:%M:%S" -5 >> ${RELEASE_INFO_PATH}
+    elif [ "${LAST_COMMIT}" = "1" ]; then
+        git log --pretty=format:"<tr class='normal_log'><td>%h</td><td>%cd</td><td>%an</td><td><a href='${HREF}' target='_gerrit'>%s</a></td></tr>" --date=format:"%Y/%m/%d %H:%M:%S" | head -1 >> ${RELEASE_INFO_PATH}
+    else
+        NEW_CNT=$(git log --pretty=format:"%h" ${LAST_COMMIT}..HEAD | wc -w)
+        NEW_CNT_INT=$(($NEW_CNT + 0))
+
+        git log --pretty=format:"<tr class='new_log'><td>%h</td><td>%cd</td><td>%an</td><td><a href='${HREF}' target='_gerrit'>%s</a></td></tr>" --date=format:"%Y/%m/%d %H:%M:%S" ${LAST_COMMIT}..HEAD >> ${RELEASE_INFO_PATH}
+        if [ $NEW_CNT_INT -lt $MAX_LOG_CNT ]; then
+            if [ ${JOB_BUILD_MACHINE} = "COCKPIT" ]; then
+                SIX_COMMIT=$(git log --pretty=format:"%h" -4 | tail -n1)
+                git log --pretty=format:"<tr class='normal_log'.><td>%h</td><td>%cd</td><td>%an</td><td><a href='${HREF}' target='_gerrit'>%s</a></td></tr>" --date=format:"%Y/%m/%d %H:%M:%S" -3 ${SIX_COMMIT}..${LAST_COMMIT} >> ${RELEASE_INFO_PATH}
+            else
+                SIX_COMMIT=$(git log --pretty=format:"%h" -6 | tail -n1)
+                git log --pretty=format:"<tr class='normal_log'><td>%h</td><td>%cd</td><td>%an</td><td><a href='${HREF}' target='_gerrit'>%s</a></td></tr>" --date=format:"%Y/%m/%d %H:%M:%S" -5 ${SIX_COMMIT}..${LAST_COMMIT} >> ${RELEASE_INFO_PATH}
+            fi
+
+        fi
+    fi
+}
+
+function get_release_info {
+    echo "<style>" > ${RELEASE_INFO_PATH}
+    echo ".commit_info {border-collapse:collapse;}" >> ${RELEASE_INFO_PATH}
+    echo ".normal_log td {color:#999;}" >> ${RELEASE_INFO_PATH}
+    echo ".new_log td {color:#000080;}" >> ${RELEASE_INFO_PATH}
+    echo ".commit_info th {font-size:13px;font-weight:bold;border:1px solid #777;padding:3px;background-color:#eee;text-align:center;}" >> ${RELEASE_INFO_PATH}
+    echo ".commit_info td {font-size:13px;border:1px solid #777;padding:3px;}" >> ${RELEASE_INFO_PATH}
+    echo "</style>" >> ${RELEASE_INFO_PATH}
+    echo "<table class='commit_info'>" >> ${RELEASE_INFO_PATH}
+
+    if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+        if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+            TMP_BUILD_TOPDIR=${BUILD_TOPDIR}/CPU/QNX
+            ARA_API_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/ara-api
+            SAMPLE_APPLICATIONS_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/sample-applications
+            AVIN_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/avin
+            AVIN_SAMPLE_APP_PATH=${TMP_BUILD_TOPDIR}/Apps/source/autosar/avin/sample-app
+
+            pushd  ${TMP_BUILD_TOPDIR}/Apps/source > /dev/null
+            print_commit_info "ecu_task/vw/icas3" "${LAST_COMMIT_ecu_task_vw_icas3}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+            popd > /dev/null
+        fi
+    elif [ "${JOB_BUILD_MACHINE}" = "qemux86-64" ] || [ "${JOB_BUILD_MACHINE}" = "raspberrypi3" ]; then
+        ARA_API_PATH=${BUILD_TOPDIR}/ara-api
+        SAMPLE_APPLICATIONS_PATH=${BUILD_TOPDIR}/sample-applications
+        AVIN_PATH=${BUILD_TOPDIR}/avin
+        AVIN_SAMPLE_APP_PATH=${BUILD_TOPDIR}/avin/sample-app
+
+        if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+            pushd  ${BUILD_TOPDIR}/meta-lara > /dev/null
+            print_commit_info "LARA/meta-lara" "${LAST_COMMIT_LARA_meta_lara}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+            popd > /dev/null
+        else
+            pushd  ${BUILD_TOPDIR}/meta-lara > /dev/null
+            print_commit_info "LARA/meta-lara" "1"
+            popd > /dev/null
+        fi
+    elif [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+        if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+            ARA_API_PATH=${BUILD_TOPDIR}/sources/ara-api
+            SAMPLE_APPLICATIONS_PATH=${BUILD_TOPDIR}/sources/sample-applications
+            AVIN_PATH=${BUILD_TOPDIR}/sources/avin
+            AVIN_SAMPLE_APP_PATH=${BUILD_TOPDIR}/sources/avin/sample-app
+
+            pushd  ${BUILD_TOPDIR}/sources/meta-lara
+            print_commit_info "LARA/meta-lara" "${LAST_COMMIT_LARA_meta_lara}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+            popd > /dev/null
+        fi
+    fi
+
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        pushd  ${ARA_API_PATH} > /dev/null
+        print_commit_info "adp/ara-api" "${LAST_COMMIT_adp_araApi}"
+        echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${SAMPLE_APPLICATIONS_PATH} > /dev/null
+        print_commit_info "adp/sample-applications" "${LAST_COMMIT_adp_sampleApp}"
+        echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${AVIN_PATH} > /dev/null
+        print_commit_info "AVIN/ara-api" "${LAST_COMMIT_AVIN_araApi}"
+        echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${AVIN_SAMPLE_APP_PATH} > /dev/null
+        print_commit_info "AVIN/sample-app" "${LAST_COMMIT_AVIN_sampleApp}"
+        popd > /dev/null
+    elif [ ${JOB_BUILD_TYPE} = "verify" ] && [ "${JOB_BUILD_MACHINE}" != "ICAS3" ]; then
+        pushd  ${ARA_API_PATH} > /dev/null
+        print_commit_info "adp/ara-api" "1"
+        echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${SAMPLE_APPLICATIONS_PATH} > /dev/null
+        print_commit_info "adp/sample-applications" "1"
+        echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${AVIN_PATH} > /dev/null
+        print_commit_info "AVIN/ara-api" "1"
+        echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${AVIN_SAMPLE_APP_PATH} > /dev/null
+        print_commit_info "AVIN/sample-app" "1"
+        popd > /dev/null
+    fi
+    echo "</table>" >> ${RELEASE_INFO_PATH}
+}
+
+function get_release_info_cockpit {
+    echo "<style>" > ${RELEASE_INFO_PATH}
+    echo ".commit_info {border-collapse:collapse;}" >> ${RELEASE_INFO_PATH}
+    echo ".normal_log td {color:#999;}" >> ${RELEASE_INFO_PATH}
+    echo ".new_log td {color:#000080;}" >> ${RELEASE_INFO_PATH}
+    echo ".commit_info th {font-size:13px;font-weight:bold;border:1px solid #777;padding:3px;background-color:#eee;text-align:center;}" >> ${RELEASE_INFO_PATH}
+    echo ".commit_info td {font-size:13px;border:1px solid #777;padding:3px;}" >> ${RELEASE_INFO_PATH}
+    echo "</style>" >> ${RELEASE_INFO_PATH}
+    echo "<table class='commit_info'>" >> ${RELEASE_INFO_PATH}
+
+    COUNT_COMMIT=0
+
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        TMP_BUILD_TOPDIR=${BUILD_TOPDIR}/sources/qnx
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/CmnBase > /dev/null
+            print_commit_info "vw/qnx/lib/CmnBase" "${LAST_COMMIT_CmnBase}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/middleware/Src/MgrTsk > /dev/null
+            print_commit_info "vw/qnx/app/MgrTsk" "${LAST_COMMIT_MgrTsk}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/adas_service > /dev/null
+            print_commit_info "vw/qnx/app/adas_service" "${LAST_COMMIT_AdasService}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/audioindicator_service > /dev/null
+            print_commit_info "vw/qnx/app/audioindicator_service" "${LAST_COMMIT_AudiondicatorService}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/carStatistics_service > /dev/null
+            print_commit_info "vw/qnx/app/carStatistics_service" "${LAST_COMMIT_CarStatisticsService}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/cluster_services > /dev/null
+            print_commit_info "vw/qnx/app/cluster_services" "${LAST_COMMIT_ClusterServices}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/DiagHandler > /dev/null
+            print_commit_info "vw/qnx/app/DiagHandler" "${LAST_COMMIT_DiagHandler}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/DiagStartSync > /dev/null
+            print_commit_info "vw/qnx/app/DiagStartSync" "${LAST_COMMIT_DiagStartSync}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/ethernetmonitor_service > /dev/null
+            print_commit_info "vw/qnx/app/ethernetmonitor_service" "${LAST_COMMIT_EthernetmonitorService}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/nm_handler > /dev/null
+            print_commit_info "vw/qnx/app/nm_handler" "${LAST_COMMIT_NmHandler}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/pdureceiverfas_service > /dev/null
+            print_commit_info "vw/qnx/app/pdureceiverfas_service" "${LAST_COMMIT_PdureceiverfasService}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/speed_service > /dev/null
+            print_commit_info "vw/qnx/app/speed_service" "${LAST_COMMIT_SpeedService}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/services/update_adapter > /dev/null
+            print_commit_info "vw/qnx/app/update_adapter" "${LAST_COMMIT_UpdateAdapter}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/model > /dev/null
+            print_commit_info "vw/qnx/app/model" "${LAST_COMMIT_AppModel}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps > /dev/null
+            print_commit_info "vw/qnx/ICAS3/CPU/QNX/Apps" "${LAST_COMMIT_QNXApps}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/kernel > /dev/null
+            print_commit_info "vw/qnx/kernel" "${LAST_COMMIT_QNXKernel}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+
+        pushd  ${TMP_BUILD_TOPDIR}/Apps/source/lara > /dev/null
+            print_commit_info "vw/qnx/app/lara" "${LAST_COMMIT_QNXLara}"
+            echo "<tr><td colspan=4>　</td></tr>" >> ${RELEASE_INFO_PATH}
+        popd > /dev/null
+    fi
+    echo "</table>" >> ${RELEASE_INFO_PATH}
+
+    # If no commit is newly reflected, build failure will occur
+    #if [ ${COUNT_COMMIT} -eq 15 ]; then
+    #    echo "[FAIL] NO Update commit from Cockpit"
+    #    exit 1
+    #fi
+}
+
+function make_output_html {
+    if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+        if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+            ARTIFACTS_DIR=${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+            ARTIFACTS_HTML=${WORKSPACE}/build_artifacts.html
+            echo "<b>[Repo Manifest]</b><br>" > ${ARTIFACTS_HTML}
+            echo "repo init -u ssh://&lt;ID&gt;@text.lge.com:29411/LARA/manifest -m DAILY/DAILY_$(date +"%y%m%d").xml<br>" >> ${ARTIFACTS_HTML}
+            echo "<b>[ICAS3 Target image]</b><br>" >> ${ARTIFACTS_HTML}
+            if [ -d "${ARTIFACTS_DIR}/Target" ]; then
+                pushd  ${ARTIFACTS_DIR}/Target > /dev/null
+                for outfile in `ls`; do
+                    echo "<a href='http://${BUILD_FILESERVER}/${BUILD_ARTIFACTS_TARGET_DIR}/Target/$outfile'>$outfile</a><br>" >> ${ARTIFACTS_HTML}
+                done
+                popd > /dev/null
+            fi
+            echo "<br><b>[ICAS3 Emulator image]</b><br>" >> ${ARTIFACTS_HTML}
+            if [ -d "${ARTIFACTS_DIR}/Emulator" ]; then
+                pushd  ${ARTIFACTS_DIR}/Emulator > /dev/null
+                for outfile in `ls`; do
+                    echo "<a href='http://${BUILD_FILESERVER}/${BUILD_ARTIFACTS_TARGET_DIR}/Emulator/$outfile'>$outfile</a><br>" >> ${ARTIFACTS_HTML}
+                done
+                popd > /dev/null
+            fi
+        fi
+    elif [ "${JOB_BUILD_MACHINE}" = "qemux86-64" ] || [ "${JOB_BUILD_MACHINE}" = "raspberrypi3" ]; then
+        if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+            ARTIFACTS_DIR=${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+            ARTIFACTS_HTML=${WORKSPACE}/build_artifacts.html
+            echo "<b>[Repo Manifest]</b><br>" > ${ARTIFACTS_HTML}
+            echo "repo init -u ssh://&lt;ID&gt;@text.lge.com:29411/LARA/manifest -m DAILY/DAILY_$(date +"%y%m%d").xml<br>" >> ${ARTIFACTS_HTML}
+            echo "<b>[LARA image]</b><br>" >> ${ARTIFACTS_HTML}
+            if [ -d "${ARTIFACTS_DIR}" ]; then
+                pushd  ${ARTIFACTS_DIR} > /dev/null
+                for outfile in `ls`; do
+                    echo "<a href='http://${BUILD_FILESERVER}/${BUILD_ARTIFACTS_TARGET_DIR}/$outfile'>$outfile</a><br>" >> ${ARTIFACTS_HTML}
+                done
+                popd > /dev/null
+            fi
+        fi
+    elif [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+        if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+            ARTIFACTS_DIR=${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+            ARTIFACTS_HTML=${WORKSPACE}/build_artifacts.html
+            echo "<b>[Repo Manifest]</b><br>" > ${ARTIFACTS_HTML}
+            echo "repo init -u ssh://&lt;ID&gt;@text.lge.com:29411/LARA/manifest -m DAILY/DAILY_$(date +"%y%m%d").xml<br>" >> ${ARTIFACTS_HTML}
+            echo "<b>[LARA Gateway image]</b><br>" >> ${ARTIFACTS_HTML}
+            if [ -d "${ARTIFACTS_DIR}" ]; then
+                pushd  ${ARTIFACTS_DIR} > /dev/null
+                for outfile in `ls`; do
+                    echo "<a href='http://${BUILD_FILESERVER}/${BUILD_ARTIFACTS_TARGET_DIR}/$outfile'>$outfile</a><br>" >> ${ARTIFACTS_HTML}
+                done
+                popd > /dev/null
+            fi
+        fi
+    elif [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+        ARTIFACTS_DIR=${BUILD_ARTIFACTS}/${BUILD_ARTIFACTS_TARGET_DIR}
+        ARTIFACTS_HTML=${WORKSPACE}/build_artifacts.html
+        #echo "<b>[Repo Manifest]</b><br>" > ${ARTIFACTS_HTML}
+        #echo "repo init -u ssh://&lt;ID&gt;@text.lge.com:29411/LARA/manifest -m DAILY/DAILY_$(date +"%y%m%d").xml<br>" >> ${ARTIFACTS_HTML}
+        echo "<b>[COCKPIT LARA image]</b><br>" > ${ARTIFACTS_HTML}
+        if [ -d "${ARTIFACTS_DIR}/LARA_IMAGE" ]; then
+            pushd  ${ARTIFACTS_DIR}/LARA_IMAGE > /dev/null
+            for outfile in `ls`; do
+                echo "<a href='http://${BUILD_FILESERVER}/${BUILD_ARTIFACTS_TARGET_DIR}/LARA_IMAGE/$outfile'>$outfile</a><br>" >> ${ARTIFACTS_HTML}
+            done
+            popd > /dev/null
+        fi
+        echo "<b>[COCKPIT VECTOR image]</b><br>" >> ${ARTIFACTS_HTML}
+        if [ -d "${ARTIFACTS_DIR}/VECTOR_IMAGE" ]; then
+            pushd  ${ARTIFACTS_DIR}/VECTOR_IMAGE > /dev/null
+            for outfile in `ls`; do
+                echo "<a href='http://${BUILD_FILESERVER}/${BUILD_ARTIFACTS_TARGET_DIR}/VECTOR_IMAGE/$outfile'>$outfile</a><br>" >> ${ARTIFACTS_HTML}
+            done
+            popd > /dev/null
+        fi
+    fi
+}
+
+function checkout_build {
+    # Clone build layers and apply changes
+    clone_init
+    echo "checkout_build : ${GERRIT_PROJECT}"
+    if [ "${JOB_BUILD_TYPE}" != "official" || [ "${BUILD_ENABLE_COM_TEST}" = "Y" ]; then
+        if [ "${GERRIT_PROJECT}" == "LARA/meta-lara" ]; then
+        cherrypick_meta_repo
+        elif [ "${GERRIT_PROJECT}" == "adp/ara-api" ]; then
+        cherrypick_ara_repo
+        elif [ "${GERRIT_PROJECT}" == "ecu_task/vw/icas3" ]; then
+        cherrypick_icas3_repo
+        fi
+
+        # Set changes of other dependent project
+        if [ -f "${WORKSPACE}/commit_parser.txt" ]; then
+            echo "Dependency_handling IN"
+            dependency_handling
+        fi
+    fi
+
+    # Build
+    if [ "${JOB_BUILD_MACHINE}" = "h3ulcb" ]; then
+        call_build_rcar
+    elif [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+        call_build_icas3
+    elif [ "${JOB_BUILD_MACHINE}" = "raspberrypi3" ]; then
+        call_build_rasp
+    elif [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+        call_build_cockpit
+    elif [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+        call_build_nxp
+    else
+        call_build
+    fi
+}
+
+function create_daily_repo_manifest {
+    rm -rf ${WORKSPACE}/hashinfo.txt ${WORKSPACE}/manifest ${WORKSPACE}/*.xml
+    # Save repository and hash info
+    pushd ${BUILD_TOPDIR} > /dev/null
+    if [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+        repo forall -c "git log --pretty=format:"%H" -1 ; git ls-remote --get-url lara | sed 's/ssh:\/\/text\.lge\.com\// /'" > ${WORKSPACE}/hashinfo.txt
+    elif [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+        repo forall -c "git log --pretty=format:"%H" -1 ; git remote get-url vgit_eu | sed 's/ssh:\/\/vgit\.lge\.com:29430/ /'" > ${WORKSPACE}/hashinfo.txt
+    else
+        repo forall -c "git log --pretty=format:"%H" -1 ; git remote get-url origin | sed 's/ssh:\/\/text\.lge\.com\// /'" > ${WORKSPACE}/hashinfo.txt
+    fi
+    sed -i 's/ /HASH_/g' ${WORKSPACE}/hashinfo.txt
+    popd > /dev/null
+
+# Repo manifest creation
+    pushd ${WORKSPACE} > /dev/null
+    git clone ssh://text.lge.com/LARA/manifest
+    if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+        cp manifest/DAILY/ICAS3_TEMPLATE.xml ./DAILY_TEMPLATE.xml
+    fi
+    if [ "${JOB_BUILD_MACHINE}" = "qemux86-64" ] || [ "${JOB_BUILD_MACHINE}" = "raspberrypi3" ]; then
+        cp manifest/DAILY/LARA_TEMPLATE.xml ./DAILY_TEMPLATE.xml
+    fi
+    if [ "${JOB_BUILD_MACHINE}" = "s32g274aevb" ]; then
+        cp manifest/DAILY/GATEWAY_TEMPLATE.xml ./DAILY_TEMPLATE.xml
+    fi
+    #if [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+    #    #COCKPIT TEMPLATE
+    #    cp manifest/cockpit/DAILY/COCKPIT_TEMPLATE.xml ./DAILY_TEMPLATE.xml
+    #    cp manifest/cockpit/DAILY/qnx_TEMPLATE.xml ./qnx_DAILY_TEMPLATE.xml
+    #fi
+    popd > /dev/null
+
+    if [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+    # Set hash value for each repository
+    #    cat hashinfo.txt | while read line
+    #    do
+    #        ProjectName=`echo $line | sed 's/.*HASH_/HASH_/g'`
+    #        HashValue=`echo $line | sed 's/HASH_.*//g'`
+    #        sed -i "s@${ProjectName}@${HashValue}@" DAILY_TEMPLATE.xml
+    #    done
+    #    sed -i "s/DAILY/qnx_DAILY_$(date +'%y%m%d').xml/g" DAILY_TEMPLATE.xml
+    #    cp DAILY_TEMPLATE.xml ${WORKSPACE}/manifest/cockpit/DAILY/DAILY_$(date +"%y%m%d").xml
+    #    cp qnx_DAILY_TEMPLATE.xml ${WORKSPACE}/manifest/cockpit/DAILY/qnx_DAILY_$(date +"%y%m%d").xml
+        echo "VS DAILY repo manifest used"
+    else
+        pushd ${WORKSPACE} > /dev/null
+        # Set hash value for each repository
+        cat hashinfo.txt | while read line
+        do
+            ProjectName=`echo $line | sed 's/.*HASH_/HASH_/g'`
+            HashValue=`echo $line | sed 's/HASH_.*//g'`
+            sed -i "s@${ProjectName}@${HashValue}@" DAILY_TEMPLATE.xml
+        done
+        cp DAILY_TEMPLATE.xml ${WORKSPACE}/manifest/DAILY/DAILY_$(date +"%y%m%d").xml
+        popd > /dev/null
+
+    # push manifest file
+        pushd ${WORKSPACE}/manifest > /dev/null
+        git add .
+        gitdir=$(git rev-parse --git-dir); scp -p -P 29411 text.lge.com:hooks/commit-msg ${gitdir}/hooks/
+        git commit -m "repo manifest for DAILY $(date +"%y%m%d") version"
+        #git push origin HEAD:refs/for/master
+        popd > /dev/null
+    fi
+}
+
+# Setup variables
+parse_job_name
+apply_build_rules
+set_build_images
+
+if [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+    get_last_commit_cockpit
+else
+    get_last_commit
+fi
+
+checkout_build
+
+# Get release INFO
+if [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+    get_release_info_cockpit
+else
+    get_release_info
+fi
+
+# Copy build output to fileserver
+if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+# speed up for verification build
+#    copy_build_output_icas3
+    if [ "${JOB_BUILD_MACHINE}" = "ICAS3" ]; then
+        copy_build_output_icas3_full
+    else
+        copy_build_output
+    fi
+fi
+
+[ "${BUILD_ENABLE_RSYNC_SSTATE}" = "Y" ] && rsync_sstate
+
+DESCRIPTION="<li><a href=\"http://${BUILD_FILESERVER}/${BUILD_ARTIFACTS_TARGET_DIR}\">Build results</a></li>"
+# Description
+echo "[DESCRIPTION] ${DESCRIPTION}"
+
+#last commit info save
+if [ ${RESULT} -eq 0 ]; then
+    make_output_html
+    if [ "${JOB_BUILD_TYPE}" = "official" ]; then
+        if [ "${JOB_BUILD_MACHINE}" = "COCKPIT" ]; then
+            #save_last_commit_cockpit
+            echo "Cockpit build done."
+        else
+            create_daily_repo_manifest
+            save_last_commit
+        fi
+    fi
+fi
+
+exit ${RESULT}
+
