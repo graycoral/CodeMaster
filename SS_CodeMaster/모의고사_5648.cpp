@@ -5,27 +5,21 @@
 using namespace std;
 
 constexpr int maxn = 1000+10;
-struct pos {
+typedef struct pos {
     int r, c;
     int dic;
     int val;
-};
+    int alive;
+}Pos ;
 
-struct DP {
-    int preIdx;
-    int len;
-};
-
-struct pos atom[maxn];
-struct DP dp[maxn];
-int cnt;
+Pos atom[maxn];
+int N;
+int totalCnt;
 
 
 void getData()
 {
     memset(atom, 0, sizeof(atom));
-    memset(dp, -1, sizeof(dp));
-    cnt = 0;
 
     int N;
     cin >> N;
@@ -34,36 +28,54 @@ void getData()
         cin >> atom[i].c;
         cin >> atom[i].dic;
         cin >> atom[i].val;
+
+        atom[i].r += 1000;
+        atom[i].c += 1000;
+        atom[i].alive = 1;
     }
+    totalCnt = N;
 }
 
-int checkMeet(int idx)
+int checkMeet()
 {
     int retVal = 0;
+    int aliveFlag = 0;
+    for(int i = 0; i<N; i++) {
+        if(totalCnt == 0)   return retVal;
+        for(int j = i+1; j<N; j++) {
+            if(atom[j].alive == 0)  continue;
+            if(atom[i].r == atom[j].r && atom[i].c == atom[j].c) {
+                retVal += atom[i].val;
+                retVal += atom[j].val;
+                atom[j].alive = 0;
+                aliveFlag = 1;
+                totalCnt--;
+            }
+        }
+        if(aliveFlag == 1){
+            atom[i].alive = 0;
+            totalCnt--;
+        }
+        aliveFlag = 0;
+    }
     return retVal;
 }
 
 void sol(int tc)
 {
-    int N;
-
     int engerySum = 0;
-    memset(dp, -1, sizeof(dp));
-
     cin >> N;
 
     // check position
-    for(int i=0; i<N; i++) {
-        int tmplen = checkMeet(i);
-        if(dp[i].len > tmplen) {
-            dp[i].len = MAX(dp[i].len, checkMeet(i));
+    for(int i=0; i<2000; i++) {
+        for(int j = 0; j<N; j++) {
+            if(atom[j].alive == 0)  continue;
+            if(atom[j].dic == 0 )       atom[j].r--;
+            else if(atom[j].dic == 1 )  atom[j].r++;
+            else if(atom[j].dic == 2 )  atom[j].c--;
+            else if(atom[j].dic == 3 )  atom[j].c++;
         }
-    }
-
-    for(int i=0; i<N; i++){
-        if(dp[i].len != -1) {
-            engerySum += atom[i].val;
-        }
+        engerySum += checkMeet();
     }
 
     cout << "#" << tc << " " << engerySum << endl;
@@ -74,7 +86,7 @@ int main()
     int t;
     cin >> t;
 
-    for(int i= 0; i<t; i++) {
+    for(int i= 1; i<=t; i++) {
         getData();
         sol(i);
     }

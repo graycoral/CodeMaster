@@ -24,7 +24,7 @@ int sol(int N)
 	for (int j = 0; j < nReset; ++j) {
 		atom[j][0] = atom[j][0] * 2;
 		atom[j][1] = atom[j][1] * 2;
-		
+
 		visit[atom[j][0]][atom[j][1]]++;
 	}
 
@@ -36,7 +36,7 @@ int sol(int N)
 			int d = atom[j][2];
 
 			visit[x][y]--;
-			
+
 			if (d == 0)	y++;
 			else if (d == 1)	y--;
 			else if (d == 2)	x++;
@@ -75,7 +75,7 @@ int main()
 	std::ios_base::sync_with_stdio(0);
 	std::cin.tie(0); std::cout.tie(0);
 
-	//freopen("¸ðÀÇ°í»ç_5648_¿øÀÚ¼Ò¸ê.txt", "r", stdin);
+	//freopen("ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½_5648_ï¿½ï¿½ï¿½Ú¼Ò¸ï¿½.txt", "r", stdin);
 
 	int T, test_case = 0;
 	int i;
