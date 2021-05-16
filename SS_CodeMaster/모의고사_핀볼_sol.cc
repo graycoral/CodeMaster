@@ -95,7 +95,7 @@ void sol()
 
 int main()
 {
-	freopen("pin_ball_input_1.txt", "r", stdin);
+	//freopen("pin_ball_input_1.txt", "r", stdin);
 	scanf("%d", &T);
 
 	for (int test_case = 1; test_case <= T; ++test_case)

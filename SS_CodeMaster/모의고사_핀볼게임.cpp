@@ -12,7 +12,6 @@ struct pos {
 };
 
 struct pos wh[10][2];
-int visited[MAXN][MAXN][4] = { -1 };
 int ansCnt = 0;
 const int dr[] = { 1, -1, 0, 0 };
 const int dc[] = { 0, 0, 1, -1 };
@@ -59,24 +58,19 @@ void input()
 	}
 }
 
-void move(int r, int c, int d)
+int move(int r, int c, int d)
 {
 	int ans = 0;
 	int dic = d;
 	int startFlag = 0;
 	int startDic = 0;
-	int startR = r;
-	int startC = c;
+	int startR = r; int startC = c;
 
-	int curR = r;
-	int curC = c;
+	int curR = r; int curC = c;
 
-
-	cout << "Start : " << startR << "," << startC << "," << d << " : ";
+	//cout << "Start : " << startR << "," << startC << "," << d << " : ";
 	while (1) {
 		if ((startFlag == 1 && curR == startR && curC == startC) || (map[curR][curC] == -1)) {
-			ansCnt = MAX(ansCnt, ans);
-			cout << ans << endl;
 			break;
 		}
 
@@ -86,8 +80,7 @@ void move(int r, int c, int d)
 		if (map[curR][curC]) {
 			// Warmhole Check and change current position
 			if (map[curR][curC] >= 6 && map[curR][curC] <= 10) {
-				int whR = curR;
-				int whC = curC;
+				int whR = curR; int whC = curC;
 				if (wh[map[whR][whC]][0].r == curR) {
 					curR = wh[map[whR][whC]][1].r + dr[dic];
 					curC = wh[map[whR][whC]][1].c + dc[dic];
@@ -110,6 +103,8 @@ void move(int r, int c, int d)
 			curC += dc[dic];
 		}
 	}
+
+	return ans;
 }
 
 void sol(int test_case)
