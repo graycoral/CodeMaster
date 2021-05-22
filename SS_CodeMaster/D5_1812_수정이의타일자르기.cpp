@@ -1,121 +1,131 @@
 #include<iostream>
-
+#define SWAP(a,b) {int t; t =a; a=b; b= t;}
 using namespace std;
 
-#define MAXN (501)
-#define SWAP(a ,b) {int t = a; a =b; b= t;}
+typedef struct Tile {
+	int vertical;
+	int column;
+	bool alive;
+} Tile;
 
-int input[MAXN];
-double length[MAXN];
-int max_num = 0;
-int tCnt = 0;
-int N;
-double M;
-double dr[] = {0,1 };
-double dc[] = {1,0 };
-int r = 0, c = 0;
+const int maxN = 800 + 10;
 
-struct tile {
-	double r, c;
-};
+Tile tile[maxN];
+int sqAliv[maxN];
+int tileIdx = 0;
+int N, M;
+int sq[maxN];
+int makeTileCnt = 0;
 
-struct tile tileQ[MAXN];
-int front, rear;
-
-void push(int r, int c)
+void input()
 {
-	struct tile tmp;
-	tmp.r = r;
-	tmp.c = c;
-	tileQ[rear++] = tmp;
-}
-
-int size()
-{
-	return rear - front;
-}
-
-struct tile pop()
-{
-	return tileQ[front++];
-}
-
-void GetData()
-{
-	max_num = 0;
-	tCnt = 0;
+	for (int i = 0; i < maxN; i++) {
+		tile[i].vertical = tile[i].column = 0;
+		tile[i].alive = false;
+		sqAliv[i] = 0;
+	}
+	tileIdx = 0;
+	makeTileCnt = 1;
 	cin >> N >> M;
 
 	for (int i = 0; i < N; i++) {
-		int tmp;
-		cin >> tmp;
-		input[tmp]++;
-		tCnt++;
-		if (max_num < tmp)	max_num = tmp;
+		cin >> sq[i];
 	}
 }
 
-double getLength(int k)
+void Qsort(int* arr, int start, int end)
 {
-	if (length[k] != 0)	return length[k];
-	
-	length[0] = 1;
-	for (int i = 1; i <= max_num; i++) {
-		length[i] = length[i-1] * 2;
-	}
+	if (start >= end)	return;
+	int pivot = start;
+	int i = start + 1;
+	int j = end;
 
-	return length[k];	
-}
-
-int visited[MAXN][MAXN];
-
-void cal(int idx, int r, int c)
-{
-	if (r > M || c > M)	return;
-	if (visited[r][c] == 1)	return;
-	if (input[idx] == 0)	return;	
-
-	visited[r][c] = 1;
-	input[idx]--;
-	tCnt--;
-
-	for (int i = 0; i < 2; i++) {
-		double len = getLength(idx);
-		cal(idx, r+len*dr[i], c+len*dc[i]);
-	}
-}
-
-void sol(int test_case)
-{
-	int ans = 0;
-	while (tCnt) {
-		for (int i = max_num; i >= 0; i--) {
-			double len = getLength(input[i]);
-			cal(i, len, len);
+	while (i <= j) {
+		while (i <= end && arr[i] >= arr[pivot]) {
+			++i;
 		}
-		ans++;
+		while (j > start&& arr[j] <= arr[pivot]) {
+			--j;
+		}
+		if (i >= j)	break;
+		SWAP(arr[i], arr[j]);
+	}
+	SWAP(arr[j], arr[pivot]);
+
+	Qsort(arr, start, j - 1);
+	Qsort(arr, j + 1, end);
+}
+
+int getLen(int m)
+{
+	if (m == 0)	return 1;
+	else return 2 * getLen(m - 1);
+}
+
+void cutTile(int idx, int len)
+{
+	if (tile[idx].vertical > len) {
+		tile[tileIdx].column = tile[idx].column;
+		tile[tileIdx].vertical = tile[idx].vertical - len;
+		tile[tileIdx++].alive = true;
+	}
+
+	if (tile[idx].column > len) {
+		tile[tileIdx].vertical = len;
+		tile[tileIdx].column = tile[idx].column - len;
+		tile[tileIdx++].alive = true;
+	}
+	tile[idx].vertical = tile[idx].column = len;
+	tile[idx].alive = false;
+}
+
+void sol()
+{
+	Qsort(sq, 0, N - 1);
+
+	//int len = getLen(M);
+	int len = M;
+
+	tile[tileIdx].column = tile[tileIdx].vertical = len;
+	tile[tileIdx++].alive = true;
+
+	for (int i = 0; i < N; i++) {
+		if (sqAliv[i] == 1)	continue;
+		bool newTile = true;
+		int sqLen = getLen(sq[i]);
+		for (int t = 0; t < tileIdx; t++) {
+			if (tile[t].alive == true && \
+				tile[t].vertical >= sqLen && \
+				tile[t].column >= sqLen) {
+				//cut tile add tile
+				cutTile(t, sqLen);
+				sqAliv[i] = 1;
+				newTile = false;
+				break;
+			}
+		}
+		if (newTile) {
+			tile[tileIdx].column = tile[tileIdx].vertical = len;
+			tile[tileIdx++].alive = true;
+			//cut tile add tile
+			cutTile(tileIdx - 1, sqLen);
+			sqAliv[i] = 1;
+			makeTileCnt++;
+		}
 	}
 }
 
-void cal_tile()
-{
-
-}
-
-
-
-int main(int argc, char** argv)
+int main()
 {
 	int test_case;
-	int T;
 
-	freopen("1812_input.txt", "r", stdin);
-	cin >> T;
-	
-	for (test_case = 1; test_case <= T; ++test_case)
-	{
-		GetData();
-		sol(test_case);		
+	//freopen("1812_input.txt", "r", stdin);
+	cin >> test_case;
+
+	for (int i = 1; i <= test_case; i++) {
+		input();
+		sol();
+		cout << "#" << i << " " << makeTileCnt << endl;
 	}
 	return 0;
 }
