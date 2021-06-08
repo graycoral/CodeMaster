@@ -2,7 +2,7 @@
 
 using namespace std;
 
-const int max_num = 40 + 1;
+const int max_num = 200 + 1;
 const int dr[] = { 0, 0, 1, -1 };
 const int dc[] = { 1, -1, 0, 0 };
 char order[max_num][max_num];
@@ -92,7 +92,7 @@ int BFS()
 		else if (order[r][c] == '_') d = (mem == 0 ? 0 : 1);
 		else if (order[r][c] == '|') d = (mem == 0 ? 2 : 3);
 		else if (order[r][c] == '.') {		}
-		else if (order[r][c] == '+') mem = (mem > 15 ? 0 : mem + 1);
+		else if (order[r][c] == '+') mem = (mem >= 15 ? 0 : mem + 1);
 		else if (order[r][c] == '-') mem = (mem <= 0 ? 15 : mem - 1);
 		
 		r += dr[d]; c += dc[d];
@@ -103,7 +103,7 @@ int BFS()
 
 		if (order[r][c] == '?') {
 			for (int i = 0; i < 4; i++) {
-				if (visitied[r][c][d][mem] == 0) {
+				if (visitied[r][c][i][mem] == 0) {
 					push(r, c, i, mem);
 				}
 			}
